@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "fonctions_SDL.h"
+#include "graphismes.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +17,7 @@ return EXIT_FAILURE;
 }
 // Créer la fenêtre
 fenetre = SDL_CreateWindow("Fenetre SDL", SDL_WINDOWPOS_CENTERED,
-SDL_WINDOWPOS_CENTERED, 600, 600, SDL_WINDOW_RESIZABLE);
+SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_RESIZABLE);
 if(fenetre == NULL) // En cas d’erreur
 {
 printf("Erreur de la creation d’une fenetre: %s",SDL_GetError());
