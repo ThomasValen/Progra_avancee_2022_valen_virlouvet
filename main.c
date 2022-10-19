@@ -1,80 +1,47 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include "sdl2-light.h"
+#include "world.h"
 #include "graphismes.h"
+#include "constante.h"
 
-int main(int argc, char *argv[])
-{
-SDL_Window* fenetre; // Déclaration de la fenêtre
-SDL_Event evenements; // Événements liés à la fenêtre
-bool terminer = false;
-if(SDL_Init(SDL_INIT_VIDEO) < 0) // Initialisation de la SDL
-{
-printf("Erreur d’initialisation de la SDL: %s",SDL_GetError());
-SDL_Quit();
-return EXIT_FAILURE;
-}
-// Créer la fenêtre
-fenetre = SDL_CreateWindow("Fenetre SDL", SDL_WINDOWPOS_CENTERED,
-SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_RESIZABLE);
-if(fenetre == NULL) // En cas d’erreur
-{
-printf("Erreur de la creation d’une fenetre: %s",SDL_GetError());
-SDL_Quit();
-return EXIT_FAILURE;
-}
+int main( int argc, char* args[] ){
 
-// Mettre en place un contexte de rendu de l’écran
-SDL_Renderer* ecran;
-ecran = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_ACCELERATED);
-// Charger l’image
-SDL_Texture* fond = charger_image( "ressources/fond.bmp", ecran );
+    SDL_Event event;
+    world_t world;
+    ressources_t textures;
+    SDL_Renderer *renderer;
+    SDL_Window *window;
+    sprite_t *sprite;
 
+      do{
 
-// Charger l’image avec la transparence
-Uint8 r = 255, g = 255, b = 255;
-SDL_Texture* obj = charger_image_transparente("ressources/obj.bmp", ecran,r,g,b);
+        init(&window,&renderer,&textures,&world); //initialisation du jeu
 
-int objetW;
-int objetH;
-SDL_QueryTexture(obj, NULL, NULL, &objetW, &objetH);//recupere automatiquement les dimensions de l'image
+        while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
+          //gestion des évènements
+          //handle_events(&event,&world);
 
-SDL_Rect SrcR, DestR;
-SrcR.x = 0;
-SrcR.y = 0;
-SrcR.w = objetW; // Largeur de l’objet en pixels de la texture
-SrcR.h = objetH; // Hauteur de l’objet en pixels de la texture
-DestR.x = 350;
-DestR.y = 350;
-DestR.w = objetW/3;
-DestR.h = objetH/3;
+          //mise à jour des données liée à la physique du monde
+          //update_data(&world);
+
+          //rafraichissement de l'écran
+          refresh_graphics(renderer,&world,&textures);
+
+          // pause de 10 ms pour controler la vitesse de rafraichissement
+          pause(10);
+        }
+        //pour rejouer
+        rejouer(renderer,&world,&textures);
 
 
-// Boucle principale
-while(!terminer){
-    SDL_RenderClear(ecran);
-    SDL_RenderCopy(ecran, fond, NULL, NULL);
-    SDL_RenderCopy(ecran, obj, &SrcR, &DestR);
-    SDL_PollEvent( &evenements );
 
-    switch(evenements.type){
-        case SDL_QUIT:
-            terminer = true; break;
-        case SDL_KEYDOWN:
-            switch(evenements.key.keysym.sym){
-                case SDLK_ESCAPE:
-                case SDLK_q:
-                    terminer = true; break;
-            }
-    }   
-    SDL_RenderPresent(ecran);
-}
-SDL_DestroyTexture(fond);
-SDL_DestroyRenderer(ecran);
-// Quitter SDL
-SDL_DestroyWindow(fenetre);
-SDL_Quit();
-return 0;
+      }while(!is_game_over2(&world));   //tant que le joueur n'a pas décider d'arrêter de jouer
+
+
+      //pause a la fin du jeu de 3sec
+      pause(1500);
+      //nettoyage final
+      clean(window,renderer,&textures,&world);
+
+      return 0;
 }
 	

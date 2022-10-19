@@ -1,8 +1,8 @@
 CFLAGS = -O3 `sdl2-config --cflags`
 LDFLAGS = `sdl2-config --libs` -lSDL2_ttf -lm 
 
-INC = graphismes.h world.h constante.h
-SRC = main.c graphismes.c world.c 
+INC = sdl2_light.h graphismes.h world.h constante.h
+SRC = main.c graphismes.c world.c sdl2_light.c
 OBJ = $(SRC:%.c=%.o)
 
 PROG = jeu
