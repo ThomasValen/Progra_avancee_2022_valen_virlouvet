@@ -12,7 +12,7 @@ void init_data(world_t * world){
 	init_valeurs(world);
 
 	// Allocation de mémoire
-	init_memoire(world);
+	//init_memoire(world);
 
 	//initialisation des sprites
 	init_environnement(world) ;
@@ -34,7 +34,7 @@ void init_environnement(world_t* world){
 	for(int i=0;i<(world->longueur_tab);i++){
         for(int j = 0;j<(world->hauteur_tab);j++){
             if(world->tab[i][j]==1){
-                init_sprite(world->wall[indice_wall],i*WALL_WIDTH,j*WALL_HEIGHT,WALL_WIDTH,WALL_HEIGHT);
+                init_sprite(world->wall[indice_wall],i*WALL_WIDTH , j*WALL_HEIGHT, WALL_WIDTH, WALL_HEIGHT);
                 indice_wall++;
             }
         }
