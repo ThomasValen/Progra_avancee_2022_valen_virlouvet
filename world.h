@@ -13,8 +13,8 @@ struct world_s{
     int longueur_tab;
     int hauteur_tab;
     int **tab;
-    sprite_t* background;
-    sprite_t* wall[1000];
+    sprite_t *background;
+    sprite_t *wall[1000];
 };
 typedef struct world_s world_t;
 
