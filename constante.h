@@ -11,8 +11,8 @@
  */
 #define SCREEN_HEIGHT 720
 
-#define WALL_WIDTH
+#define WALL_WIDTH 50
 
-#define WALL_HEIGHT
+#define WALL_HEIGHT 50
 
 #endif
