@@ -16,7 +16,7 @@ int main( int argc, char* args[] ){
 
         init(&window,&renderer,&textures,&world); //initialisation du jeu
 
-        while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
+        while(&world){ //tant que le jeu n'est pas fini
           //gestion des évènements
           //handle_events(&event,&world);
 
@@ -29,18 +29,16 @@ int main( int argc, char* args[] ){
           // pause de 10 ms pour controler la vitesse de rafraichissement
           pause(10);
         }
-        //pour rejouer
-        rejouer(renderer,&world,&textures);
 
 
 
-      }while(!is_game_over2(&world));   //tant que le joueur n'a pas décider d'arrêter de jouer
+      }while(&world);   //tant que le joueur n'a pas décider d'arrêter de jouer
 
 
       //pause a la fin du jeu de 3sec
       pause(1500);
       //nettoyage final
-      clean(window,renderer,&textures,&world);
+      clean(window,&renderer,&textures,&world);
 
       return 0;
 }
