@@ -54,15 +54,12 @@ void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
 int** generate_world(int ligne,int colonne){
 
     int **tab1 = malloc(sizeof(int)*ligne*colonne);
-
-    tab1[colonne][ligne]={
-        1,1,1,1,1,1,1,1,1,1,1,1,
-        1,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,1,
-        1,1,1,1,1,1,1,1,1,1,1,1
-    };
+    for(int i=0;i<(colonne);i++){
+        for(int j = 0;j<(ligne);j++){
+            tab1[i][j]=1;
+        }
+    }
+    
 
     return tab1;
 }
