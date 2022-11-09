@@ -19,6 +19,7 @@ void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, wo
 void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world){
     clean_textures(textures);
     clean_sdl(renderer,window);
+    init_data(world) ;
 }
 
 
