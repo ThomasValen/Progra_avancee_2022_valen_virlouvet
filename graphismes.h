@@ -1,6 +1,5 @@
 #ifndef __FONCTIONS_SDL__H__
 #define __FONCTIONS_SDL__H__
-#include <SDL2/SDL.h>
 #include "sdl2-light.h"
 #include "world.h"
 

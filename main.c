@@ -14,7 +14,7 @@ int main( int argc, char* args[] ){
 
       do{
 
-        init(&window,&renderer,&textures,&world); //initialisation du jeu
+        //init(&window,&renderer,&textures,&world); //initialisation du jeu
 
         while(&world){ //tant que le jeu n'est pas fini
           //gestion des évènements

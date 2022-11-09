@@ -55,14 +55,14 @@ int** generate_world(int ligne,int colonne){
 
     int **tab1 = malloc(sizeof(int)*ligne*colonne);
 
-    tab1[colonne][ligne]={
+    /*tab1[colonne][ligne]={
         1,1,1,1,1,1,1,1,1,1,1,1,
         1,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,1,
         1,1,1,1,1,1,1,1,1,1,1,1
-    };
+    };*/
 
     return tab1;
 }
