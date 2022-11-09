@@ -17,7 +17,6 @@ void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, wo
 
 
 void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world){
-    clean_data(world);
     clean_textures(textures);
     clean_sdl(renderer,window);
 }
@@ -60,7 +59,7 @@ int main( int argc, char* args[] ){
       //pause a la fin du jeu de 3sec
       pause(1500);
       //nettoyage final
-      clean(window,&renderer,&textures,&world);
+      clean(window,renderer,&textures,&world);
 
       return 0;
 }

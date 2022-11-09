@@ -19,8 +19,5 @@ void apply_background(SDL_Renderer * renderer, SDL_Texture * texture);
 
 void refresh_graphics(SDL_Renderer * renderer, world_t *world, textures_t *textures);
 
-void clean(SDL_Window *window, SDL_Renderer **renderer, textures_t *textures, world_t *world);
-
-void init(SDL_Window **window, SDL_Renderer **renderer, textures_t *textures, world_t *world);
 
 #endif
