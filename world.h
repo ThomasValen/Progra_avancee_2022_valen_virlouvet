@@ -23,6 +23,8 @@ void init_data(world_t * world);
 
 void init_valeurs(world_t* world);
 
+void init_memoire(world_t* world);
+
 void init_environnement(world_t* world); 
 
 void init_sprite(sprite_t *sprite,int x,int y,int h,int l);

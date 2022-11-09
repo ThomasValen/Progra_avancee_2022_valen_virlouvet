@@ -12,11 +12,15 @@ void init_data(world_t * world){
 	init_valeurs(world);
 
 	// Allocation de mémoire
-	//init_memoire(world);
+	init_memoire(world);
 
 	//initialisation des sprites
 	init_environnement(world) ;
 
+}
+
+void init_memoire(world_t* world){
+    world->background = (sprite_t*)malloc(sizeof(sprite_t));
 }
 
 void init_valeurs(world_t* world){
