@@ -8,7 +8,6 @@
 void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world){ 
     init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
     init_data(world);
-	init_ttf();
     init_textures(*renderer,textures);
 }   
 
