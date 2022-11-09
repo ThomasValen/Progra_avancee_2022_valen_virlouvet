@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/include/SDL2"
+                "/usr/include/SDL2",
+                "/home/virbek/Documents/programmation_avance/Progra-avance2021-Jeu-valen-khoualed-virlouvet"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

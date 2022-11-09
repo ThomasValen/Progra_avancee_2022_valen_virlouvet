@@ -5,22 +5,22 @@
 
 
 
-struct ressources_s
+struct textures_s
 {
     SDL_Texture* background;
 };
-typedef struct ressources_s ressources_t;
+typedef struct textures_s textures_t;
 
-void clean_textures(ressources_t *textures) ;
+void clean_textures(textures_t *textures) ;
 
-void init_textures(SDL_Renderer * renderer, ressources_t *textures);
+void init_textures(SDL_Renderer * renderer, textures_t *textures);
 
 void apply_background(SDL_Renderer * renderer, SDL_Texture * texture);
 
-void refresh_graphics(SDL_Renderer * renderer, world_t *world, ressources_t *textures);
+void refresh_graphics(SDL_Renderer * renderer, world_t *world, textures_t *textures);
 
-void clean(SDL_Window *window, SDL_Renderer **renderer, ressources_t *textures, world_t *world);
+void clean(SDL_Window *window, SDL_Renderer **renderer, textures_t *textures, world_t *world);
 
-void init(SDL_Window **window, SDL_Renderer **renderer, ressources_t *textures, world_t *world);
+void init(SDL_Window **window, SDL_Renderer **renderer, textures_t *textures, world_t *world);
 
 #endif
