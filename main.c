@@ -2,19 +2,41 @@
 #include "world.h"
 #include "graphismes.h"
 #include "constante.h"
+#include "eventsMain.h"
+
+
+/**
+* \brief fonction qui nettoie le jeu: nettoyage de la partie graphique (SDL), nettoyage des textures, nettoyage des données
+* \param window la fenêtre du jeu
+* \param renderer le renderer
+* \param textures les textures
+* \param world le monde
+*/
+
+void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world);
+
+
+void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world){
+    clean_data(world);
+    clean_textures(textures);
+    clean_sdl(renderer,window);
+}
+
+
+
 
 int main( int argc, char* args[] ){
 
     SDL_Event event;
     world_t world;
-    ressources_t textures;
+    textures_t textures;
     SDL_Renderer *renderer;
     SDL_Window *window;
     sprite_t *sprite;
 
       do{
 
-        //init(&window,&renderer,&textures,&world); //initialisation du jeu
+        init(&window,&renderer,&textures,&world); //initialisation du jeu
 
         while(&world){ //tant que le jeu n'est pas fini
           //gestion des évènements

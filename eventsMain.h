@@ -1,9 +1,8 @@
 #ifndef __EVENTSMAIN__H__
 #define __EVENTSMAIN__H__
 #include "world.h"
-#include "graphisme.h"
+#include "graphismes.h"
 #include "sdl2-light.h"
-#include "sdl2-ttf-light.h"
 
 
 /**
