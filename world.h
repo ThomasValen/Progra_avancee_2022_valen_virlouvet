@@ -40,6 +40,10 @@ void free_matrice(int** T, int taille1, int taille2);
 
 void free_murs(sprite_t* T);
 
+int sethauteur();
+
+int setlongueur();
+
 int nb_murs(int **tab,int hauteur_tab,int longueur_tab);
 
 void update_data(world_t *world) ;
