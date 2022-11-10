@@ -29,6 +29,8 @@ void init_environnement(world_t* world);
 
 void init_sprite(sprite_t *sprite,int x,int y,int h,int l);
 
+void clean_data(world_t *world);
+
 int** generate_world(int ligne,int colonne);
 
 int nb_murs(world_t*world);

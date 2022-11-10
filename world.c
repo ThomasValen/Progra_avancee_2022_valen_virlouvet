@@ -46,6 +46,10 @@ void init_environnement(world_t* world){
 
 }
 
+void clean_data(world_t *world){
+    free(world->background);
+}
+
 
 
 void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
