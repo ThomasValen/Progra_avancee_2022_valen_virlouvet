@@ -23,7 +23,7 @@ void init_memoire(world_t* world){
     world->background = (sprite_t*)malloc(sizeof(sprite_t));
     //world->wall = cree_murs(500);
     world->tab = changer_monde(world->hauteur_tab,world->longueur_tab );
-    for(int i=0;i<(world->longueur_tab);i++){//A CHANGER
+    for(int i=0;i<(world->hauteur_tab);i++){//A CHANGER
         
         for(int j = 0;j<(world->longueur_tab);j++){
             printf("%d",world->tab[i][j]);
@@ -67,7 +67,6 @@ void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
     sprite->h=h;
     sprite->l=l;
 }
-
 
 int** changer_monde(int ligne,int colonne){
     int ** T = malloc(ligne*sizeof(int*));
