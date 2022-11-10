@@ -21,13 +21,15 @@ void init_data(world_t * world){
 
 void init_memoire(world_t* world){
     world->background = (sprite_t*)malloc(sizeof(sprite_t));
+
 }
 
 void init_valeurs(world_t* world){
 	//Initialisation de valeurs 
     world->hauteur_tab=6;
     world->longueur_tab=12;
-    world->tab=generate_world(world->hauteur_tab,world->longueur_tab);
+    world->gameover = 0 ;
+    //world->tab=generate_world(world->hauteur_tab,world->longueur_tab);
     
 }
 
@@ -35,15 +37,19 @@ void init_environnement(world_t* world){
 	//initialisation des sprites
 	init_sprite(world->background,0,0, SCREEN_HEIGHT, SCREEN_WIDTH);
     int indice_wall=0;
-	for(int i=0;i<(world->longueur_tab);i++){
+	/*for(int i=0;i<(world->longueur_tab);i++){
         for(int j = 0;j<(world->hauteur_tab);j++){
             if(world->tab[i][j]==1){
-                init_sprite(world->wall[indice_wall],(i*WALL_WIDTH),(j*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH);
+                init_sprite(&(world->wall[indice_wall]),(i*WALL_WIDTH),(j*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH);
                 indice_wall++;
             }
         }
-    }
+    }*/
 
+}
+
+void clean_data(world_t *world){
+    free(world->background);
 }
 
 
@@ -81,7 +87,7 @@ int nb_murs(world_t*world){
 }
 
 void updata_data(world_t *world){
-    
+
 }
 
 int is_game_over(world_t *world){

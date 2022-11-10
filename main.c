@@ -17,6 +17,7 @@ void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, wo
 
 
 void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world){
+    clean_data(world);
     clean_textures(textures);
     clean_sdl(renderer,window);
     
@@ -42,10 +43,10 @@ int main( int argc, char* args[] ){
 
         while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
           //gestion des évènements
-          //handle_events(&event,&world);
+          handle_events(&event,&world);
 
           //mise à jour des données liée à la physique du monde
-          update_data(&world);
+          //update_data(&world);
 
           //rafraichissement de l'écran
           refresh_graphics(renderer,&world,&textures);
