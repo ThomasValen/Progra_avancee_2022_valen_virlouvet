@@ -21,14 +21,17 @@ void init_data(world_t * world){
 
 void init_memoire(world_t* world){
     world->background = (sprite_t*)malloc(sizeof(sprite_t));
+    for(int i=0;i<world->hauteur_tab*world->longueur_tab;i++){
+        world->wall[i]= (sprite_t*)malloc(sizeof(sprite_t));
+    }
+    world->tab = malloc(sizeof(int)*world->hauteur_tab*world->longueur_tab);
 }
 
 void init_valeurs(world_t* world){
 	//Initialisation de valeurs 
     world->hauteur_tab=6;
     world->longueur_tab=12;
-    world->tab=generate_world(world->hauteur_tab,world->longueur_tab);
-    
+    generate_world(world->tab,world->hauteur_tab,world->longueur_tab);    
 }
 
 void init_environnement(world_t* world){
@@ -48,6 +51,10 @@ void init_environnement(world_t* world){
 
 void clean_data(world_t *world){
     free(world->background);
+    for(int i=0;i<world->hauteur_tab*world->longueur_tab;i++){
+        free(world->wall[i]);
+    }
+    //bug git
 }
 
 
@@ -59,17 +66,12 @@ void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
     sprite->l=l;
 }
 
-int** generate_world(int ligne,int colonne){
-
-    int **tab1 = malloc(sizeof(int)*ligne*colonne);
-    for(int i=0;i<(colonne);i++){
+void generate_world(int **tab,int ligne,int colonne){
+    for(int i=0;i<(colonne);i++){//A CHANGER
         for(int j = 0;j<(ligne);j++){
-            tab1[i][j]=1;
+            tab[i][j]=1;
         }
     }
-    
-
-    return tab1;
 }
 
 int nb_murs(world_t*world){
