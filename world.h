@@ -15,7 +15,7 @@ struct world_s{
     int hauteur_tab;
     int **tab;
     sprite_t* background;
-    sprite_t *wall;
+    sprite_t wall[500];
 };
 typedef struct world_s world_t;
 

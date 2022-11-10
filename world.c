@@ -21,7 +21,7 @@ void init_data(world_t * world){
 
 void init_memoire(world_t* world){
     world->background = (sprite_t*)malloc(sizeof(sprite_t));
-    world->wall = cree_murs(500);
+    //world->wall = cree_murs(500);
     changer_monde(world->tab, world->longueur_tab, world->hauteur_tab);
 }
 
@@ -50,9 +50,8 @@ void init_environnement(world_t* world){
 void clean_data(world_t *world){
     free(world->background);
     free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
-    free_murs(world->wall);
+    //free_murs(world->wall);
 }
-
 
 
 void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
@@ -63,7 +62,9 @@ void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
 }
 
 void changer_monde(int **tab,int ligne,int colonne){
-    free_matrice(tab,colonne,ligne);
+    if(tab!=NULL){
+        free_matrice(tab,colonne,ligne);
+    }
     tab = generate_world(colonne,ligne);
     for(int i=0;i<(colonne);i++){//A CHANGER
         for(int j = 0;j<(ligne);j++){
@@ -81,12 +82,12 @@ int** generate_world(int longueur,int hauteur) {
     return T;
 }
 
-sprite_t* cree_murs(int nb_elements) {
-    sprite_t* T = malloc(nb_elements*sizeof(sprite_t));
+/*sprite_t * cree_murs(int nb_elements) {
+    sprite_t * tab[nb_elements] = malloc(nb_elements*sizeof(sprite_t));
     if(T == NULL)
         exit(EXIT_FAILURE);
     return T;
-}
+}*/
 
 int nb_murs(world_t*world){
     int count =0;
