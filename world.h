@@ -10,6 +10,7 @@ struct sprite_s{
 typedef struct sprite_s sprite_t;
 
 struct world_s{
+    int gameover ;
     int longueur_tab;
     int hauteur_tab;
     int **tab;
@@ -23,6 +24,8 @@ void init_data(world_t * world);
 
 void init_valeurs(world_t* world);
 
+void init_memoire(world_t* world);
+
 void init_environnement(world_t* world); 
 
 void init_sprite(sprite_t *sprite,int x,int y,int h,int l);
@@ -30,5 +33,7 @@ void init_sprite(sprite_t *sprite,int x,int y,int h,int l);
 int** generate_world(int ligne,int colonne);
 
 int nb_murs(world_t*world);
+
+int is_game_over(world_t *world) ;
 
 #endif

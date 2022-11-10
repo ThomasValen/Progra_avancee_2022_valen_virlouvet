@@ -19,7 +19,7 @@ void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, wo
 void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, world_t * world){
     clean_textures(textures);
     clean_sdl(renderer,window);
-    init_data(world) ;
+    
 }
 
 
@@ -34,11 +34,13 @@ int main( int argc, char* args[] ){
     SDL_Window *window;
     sprite_t *sprite;
 
+    world.gameover = 0 ;
+
       do{
 
         init(&window,&renderer,&textures,&world); //initialisation du jeu
 
-        while(&world){ //tant que le jeu n'est pas fini
+        while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
           //gestion des évènements
           //handle_events(&event,&world);
 
@@ -54,7 +56,7 @@ int main( int argc, char* args[] ){
 
 
 
-      }while(&world);   //tant que le joueur n'a pas décider d'arrêter de jouer
+      }while(!is_game_over(&world));   //tant que le joueur n'a pas décider d'arrêter de jouer
 
 
       //pause a la fin du jeu de 3sec

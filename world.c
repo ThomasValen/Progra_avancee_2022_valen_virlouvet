@@ -12,11 +12,15 @@ void init_data(world_t * world){
 	init_valeurs(world);
 
 	// Allocation de mémoire
-	//init_memoire(world);
+	init_memoire(world);
 
 	//initialisation des sprites
 	init_environnement(world) ;
 
+}
+
+void init_memoire(world_t* world){
+    world->background = (sprite_t*)malloc(sizeof(sprite_t));
 }
 
 void init_valeurs(world_t* world){
@@ -54,15 +58,12 @@ void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
 int** generate_world(int ligne,int colonne){
 
     int **tab1 = malloc(sizeof(int)*ligne*colonne);
-
-    /*tab1[colonne][ligne]={
-        1,1,1,1,1,1,1,1,1,1,1,1,
-        1,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,1,
-        1,1,1,1,1,1,1,1,1,1,1,1
-    };*/
+    for(int i=0;i<(colonne);i++){
+        for(int j = 0;j<(ligne);j++){
+            tab1[i][j]=1;
+        }
+    }
+    
 
     return tab1;
 }
@@ -79,7 +80,8 @@ int nb_murs(world_t*world){
     return count;
 }
 
-int isGameOver(){
-
+int is_game_over(world_t *world){
+    return world->gameover;
 }
+
 
