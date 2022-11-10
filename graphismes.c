@@ -32,6 +32,9 @@ void refresh_graphics(SDL_Renderer * renderer, world_t *world, textures_t *textu
     clear_renderer(renderer) ;
 
     apply_background(renderer, textures->background) ;
+    for(int i = 0; i < 500 ; i++){
+      apply_sprite(renderer,textures->wall, &(world->wall[i])) ;
+    }
 
     update_screen(renderer);
 }

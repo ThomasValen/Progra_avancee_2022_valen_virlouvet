@@ -15,7 +15,7 @@ struct world_s{
     int hauteur_tab;
     int **tab;
     sprite_t* background;
-    sprite_t wall[1000];
+    sprite_t wall[500];
 };
 typedef struct world_s world_t;
 
@@ -36,7 +36,15 @@ int** generate_world(int ligne,int colonne);
 
 int nb_murs(world_t*world);
 
+void changer_monde(int **tab,int ligne,int colonne) ;
+
+sprite_t* cree_murs(int nb_elements) ;
+
 void update_data(world_t *world) ;
+
+void free_matrice(int** T, int taille1, int taille2) ;
+
+void free_murs(sprite_t* T);
 
 int is_game_over(world_t *world) ;
 
