@@ -34,8 +34,8 @@ void init_memoire(world_t* world){
 
 void init_valeurs(world_t* world){
 	//Initialisation de valeurs 
-    world->hauteur_tab=6;
-    world->longueur_tab=12;
+    world->hauteur_tab=4;
+    world->longueur_tab=6;
     world->gameover=0;
 }
 
@@ -56,7 +56,7 @@ void init_environnement(world_t* world){
 
 void clean_data(world_t *world){
     free(world->background);
-    free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
+    //free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
     //free_murs(world->wall);
 }
 
@@ -79,15 +79,11 @@ int** changer_monde(int ligne,int colonne){
             T[j][i]=1;
         }
     }
-    return T;
-}
+    T[1][1]=0;
+    T[2][1]=0;
+    T[1][4]=0;
+    T[2][4]=0;
 
-int** generate_world(int longueur,int hauteur) {
-    int ** T = malloc(hauteur*sizeof(int*));
-    if(T == NULL)
-        exit(EXIT_FAILURE);
-    for(int i = 0; i < hauteur ; i++)
-        T[i] = malloc(longueur*sizeof(int));
     return T;
 }
 
