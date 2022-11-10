@@ -4,5 +4,5 @@
         "sdl.h": "c",
         "fonctions_sdl.h": "c"
     },
-    "C_Cpp.errorSquiggles": "Enabled"
+    "C_Cpp.errorSquiggles": "Disabled"
 }
