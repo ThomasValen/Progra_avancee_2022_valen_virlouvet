@@ -56,7 +56,7 @@ void init_environnement(world_t* world){
 
 void clean_data(world_t *world){
     free(world->background);
-    //free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
+    ////free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
     //free_murs(world->wall);
 }
 

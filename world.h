@@ -44,6 +44,7 @@ int nb_murs(int **tab,int hauteur_tab,int longueur_tab);
 
 void update_data(world_t *world) ;
 
-int is_game_over(world_t *world) ;
+int is_game_over(world_t *world);
+
 
 #endif
