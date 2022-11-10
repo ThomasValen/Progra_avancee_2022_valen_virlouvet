@@ -21,26 +21,25 @@ void init_data(world_t * world){
 
 void init_memoire(world_t* world){
     world->background = (sprite_t*)malloc(sizeof(sprite_t));
-   // world->wall = cree_murs(500);
-    changer_monde(world->tab, world->longueur_tab, world->hauteur_tab);
+    //world->wall = cree_murs(500);
+    changer_monde(**world->tab, world->hauteur_tab, world->longueur_tab);
 }
 
 void init_valeurs(world_t* world){
 	//Initialisation de valeurs 
-    world->hauteur_tab=6;
-    world->longueur_tab=12;
+    world->hauteur_tab=12;
+    world->longueur_tab=6;
     world->gameover=0;
 }
 
 void init_environnement(world_t* world){
 	//initialisation des sprites
 	init_sprite(world->background,0,0, SCREEN_HEIGHT, SCREEN_WIDTH);
-    init_sprite(world->background,0,0,0,0);
     int indice_wall=0;
-	for(int i=0;i<(world->longueur_tab);i++){
-        for(int j = 0;j<(world->hauteur_tab);j++){
+	for(int i=0;i<world->longueur_tab;i++){
+        for(int j = 0;j<world->hauteur_tab;j++){
             //init_sprite(&(world->wall[indice_wall]),(i*WALL_WIDTH),(j*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH);
-            printf("%d",world->tab[i][j]) ;
+            //printf("%ls",&(world->tab[i][j])) ;
             /*if(world->tab[i][j]==1){
                 //init_sprite(&(world->wall[indice_wall]),(i*WALL_WIDTH),(j*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH);
                 //init_sprite(&(world->wall[indice_wall]),0,0,0,0);
@@ -60,7 +59,6 @@ void clean_data(world_t *world){
 }
 
 
-
 void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
     sprite->x=x;
     sprite->y=y;
@@ -69,10 +67,12 @@ void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
 }
 
 void changer_monde(int **tab,int ligne,int colonne){
-    //free_matrice(tab,colonne,ligne);
-    tab = generate_world(colonne,ligne);
-    for(int i=0;i<(colonne);i++){//A CHANGER
-        for(int j = 0;j<(ligne);j++){
+    if(tab!=NULL){
+        free_matrice(tab,ligne,colonne);
+    }
+    tab = generate_world(ligne,colonne);
+    for(int i=0;i<(ligne);i++){//A CHANGER
+        for(int j = 0;j<(colonne);j++){
             tab[i][j]=1;
         }
     }
@@ -87,12 +87,12 @@ int** generate_world(int longueur,int hauteur) {
     return T;
 }
 
-sprite_t* cree_murs(int nb_elements) {
-    sprite_t* T = malloc(nb_elements*sizeof(sprite_t));
+/*sprite_t * cree_murs(int nb_elements) {
+    sprite_t * tab[nb_elements] = malloc(nb_elements*sizeof(sprite_t));
     if(T == NULL)
         exit(EXIT_FAILURE);
     return T;
-}
+}*/
 
 int nb_murs(world_t*world){
     int count =0;
