@@ -80,6 +80,10 @@ int nb_murs(world_t*world){
     return count;
 }
 
+void updata_data(world_t *world){
+    
+}
+
 int is_game_over(world_t *world){
     return world->gameover;
 }
