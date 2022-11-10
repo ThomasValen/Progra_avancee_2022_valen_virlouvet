@@ -32,20 +32,17 @@ void init_sprite(sprite_t *sprite,int x,int y,int h,int l);
 
 void clean_data(world_t *world);
 
-int** generate_world(int ligne,int colonne);
+int** changer_monde(int ligne,int colonne);
 
-int nb_murs(world_t*world);
+sprite_t * cree_murs(int nb_elements);
 
-void changer_monde(int **tab,int ligne,int colonne) ;
-
-sprite_t* cree_murs(int nb_elements) ;
-
-void update_data(world_t *world) ;
-
-void free_matrice(int** T, int taille1, int taille2) ;
+void free_matrice(int** T, int taille1, int taille2);
 
 void free_murs(sprite_t* T);
 
-int is_game_over(world_t *world) ;
+int nb_murs(int **tab,int hauteur_tab,int longueur_tab);
+
+void update_data(world_t *world) ;
+
 
 #endif

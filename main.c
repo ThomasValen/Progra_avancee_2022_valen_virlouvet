@@ -38,7 +38,6 @@ int main( int argc, char* args[] ){
     world.gameover = 0 ;
 
       do{
-
         init(&window,&renderer,&textures,&world); //initialisation du jeu
 
         while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
