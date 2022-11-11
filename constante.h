@@ -19,4 +19,6 @@
 
 #define PLAYER_HEIGHT 25
 
+#define MOVING_STEP 5
+
 #endif
