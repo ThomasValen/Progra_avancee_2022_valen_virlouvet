@@ -46,7 +46,7 @@ void init_environnement(world_t* world){
                 indice_wall++;
             }
             if(world->tab[i][j]== 2){
-                init_sprite(world->player,(j*PLAYER_WIDTH),(i*PLAYER_HEIGHT),PLAYER_HEIGHT, PLAYER_WIDTH);
+                init_sprite(world->player,(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH);
             }
         }
     }

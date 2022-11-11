@@ -15,8 +15,8 @@
 
 #define WALL_HEIGHT 50
 
-#define PLAYER_WIDTH 16
+#define PLAYER_WIDTH 25 //moitié d'un mur
 
-#define PLAYER_HEIGHT 16 
+#define PLAYER_HEIGHT 25
 
 #endif
