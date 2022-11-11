@@ -162,6 +162,33 @@ int nb_murs(int **tab,int hauteur_tab,int longueur_tab){
     return count;
 }
 
+int sprites_collide(sprite_t *sp1, sprite_t sp2)
+{
+    int w1 = sp1->l ;
+    int w2 = sp2.l ;
+    int h1 = sp1->h;
+    int h2 = sp2.h;
+    int x1 = sp1->x ;
+    int x2 = sp2.x ;
+    int y1 = sp1->y ;
+    int y2 = sp2.y ;
+
+
+	return x1 +w1 > x2 && x1 < x2 + w2 && y1 +h1 >y2 && y1 <y2 +h2;
+    //return (abs(x1 - x2) <= (w1 + w2) / 2) && (abs(y1 - y2) <= (h1 + h2) / 2);
+}
+
+void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
+{
+    int collision = sprites_collide(sp1, sp2);
+    if (collision == 1)
+    {
+        sp1->x = sp1->x - 5;
+        sp2.x =sp2.x + 5;
+    }
+}
+
+
 void free_matrice(int** T, int taille1, int taille2) {
     for(int i = 0; i < taille1; i++)
         free(T[i]);
@@ -175,7 +202,10 @@ void free_murs(sprite_t* T) {
 }
 
 void updata_data(world_t *world){
-
+    for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
+        handle_sprites_collision(world->player,world->wall[i],world);
+    }
+    
 }
 
 int is_game_over(world_t *world){
