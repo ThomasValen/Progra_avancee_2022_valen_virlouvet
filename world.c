@@ -184,18 +184,16 @@ void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
     int collision = sprites_collide(sp1, sp2);
     if (collision == 1)
     {
-            printf("%d",world->direction);
-
-        if(world->direction=1){
+        if(world->direction==1){
             sp1->x = sp1->x - 5;
         }
-        if(world->direction=2){
+        if(world->direction==2){
             sp1->x = sp1->x + 5;
         }
-        if(world->direction=3){
+        if(world->direction==3){
             sp1->y = sp1->y - 5;
         }
-        if(world->direction=4){
+        if(world->direction==4){
             sp1->y = sp1->y + 5;
         }
         

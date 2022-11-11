@@ -20,19 +20,25 @@ void handle_events_player(SDL_Event *event, world_t *world){
             if (keystates[SDL_SCANCODE_RIGHT]){
                 world->player->x = world->player->x + MOVING_STEP;
                 world->direction=1;
+            }else{
+                if (keystates[SDL_SCANCODE_UP]){
+                    world->player->y = world->player->y - MOVING_STEP;
+                    world->direction=4;
+                }else{
+                    if (keystates[SDL_SCANCODE_DOWN]){
+                        world->player->y = world->player->y + MOVING_STEP;
+                        world->direction=3;
+                    }else{
+                        if (keystates[SDL_SCANCODE_LEFT]){
+                            world->player->x = world->player->x - MOVING_STEP;
+                            world->direction=2;
+                        }
+                    }
+                    
+                }
+                
             }
-            if (keystates[SDL_SCANCODE_UP]){
-                world->player->y = world->player->y - MOVING_STEP;
-                world->direction=4;
-            }
-            if (keystates[SDL_SCANCODE_DOWN]){
-                world->player->y = world->player->y + MOVING_STEP;
-                world->direction=3;
-            }
-            if (keystates[SDL_SCANCODE_LEFT]){
-                world->player->x = world->player->x - MOVING_STEP;
-                world->direction=2;
-            }
+            
             break;
 
         case SDL_KEYUP:
