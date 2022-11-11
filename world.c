@@ -32,6 +32,7 @@ void init_valeurs(world_t* world){
     world->hauteur_tab=sethauteur();
     world->longueur_tab=setlongueur();
     world->gameover=0;
+    world->direction=0;
 }
 
 void init_environnement(world_t* world){
@@ -183,8 +184,21 @@ void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
     int collision = sprites_collide(sp1, sp2);
     if (collision == 1)
     {
-        sp1->x = sp1->x - 5;
-        sp2.x =sp2.x + 5;
+            printf("%d",world->direction);
+
+        if(world->direction=1){
+            sp1->x = sp1->x - 5;
+        }
+        if(world->direction=2){
+            sp1->x = sp1->x + 5;
+        }
+        if(world->direction=3){
+            sp1->y = sp1->y - 5;
+        }
+        if(world->direction=4){
+            sp1->y = sp1->y + 5;
+        }
+        
     }
 }
 
@@ -201,7 +215,7 @@ void free_murs(sprite_t* T) {
     T = NULL;
 }
 
-void updata_data(world_t *world){
+void update_data(world_t *world){
     for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
         handle_sprites_collision(world->player,world->wall[i],world);
     }
