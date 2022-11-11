@@ -15,4 +15,8 @@
 
 #define WALL_HEIGHT 50
 
+#define PLAYER_WIDTH 16
+
+#define PLAYER_HEIGHT 16 
+
 #endif

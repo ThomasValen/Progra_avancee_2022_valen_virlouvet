@@ -9,6 +9,7 @@ struct textures_s
 {
     SDL_Texture* background;
     SDL_Texture* wall;
+    SDL_Texture* player ;
 };
 typedef struct textures_s textures_t;
 
