@@ -201,7 +201,7 @@ void free_murs(sprite_t* T) {
     T = NULL;
 }
 
-void updata_data(world_t *world){
+void update_data(world_t *world){
     for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
         handle_sprites_collision(world->player,world->wall[i],world);
     }
