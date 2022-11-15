@@ -200,6 +200,25 @@ void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
     }
 }
 
+int PointIsInWall(int x,int y,sprite_t wall){
+    if(wall.x<=x<=wall.x+WALL_WIDTH){
+        if(wall.y<=y<=wall.y+WALL_HEIGHT){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int PointIsInWalls(int x,int y,world_t*world){
+    for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
+        if(PointIsInWall(x,y,world->wall[i])==1){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+
 
 void free_matrice(int** T, int taille1, int taille2) {
     for(int i = 0; i < taille1; i++)
