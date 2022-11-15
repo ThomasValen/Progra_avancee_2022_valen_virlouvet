@@ -14,10 +14,12 @@ struct world_s{
     int direction;//1 = droite  2 = gauche  3 = bas 4 = haut
     int longueur_tab;
     int hauteur_tab;
+    int nb_point_ligne ;
     int **tab;
     sprite_t* background;
     sprite_t wall[500];
     sprite_t* player ;
+    sprite_t ligne[10000];
 };
 typedef struct world_s world_t;
 
@@ -51,6 +53,15 @@ int nb_murs(int **tab,int hauteur_tab,int longueur_tab);
 void update_data(world_t *world) ;
 
 int is_game_over(world_t *world);
+
+int PointIsInWalls(int x,int y,world_t*world) ;
+
+int PointIsInWall(int x,int y,sprite_t wall) ;
+
+int sprites_collide_ligne(sprite_t sp1, sprite_t sp2);
+
+
+void ligne(world_t* world) ;
 
 
 #endif

@@ -34,6 +34,7 @@ void init_valeurs(world_t* world){
     world->longueur_tab=setlongueur();
     world->gameover=0;
     world->direction=0;
+    world->nb_point_ligne = 0 ;
 }
 
 void init_environnement(world_t* world){
@@ -52,6 +53,8 @@ void init_environnement(world_t* world){
             }
         }
     }
+
+    ligne(world) ;
 }
 
 void clean_data(world_t *world){
@@ -180,6 +183,22 @@ int sprites_collide(sprite_t *sp1, sprite_t sp2)
     //return (abs(x1 - x2) <= (w1 + w2) / 2) && (abs(y1 - y2) <= (h1 + h2) / 2);
 }
 
+int sprites_collide_ligne(sprite_t sp1, sprite_t sp2)
+{
+    int w1 = sp1.l ;
+    int w2 = sp2.l ;
+    int h1 = sp1.h;
+    int h2 = sp2.h;
+    int x1 = sp1.x ;
+    int x2 = sp2.x ;
+    int y1 = sp1.y ;
+    int y2 = sp2.y ;
+
+
+	return x1 +w1 > x2 && x1 < x2 + w2 && y1 +h1 >y2 && y1 <y2 +h2;
+    //return (abs(x1 - x2) <= (w1 + w2) / 2) && (abs(y1 - y2) <= (h1 + h2) / 2);
+}
+
 void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
 {
     int collision = sprites_collide(sp1, sp2);
@@ -242,6 +261,26 @@ void update_data(world_t *world){
 
 int is_game_over(world_t *world){
     return world->gameover;
+}
+
+void ligne(world_t *world){
+    float player_a =  48;
+    float cx = world->player->x ;
+    float cy = world->player->y ;
+    int is_over = 0 ;
+    while(is_over == 0){
+        cx = world->player->x + world->nb_point_ligne*cos(player_a) ;
+        cy = world->player->y + world->nb_point_ligne*sin(player_a) ;
+        init_sprite(&(world->ligne[world->nb_point_ligne]),cx, cy, 1, 1);
+        for(int i =0 ; i < nb_murs(world->tab,world->hauteur_tab, world->hauteur_tab); i++){
+            if (sprites_collide_ligne(world->ligne[world->nb_point_ligne], world->wall[i])){
+                is_over = 1 ;
+            }
+        }  
+        world->nb_point_ligne++;
+    }
+    
+    
 }
 
 
