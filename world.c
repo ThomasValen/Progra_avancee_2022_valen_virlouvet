@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "world.h"
+#include <math.h> 
 #include "constante.h"
 
 void init_data(world_t * world){
@@ -223,5 +224,8 @@ void update_data(world_t *world){
 int is_game_over(world_t *world){
     return world->gameover;
 }
+
+
+    
 
 
