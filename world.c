@@ -264,22 +264,27 @@ int is_game_over(world_t *world){
 }
 
 void ligne(world_t *world){
-    float player_a =  48;
+    float player_a =  0;//72 max
+    float angle_radian = player_a*PI/180;
     float cx = world->player->x ;
     float cy = world->player->y ;
     int is_over = 0 ;
+    float vcos = cos(angle_radian);
+    float vsin = sin(angle_radian);
+
     while(is_over == 0){
-        cx = world->player->x + world->nb_point_ligne*cos(player_a) ;
-        cy = world->player->y + world->nb_point_ligne*sin(player_a) ;
+        cx = world->player->x + world->nb_point_ligne*vcos ;
+        cy = world->player->y + world->nb_point_ligne*vsin ;
+        
         init_sprite(&(world->ligne[world->nb_point_ligne]),cx, cy, 1, 1);
-        for(int i =0 ; i < nb_murs(world->tab,world->hauteur_tab, world->hauteur_tab); i++){
+        for(int i =0 ; i < 500; i++){
             if (sprites_collide_ligne(world->ligne[world->nb_point_ligne], world->wall[i])){
                 is_over = 1 ;
             }
-        }  
+        } 
         world->nb_point_ligne++;
     }
-    
+    printf("%d",world->nb_point_ligne);
     
 }
 
