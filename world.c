@@ -34,7 +34,12 @@ void init_valeurs(world_t* world){
     world->longueur_tab=setlongueur();
     world->gameover=0;
     world->direction=0;
-    world->nb_point_ligne = 0 ;
+    for (int i = 0; i < 512; i++)
+    {
+        world->nb_point_ligne[i] = 0 ;
+    }
+    
+    
 }
 
 void init_environnement(world_t* world){
@@ -53,8 +58,13 @@ void init_environnement(world_t* world){
             }
         }
     }
+    float angle = 1;
+    for (int i = 0; i < 512; i++)
+    {
+        ligne(world, angle, i) ;
+        angle = angle + 1 ;
+    }
 
-    ligne(world) ;
 }
 
 void clean_data(world_t *world){
@@ -263,8 +273,7 @@ int is_game_over(world_t *world){
     return world->gameover;
 }
 
-void ligne(world_t *world){
-    float player_a =  2;//72 max
+void ligne(world_t *world, float player_a, int numero_ligne){
     float angle_radian = player_a*PI/180;
     float cx = world->player->x ;
     float cy = world->player->y ;
@@ -273,18 +282,17 @@ void ligne(world_t *world){
     float vsin = sin(angle_radian);
 
     while(is_over == 0){
-        cx = world->player->x + world->nb_point_ligne*vcos ;
-        cy = world->player->y + world->nb_point_ligne*vsin ;
+        cx = world->player->x + world->nb_point_ligne[numero_ligne]*vcos ;
+        cy = world->player->y + world->nb_point_ligne[numero_ligne ]*vsin ;
         
-        init_sprite(&(world->ligne[world->nb_point_ligne]),cx, cy, 1, 1);
+        init_sprite(&(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]]),cx, cy, 1, 1);
         for(int i =0 ; i < 500; i++){
-            if (sprites_collide_ligne(world->ligne[world->nb_point_ligne], world->wall[i])){
+            if (sprites_collide_ligne(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]], world->wall[i])){
                 is_over = 1 ;
             }
         } 
-        world->nb_point_ligne++;
+        world->nb_point_ligne[numero_ligne]++;
     }
-    printf("%d",world->nb_point_ligne);
     
 }
 
