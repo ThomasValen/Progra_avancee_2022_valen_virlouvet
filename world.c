@@ -58,11 +58,10 @@ void init_environnement(world_t* world){
             }
         }
     }
-    float angle = 1;
+    float angle = 0;
     for (int i = 0; i < 512; i++)
     {
         ligne(world, angle, i) ;
-        angle = angle + 1 ;
     }
 
 }
@@ -273,7 +272,7 @@ int is_game_over(world_t *world){
     return world->gameover;
 }
 
-void ligne(world_t *world, float player_a, int numero_ligne){
+void ligne(world_t *world,float player_a, int numero_ligne){
     float angle_radian = player_a*PI/180;
     float cx = world->player->x ;
     float cy = world->player->y ;

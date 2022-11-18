@@ -61,7 +61,7 @@ int PointIsInWall(int x,int y,sprite_t wall) ;
 int sprites_collide_ligne(sprite_t sp1, sprite_t sp2);
 
 
-void ligne(world_t* world, float player_a, int numero_ligne) ;
+void ligne(world_t* world,float player_a, int numero_ligne) ;
 
 
 #endif
