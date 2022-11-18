@@ -26,6 +26,7 @@ void init_memoire(world_t* world){
 
     //world->wall = cree_murs(500);
     world->tab = changer_monde(world->hauteur_tab,world->longueur_tab );
+    world->ligne = creer_ligne(512,2000) ;
 }
 
 void init_valeurs(world_t* world){
@@ -62,7 +63,9 @@ void init_environnement(world_t* world){
     for (int i = 0; i < 512; i++)
     {
         ligne(world, angle, i) ;
+        angle = angle + 1;
     }
+
 
 }
 
@@ -162,6 +165,15 @@ int** changer_monde(int ligne,int colonne){
         fclose(fichier);
     }
     return T;
+}
+
+sprite_t** creer_ligne(int ligne, int colonne){
+    sprite_t ** T = malloc(ligne*sizeof(sprite_t*));
+    if(T == NULL)
+        exit(EXIT_FAILURE);
+    for(int i = 0; i < ligne ; i++)
+        T[i] = malloc(colonne*sizeof(sprite_t));
+    return T ;
 }
 
 int nb_murs(int **tab,int hauteur_tab,int longueur_tab){
@@ -277,10 +289,11 @@ void ligne(world_t *world,float player_a, int numero_ligne){
     float cx = world->player->x ;
     float cy = world->player->y ;
     int is_over = 0 ;
+    int incr=0;
     float vcos = cos(angle_radian);
     float vsin = sin(angle_radian);
 
-    while(is_over == 0){
+    while(is_over != 1){
         cx = world->player->x + world->nb_point_ligne[numero_ligne]*vcos ;
         cy = world->player->y + world->nb_point_ligne[numero_ligne ]*vsin ;
         
@@ -288,10 +301,19 @@ void ligne(world_t *world,float player_a, int numero_ligne){
         for(int i =0 ; i < 500; i++){
             if (sprites_collide_ligne(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]], world->wall[i])){
                 is_over = 1 ;
+                free(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]]) ;
             }
         } 
-        world->nb_point_ligne[numero_ligne]++;
+        
+        incr++ ;
+        world->nb_point_ligne[numero_ligne] = incr;
+
     }
+
+    printf("%d", world->nb_point_ligne[numero_ligne]) ;
+    
+
+    
     
 }
 
