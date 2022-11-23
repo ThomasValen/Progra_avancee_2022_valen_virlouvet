@@ -15,6 +15,7 @@ struct world_s{
     int longueur_tab;
     int hauteur_tab;
     int nb_point_ligne[512] ;
+    float player_a;
     int **tab;
     sprite_t* background;
     sprite_t wall[500];
@@ -61,7 +62,7 @@ int PointIsInWall(int x,int y,sprite_t wall) ;
 int sprites_collide_ligne(sprite_t sp1, sprite_t sp2);
 
 
-void ligne(world_t* world, float player_a, int numero_ligne) ;
+void ligne(world_t* world, int numero_ligne) ;
 
 
 #endif

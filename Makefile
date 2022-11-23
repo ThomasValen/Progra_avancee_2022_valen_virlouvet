@@ -11,7 +11,7 @@ PROG = jeu
 	gcc $(CFLAGS) -c $<
 
 jeu: $(OBJ)
-	gcc $(CFLAGS) $(OBJ) $(LDFLAGS) -o $@
+	gcc $(CFLAGS) $(OBJ) $(LDFLAGS) -o $@ -lm
 
 doc: $(PROG)
 	doxygen ./$(PROG)

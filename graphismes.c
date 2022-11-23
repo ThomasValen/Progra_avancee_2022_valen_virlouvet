@@ -54,7 +54,7 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     apply_sprite(renderer, textures->player, world->player) ;
     for(int j = 0 ; j < 512 ; j++){
         for(int i = 0 ; i < world->nb_point_ligne[j]; i++){
-                apply_wall(world->ligne[j][i], renderer, textures->ligne) ;
+            apply_wall(world->ligne[j][i], renderer, textures->ligne) ;
         }
     }
     
