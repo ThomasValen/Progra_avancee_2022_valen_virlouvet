@@ -16,8 +16,9 @@ struct world_s{
     int hauteur_tab;
     int nb_point_ligne[512] ;
     int **tab;
+    int nb_mur ;
     sprite_t* background;
-    sprite_t wall[500];
+    sprite_t wall[100];
     sprite_t* player ;
     sprite_t **ligne;
 };
@@ -38,7 +39,7 @@ sprite_t** creer_ligne(int ligne, int colonne) ;
 
 void clean_data(world_t *world);
 
-int** changer_monde(int ligne,int colonne);
+int** changer_monde(world_t *world,int ligne,int colonne);
 
 sprite_t * cree_murs(int nb_elements);
 

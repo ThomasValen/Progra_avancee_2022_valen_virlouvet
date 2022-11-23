@@ -47,7 +47,7 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
 
     apply_background(renderer, textures->background) ;
     
-    for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
+    for(int i=0;i<world->nb_mur;i++){
         apply_wall(world->wall[i],renderer,textures->wall);
     }
     
@@ -60,5 +60,7 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     
     update_screen(renderer);
 }
+
+
 
     

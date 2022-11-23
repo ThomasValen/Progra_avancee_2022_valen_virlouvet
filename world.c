@@ -25,7 +25,7 @@ void init_memoire(world_t* world){
     world->player = (sprite_t*)malloc(sizeof(sprite_t));
 
     //world->wall = cree_murs(500);
-    world->tab = changer_monde(world->hauteur_tab,world->longueur_tab );
+    world->tab = changer_monde(world,world->hauteur_tab,world->longueur_tab );
     world->ligne = creer_ligne(512,2000) ;
 }
 
@@ -39,6 +39,8 @@ void init_valeurs(world_t* world){
     {
         world->nb_point_ligne[i] = 0 ;
     }
+
+    world->nb_mur = 0 ;
     
     
 }
@@ -63,7 +65,7 @@ void init_environnement(world_t* world){
     for (int i = 0; i < 512; i++)
     {
         ligne(world, angle, i) ;
-        angle = angle + 1;
+        angle = angle + 0.5;
     }
 
 
@@ -126,7 +128,7 @@ int setlongueur(){
     return max;
 }
 
-int** changer_monde(int ligne,int colonne){
+int** changer_monde(world_t* world,int ligne,int colonne){
     int ** T = malloc(ligne*sizeof(int*));
     if(T == NULL)
         exit(EXIT_FAILURE);
@@ -146,6 +148,7 @@ int** changer_monde(int ligne,int colonne){
             if(chara!=EOF){
                 if(chara == '#'){
                     T[lignes][colonnes]=1;
+                    world->nb_mur++ ;
                 }else if(chara == '.'){
 
                     T[lignes][colonnes]= 2;
@@ -278,6 +281,13 @@ void update_data(world_t *world){
         handle_sprites_collision(world->player,world->wall[i],world);
     }
     
+    float angle = 70.6;
+    for (int i = 0; i < 512; i++)
+    {
+        ligne(world, angle, i) ;
+        angle = angle + 0.16;
+    }
+
 }
 
 int is_game_over(world_t *world){
@@ -294,23 +304,23 @@ void ligne(world_t *world,float player_a, int numero_ligne){
     float vsin = sin(angle_radian);
 
     while(is_over != 1){
-        cx = world->player->x + world->nb_point_ligne[numero_ligne]*vcos ;
-        cy = world->player->y + world->nb_point_ligne[numero_ligne ]*vsin ;
+        cx = world->player->x + incr*vcos ;
+        cy = world->player->y + incr*vsin ;
         
-        init_sprite(&(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]]),cx, cy, 1, 1);
-        for(int i =0 ; i < 500; i++){
-            if (sprites_collide_ligne(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]], world->wall[i])){
+        init_sprite(&(world->ligne[numero_ligne][incr]),cx, cy, 1, 1);
+        for(int i =0 ; i < world->nb_mur; i++){
+            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->wall[i])){
                 is_over = 1 ;
-                free(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]]) ;
+               
             }
         } 
         
         incr++ ;
-        world->nb_point_ligne[numero_ligne] = incr;
 
     }
+    world->nb_point_ligne[numero_ligne] = incr ;
 
-    printf("%d", world->nb_point_ligne[numero_ligne]) ;
+
     
 
     
