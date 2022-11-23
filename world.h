@@ -20,7 +20,7 @@ struct world_s{
     sprite_t* background;
     sprite_t wall[500];
     sprite_t* player ;
-    sprite_t ligne[512][2000];
+    sprite_t **ligne;
 };
 typedef struct world_s world_t;
 
@@ -34,6 +34,8 @@ void init_memoire(world_t* world);
 void init_environnement(world_t* world); 
 
 void init_sprite(sprite_t *sprite,int x,int y,int h,int l);
+
+sprite_t** creer_ligne(int ligne, int colonne) ;
 
 void clean_data(world_t *world);
 
@@ -62,7 +64,11 @@ int PointIsInWall(int x,int y,sprite_t wall) ;
 int sprites_collide_ligne(sprite_t sp1, sprite_t sp2);
 
 
+<<<<<<< HEAD
 void ligne(world_t* world, int numero_ligne) ;
+=======
+void ligne(world_t* world,float player_a, int numero_ligne) ;
+>>>>>>> 20f55183d11872f62e2ca7fdb1fd5b0b048fc61c
 
 
 #endif
