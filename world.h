@@ -10,6 +10,7 @@ struct sprite_s{
 typedef struct sprite_s sprite_t;
 
 struct world_s{
+    int three_d_check;
     int gameover ;
     int direction;//1 = droite  2 = gauche  3 = bas 4 = haut
     int longueur_tab;

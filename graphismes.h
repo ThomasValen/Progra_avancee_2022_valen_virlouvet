@@ -8,11 +8,13 @@
 struct textures_s
 {
     SDL_Texture* background;
+    SDL_Texture* sky;
     SDL_Texture* bandes[512];
     SDL_Texture* wall;
     SDL_Texture* player ;
     SDL_Texture* ligne ;
     SDL_Surface* surface;
+    SDL_Rect tab_bandes[512];
 };
 typedef struct textures_s textures_t;
 

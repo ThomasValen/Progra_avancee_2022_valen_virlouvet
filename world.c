@@ -44,6 +44,8 @@ void init_valeurs(world_t* world){
     world->nb_mur = 0 ;
 
     world->angle = 0 ;
+
+    world->three_d_check=0;
     
     
 }
