@@ -23,10 +23,11 @@ void init_data(world_t * world){
 void init_memoire(world_t* world){
     world->background = (sprite_t*)malloc(sizeof(sprite_t));
     world->player = (sprite_t*)malloc(sizeof(sprite_t));
+    world->view_player = (sprite_t*)malloc(sizeof(sprite_t)) ;
 
     //world->wall = cree_murs(500);
     world->tab = changer_monde(world,world->hauteur_tab,world->longueur_tab );
-    world->ligne = creer_ligne(512,2000) ;
+    world->ligne = creer_ligne(515,2000) ;
 }
 
 void init_valeurs(world_t* world){
@@ -35,12 +36,14 @@ void init_valeurs(world_t* world){
     world->longueur_tab=setlongueur();
     world->gameover=0;
     world->direction=0;
-    for (int i = 0; i < 512; i++)
+    for (int i = 0; i < 515; i++)
     {
         world->nb_point_ligne[i] = 0 ;
     }
 
     world->nb_mur = 0 ;
+
+    world->angle = 0 ;
     
     
 }
@@ -61,12 +64,20 @@ void init_environnement(world_t* world){
             }
         }
     }
-    float angle = 0;
+    float angle = world->angle ;
     for (int i = 0; i < 512; i++)
     {
         ligne(world, angle, i) ;
-        angle = angle + 0.5;
+        angle = angle + 0.16;
     }
+
+    angle = world->angle + 90 ;
+    ligne(world, angle, 512) ;
+    angle = world->angle +180 ;
+    ligne(world,angle, 513) ;
+    angle = world->angle + 270 ;
+    ligne(world,angle,514) ;
+
 
 
 }
@@ -280,13 +291,18 @@ void update_data(world_t *world){
     for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
         handle_sprites_collision(world->player,world->wall[i],world);
     }
-    
-    float angle = 70.6;
+    float angle = world->angle ;
     for (int i = 0; i < 512; i++)
     {
         ligne(world, angle, i) ;
         angle = angle + 0.16;
     }
+    angle = world->angle + 90+40.96 ;
+    ligne(world, angle, 512) ;
+    angle = world->angle +180 +40.96 ;
+    ligne(world,angle, 513) ;
+    angle = world->angle + 270  +40.96;
+    ligne(world,angle,514) ;
 
 }
 
@@ -318,13 +334,12 @@ void ligne(world_t *world,float player_a, int numero_ligne){
         incr++ ;
 
     }
-    world->nb_point_ligne[numero_ligne] = incr ;
-
-
-    
-
-    
+    world->nb_point_ligne[numero_ligne] = incr ;  
     
 }
+
+
+
+    
 
 
