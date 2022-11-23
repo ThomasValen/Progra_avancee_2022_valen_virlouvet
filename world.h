@@ -15,7 +15,6 @@ struct world_s{
     int longueur_tab;
     int hauteur_tab;
     int nb_point_ligne[512] ;
-    float player_a;
     int **tab;
     int nb_mur ;
     sprite_t* background;

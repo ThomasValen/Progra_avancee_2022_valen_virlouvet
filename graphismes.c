@@ -11,6 +11,7 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->wall);
     clean_texture(textures->player) ;
     clean_texture(textures->ligne) ;
+    SDL_FreeSurface(textures->surface);
 }
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures){
@@ -21,6 +22,8 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures){
     textures->player = load_image("ressources/carre_bleu.bmp", renderer);
 
     textures->ligne = load_image("ressources/carre_blanc.bmp", renderer);
+
+    textures->surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
 }
 
 void apply_background(SDL_Renderer * renderer, SDL_Texture * texture){
@@ -41,17 +44,36 @@ void apply_sprite(SDL_Renderer* renderer, SDL_Texture* texture, sprite_t *sprite
     }
 }
 
+void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
+    SDL_Rect tab_bandes[512];
+    int x_incr=0;
+    for(int i=0;i<512;i++){
+        tab_bandes[i].w=2;
+        tab_bandes[i].h=27000/world->nb_point_ligne[i];//a modif
+        tab_bandes[i].x=x_incr;
+        tab_bandes[i].y=SCREEN_HEIGHT/2 - (27000/world->nb_point_ligne[i])/2;//a modif
+        x_incr=x_incr+2;
+        SDL_FillRect(textures->surface, &tab_bandes[i], SDL_MapRGB(textures->surface->format, 255, 0, 0));
+        textures->bandes[i] = SDL_CreateTextureFromSurface(renderer, textures->surface);
+        apply_texture(textures->bandes[i],renderer,0,0);
+    }
+    
+}
+
 
 void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textures){
     clear_renderer(renderer) ;
-
-    apply_background(renderer, textures->background) ;
+color_3d(renderer,world,textures);
+    //apply_background(renderer, textures->background) ;
     
     for(int i=0;i<world->nb_mur;i++){
         apply_wall(world->wall[i],renderer,textures->wall);
     }
     
     apply_sprite(renderer, textures->player, world->player) ;
+
+    
+    
     for(int j = 0 ; j < 512 ; j++){
         for(int i = 0 ; i < world->nb_point_ligne[j]; i++){
             apply_wall(world->ligne[j][i], renderer, textures->ligne) ;
@@ -60,7 +82,3 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     
     update_screen(renderer);
 }
-
-
-
-    

@@ -8,7 +8,7 @@
 
 void init_data(world_t * world){
     //on n'est pas à la fin du jeu
-    
+
 	//Initialisation de valeurs 
 	init_valeurs(world);
 
@@ -35,7 +35,6 @@ void init_valeurs(world_t* world){
     world->longueur_tab=setlongueur();
     world->gameover=0;
     world->direction=0;
-    world->player_a=0;
     for (int i = 0; i < 512; i++)
     {
         world->nb_point_ligne[i] = 0 ;
@@ -48,7 +47,7 @@ void init_valeurs(world_t* world){
 
 void init_environnement(world_t* world){
 	//initialisation des sprites
-	init_sprite(world->background,0,0, SCREEN_HEIGHT, SCREEN_WIDTH);
+	init_sprite(world->background,0,0, world->hauteur_tab*WALL_HEIGHT, world->longueur_tab*WALL_WIDTH);
 
     int indice_wall=0;
 	for(int i=0;i<(world->hauteur_tab);i++){
@@ -230,16 +229,16 @@ void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
     if (collision == 1)
     {
         if(world->direction==1){
-            sp1->x = sp1->x - 5;
+            sp1->x = sp1->x - MOVING_STEP-1;
         }
         if(world->direction==2){
-            sp1->x = sp1->x + 5;
+            sp1->x = sp1->x + MOVING_STEP+1;
         }
         if(world->direction==3){
-            sp1->y = sp1->y - 5;
+            sp1->y = sp1->y - MOVING_STEP-1;
         }
         if(world->direction==4){
-            sp1->y = sp1->y + 5;
+            sp1->y = sp1->y + MOVING_STEP+1;
         }
         
     }
@@ -305,8 +304,8 @@ void ligne(world_t *world,float player_a, int numero_ligne){
     float vsin = sin(angle_radian);
 
     while(is_over != 1){
-        cx = world->player->x + incr*vcos ;
-        cy = world->player->y + incr*vsin ;
+        cx = world->player->x + incr*vcos +PLAYER_WIDTH/2;
+        cy = world->player->y + incr*vsin +PLAYER_HEIGHT/2;
         
         init_sprite(&(world->ligne[numero_ligne][incr]),cx, cy, 1, 1);
         for(int i =0 ; i < world->nb_mur; i++){
@@ -327,8 +326,5 @@ void ligne(world_t *world,float player_a, int numero_ligne){
     
     
 }
-
-
-    
 
 
