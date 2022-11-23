@@ -302,7 +302,6 @@ void ligne(world_t *world,float player_a, int numero_ligne){
         for(int i =0 ; i < 500; i++){
             if (sprites_collide_ligne(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]], world->wall[i])){
                 is_over = 1 ;
-                free(world->ligne[numero_ligne][world->nb_point_ligne[numero_ligne]]) ;
             }
         } 
         
