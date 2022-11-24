@@ -12,8 +12,7 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->wall);
     clean_texture(textures->player) ;
     clean_texture(textures->ligne) ;
-    clean_texture( textures->bandes );       
-    //SDL_FreeSurface(textures->surface);
+    clean_texture( textures->bandes );
 }
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures){
@@ -59,18 +58,26 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     int x_incr=0;
     for(int i=0;i<513;i++){
         textures->tab_bandes[i].w=2;
-        textures->tab_bandes[i].h=30000/world->nb_point_ligne[i]/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180);//a modif
+        textures->tab_bandes[i].h=32000/world->nb_point_ligne[i]/*/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180)*/;//a modif
         if(textures->tab_bandes[i].h<0){
             textures->tab_bandes[i].h=textures->tab_bandes[i].h*(-1);
         }
         textures->tab_bandes[i].x=x_incr;
-        textures->tab_bandes[i].y=SCREEN_HEIGHT/2 - (30000/world->nb_point_ligne[i]/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180))/2;//a modif
+        textures->tab_bandes[i].y=SCREEN_HEIGHT/2 - (32000/world->nb_point_ligne[i]/*/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180)*/)/2;//a modif
         x_incr=x_incr+2;
         
         //textures->bandes[i] = SDL_CreateTextureFromSurface(renderer, textures->surface);
         //apply_texture(textures->bandes[i],renderer,0,0);
     }
-    for(int y=0;y<512;y++){
+
+    SDL_Rect couleur_fond;
+    couleur_fond.h=SCREEN_HEIGHT;
+    couleur_fond.w=SCREEN_WIDTH;
+    couleur_fond.x=0;
+    couleur_fond.y=0;
+    SDL_FillRect(textures->surface, &couleur_fond, SDL_MapRGB(textures->surface->format, 0, 255, 0));
+
+    for(int y=0;y<513;y++){
         couleur = 255 - world->nb_point_ligne[y];
         if(couleur<0){
             couleur=0;
@@ -78,6 +85,10 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
         SDL_FillRect(textures->surface, &textures->tab_bandes[y], SDL_MapRGB(textures->surface->format, couleur, 0, 0));
         
     }
+    
+    
+    Uint32 colorkey = SDL_MapRGB( textures->surface->format, 0, 255, 0 );
+    SDL_SetColorKey( textures->surface, SDL_RLEACCEL , colorkey );
     textures->bandes = SDL_CreateTextureFromSurface(renderer, textures->surface);
     apply_texture(textures->bandes,renderer,0,0);
 
@@ -90,7 +101,7 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
 void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textures){
     clear_renderer(renderer) ;
     
-    //apply_texture(textures->sky,renderer,0,0);
+    apply_texture(textures->sky,renderer,0,SCREEN_HEIGHT/2);
     color_3d(renderer,world,textures);
     apply_background(renderer, textures->background) ;
 
