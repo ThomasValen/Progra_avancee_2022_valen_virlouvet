@@ -27,7 +27,6 @@ void clean(SDL_Window *window, SDL_Renderer * renderer, textures_t *textures, wo
 
 
 int main( int argc, char* args[] ){
-
     SDL_Event event;
     world_t world;
     textures_t textures;
@@ -50,7 +49,7 @@ int main( int argc, char* args[] ){
           refresh_graphics(renderer,&world,&textures);
 
           // pause de 10 ms pour controler la vitesse de rafraichissement
-          pause(20);
+          pause(10);
         }
 
 

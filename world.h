@@ -10,16 +10,20 @@ struct sprite_s{
 typedef struct sprite_s sprite_t;
 
 struct world_s{
+    int three_d_check;
     int gameover ;
     int direction;//1 = droite  2 = gauche  3 = bas 4 = haut
     int longueur_tab;
     int hauteur_tab;
-    int nb_point_ligne[512] ;
+    int nb_point_ligne[515] ;
     int **tab;
+    int nb_mur ;
+    float angle ;
     sprite_t* background;
     sprite_t wall[100];
     sprite_t* player ;
     sprite_t **ligne;
+    sprite_t *view_player ;
 };
 typedef struct world_s world_t;
 
@@ -38,7 +42,7 @@ sprite_t** creer_ligne(int ligne, int colonne) ;
 
 void clean_data(world_t *world);
 
-int** changer_monde(int ligne,int colonne);
+int** changer_monde(world_t *world,int ligne,int colonne);
 
 sprite_t * cree_murs(int nb_elements);
 
