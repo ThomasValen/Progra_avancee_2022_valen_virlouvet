@@ -17,7 +17,7 @@ struct world_s{
     int nb_point_ligne[512] ;
     int **tab;
     sprite_t* background;
-    sprite_t wall[500];
+    sprite_t wall[100];
     sprite_t* player ;
     sprite_t **ligne;
 };
