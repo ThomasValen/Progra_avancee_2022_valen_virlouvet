@@ -59,12 +59,12 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     int x_incr=0;
     for(int i=0;i<513;i++){
         textures->tab_bandes[i].w=2;
-        textures->tab_bandes[i].h=30000/world->nb_point_ligne[i]/*/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180)*/;//a modif
+        textures->tab_bandes[i].h=30000/world->nb_point_ligne[i]/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180);//a modif
         if(textures->tab_bandes[i].h<0){
             textures->tab_bandes[i].h=textures->tab_bandes[i].h*(-1);
         }
         textures->tab_bandes[i].x=x_incr;
-        textures->tab_bandes[i].y=SCREEN_HEIGHT/2 - (30000/world->nb_point_ligne[i]/*/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180)*/)/2;//a modif
+        textures->tab_bandes[i].y=SCREEN_HEIGHT/2 - (30000/world->nb_point_ligne[i]/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180))/2;//a modif
         x_incr=x_incr+2;
         
         //textures->bandes[i] = SDL_CreateTextureFromSurface(renderer, textures->surface);
@@ -103,11 +103,11 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
 
     
     
-    for(int j = 0 ; j < 513 ; j++){
+    /*for(int j = 0 ; j < 513 ; j++){
         for(int i = 0 ; i < world->nb_point_ligne[j]; i++){
             apply_wall(world->ligne[j][i], renderer, textures->ligne) ;
         }
-    }
+    }*/
     
     update_screen(renderer);
 }
