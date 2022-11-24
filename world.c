@@ -316,8 +316,7 @@ int is_game_over(world_t *world){
     return world->gameover;
 }
 
-void ligne(world_t *world,float player_a, int numero_ligne){
-    float angle_radian = player_a*PI/180;
+float angle_radian = player_a*PI/180;
     float cx = world->player->x ;
     float cy = world->player->y ;
     int is_over = 0 ;

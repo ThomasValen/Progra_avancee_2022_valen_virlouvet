@@ -9,7 +9,7 @@ struct textures_s
 {
     SDL_Texture* background;
     SDL_Texture* sky;
-    SDL_Texture* bandes[513];
+    SDL_Texture* bandes;
     SDL_Texture* wall;
     SDL_Texture* player ;
     SDL_Texture* ligne ;
