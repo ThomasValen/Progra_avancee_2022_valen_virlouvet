@@ -27,7 +27,7 @@ void init_memoire(world_t* world){
 
     //world->wall = cree_murs(500);
     world->tab = changer_monde(world,world->hauteur_tab,world->longueur_tab );
-    world->ligne = creer_ligne(515,2000) ;
+    world->ligne = creer_ligne(516,2000) ;
 }
 
 void init_valeurs(world_t* world){
@@ -36,7 +36,7 @@ void init_valeurs(world_t* world){
     world->longueur_tab=setlongueur();
     world->gameover=0;
     world->direction=0;
-    for (int i = 0; i < 515; i++)
+    for (int i = 0; i < 516; i++)
     {
         world->nb_point_ligne[i] = 0 ;
     }
@@ -67,18 +67,18 @@ void init_environnement(world_t* world){
         }
     }
     float angle = world->angle ;
-    for (int i = 0; i < 512; i++)
+    for (int i = 0; i < 513; i++)
     {
         ligne(world, angle, i) ;
-        angle = angle + 0.16;
+        angle = angle + 0.15;
     }
 
     angle = world->angle + 90 ;
-    ligne(world, angle, 512) ;
+    ligne(world, angle, 513) ;
     angle = world->angle +180 ;
-    ligne(world,angle, 513) ;
+    ligne(world,angle, 514) ;
     angle = world->angle + 270 ;
-    ligne(world,angle,514) ;
+    ligne(world,angle,515) ;
 
 
 
@@ -92,7 +92,7 @@ void clean_data(world_t *world){
 }
 
 
-void init_sprite(sprite_t *sprite,int x,int y,int h,int l){
+void init_sprite(sprite_t *sprite,float x,float y,int h,int l){
     sprite->x=x;
     sprite->y=y;
     sprite->h=h;
@@ -294,17 +294,21 @@ void update_data(world_t *world){
         handle_sprites_collision(world->player,world->wall[i],world);
     }
     float angle = world->angle ;
-    for (int i = 0; i < 512; i++)
+    float mid_angle = 0 ;
+    for (int i = 0; i < 513; i++)
     {
         ligne(world, angle, i) ;
-        angle = angle + 0.16;
+        angle = angle + 0.15;
+        if(i == 256){
+            mid_angle = angle ;
+        }
     }
-    angle = world->angle + 90+40.96 ;
-    ligne(world, angle, 512) ;
-    angle = world->angle +180 +40.96 ;
-    ligne(world,angle, 513) ;
-    angle = world->angle + 270  +40.96;
-    ligne(world,angle,514) ;
+    angle = mid_angle + 90;
+    ligne(world, angle, 513) ;
+    angle = mid_angle + 180 ;
+    ligne(world,angle, 514) ;
+    angle = mid_angle + 270 ;
+    ligne(world,angle,515) ;
 
 }
 
@@ -322,8 +326,8 @@ void ligne(world_t *world,float player_a, int numero_ligne){
     float vsin = sin(angle_radian);
 
     while(is_over != 1){
-        cx = world->player->x + incr*vcos +PLAYER_WIDTH/2;
-        cy = world->player->y + incr*vsin +PLAYER_HEIGHT/2;
+        cx = world->player->x + incr*vcos +PLAYER_WIDTH/2 ;
+        cy = world->player->y + incr*vsin +PLAYER_HEIGHT/2 ;
         
         init_sprite(&(world->ligne[numero_ligne][incr]),cx, cy, 1, 1);
         for(int i =0 ; i < world->nb_mur; i++){

@@ -2,23 +2,24 @@
 #define __WORLD__H__
 
 struct sprite_s{
-    int x;
-    int y;
+    float x;
+    float y;
     int h;
     int l;
 };
 typedef struct sprite_s sprite_t;
 
 struct world_s{
-    int three_d_check;
     int gameover ;
     int direction;//1 = droite  2 = gauche  3 = bas 4 = haut
     int longueur_tab;
     int hauteur_tab;
-    int nb_point_ligne[515] ;
+    int nb_point_ligne[516] ;
     int **tab;
     int nb_mur ;
+    int three_d_check ;
     float angle ;
+    float mid_angle ;
     sprite_t* background;
     sprite_t wall[100];
     sprite_t* player ;
@@ -36,7 +37,7 @@ void init_memoire(world_t* world);
 
 void init_environnement(world_t* world); 
 
-void init_sprite(sprite_t *sprite,int x,int y,int h,int l);
+void init_sprite(sprite_t *sprite,float x,float y,int h,int l);
 
 sprite_t** creer_ligne(int ligne, int colonne) ;
 

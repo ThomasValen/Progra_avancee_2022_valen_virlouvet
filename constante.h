@@ -4,7 +4,7 @@
 /**
  * \brief Largeur de l'écran de jeu
  */
-#define SCREEN_WIDTH 1024
+#define SCREEN_WIDTH 1026
 
 /**
  * \brief Hauteur de l'écran de jeu
@@ -19,7 +19,7 @@
 
 #define PLAYER_HEIGHT 6
 
-#define MOVING_STEP 10
+#define MOVING_STEP 3
 
 #define PI 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679 
 

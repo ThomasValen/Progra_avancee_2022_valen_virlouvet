@@ -18,25 +18,26 @@ void handle_events_player(SDL_Event *event, world_t *world){
         {
         case SDL_KEYDOWN:
             if (keystates[SDL_SCANCODE_D]){
-                world->player->y = world->ligne[512][MOVING_STEP].y;
-                world->player->x = world->ligne[512][MOVING_STEP].x;
+                world->player->y = world->ligne[513][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                world->player->x = world->ligne[513][MOVING_STEP].x - PLAYER_WIDTH/2;
             
                 world->direction=1;
             }else{
                 if (keystates[SDL_SCANCODE_W]){
-                    world->player->y = world->ligne[256][MOVING_STEP].y;
-                    world->player->x = world->ligne[256][MOVING_STEP].x;
+
+                    world->player->y = world->ligne[256][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                    world->player->x = world->ligne[256][MOVING_STEP].x - PLAYER_WIDTH/2;
 
                     world->direction=4;
                 }else{
                     if (keystates[SDL_SCANCODE_S]){
-                        world->player->y = world->ligne[513][MOVING_STEP].y;
-                        world->player->x = world->ligne[513][MOVING_STEP].x;
+                        world->player->y = world->ligne[514][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                        world->player->x = world->ligne[514][MOVING_STEP].x - PLAYER_WIDTH/2;
                         world->direction=3;
                     }else{
                         if (keystates[SDL_SCANCODE_A]){
-                            world->player->y = world->ligne[514][MOVING_STEP].y;
-                            world->player->x = world->ligne[514][MOVING_STEP].x;
+                            world->player->y = world->ligne[515][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                            world->player->x = world->ligne[515][MOVING_STEP].x - PLAYER_WIDTH/2;
                             world->direction=2;
                         }else{
                             if (keystates[SDL_SCANCODE_E]){
