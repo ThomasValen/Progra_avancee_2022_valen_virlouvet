@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL_image.h>
 #include "graphismes.h"
 #include "constante.h"
 #include "world.h"

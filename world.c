@@ -242,16 +242,20 @@ void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
     if (collision == 1)
     {
         if(world->direction==1){
-            sp1->x = sp1->x - MOVING_STEP-1;
+            sp1->x = world->ligne[513][0].x - PLAYER_WIDTH/2;
+            sp1->y = world->ligne[513][0].y - PLAYER_HEIGHT/2;
         }
         if(world->direction==2){
-            sp1->x = sp1->x + MOVING_STEP+1;
+            sp1->x = world->ligne[515][0].x - PLAYER_HEIGHT/2;
+            sp1->y = world->ligne[515][0].y - PLAYER_HEIGHT/2;
         }
         if(world->direction==3){
-            sp1->y = sp1->y - MOVING_STEP-1;
+            sp1->y = world->ligne[514][0].y - PLAYER_HEIGHT/2;
+            sp1->x =  world->ligne[514][0].x - PLAYER_HEIGHT/2;
         }
         if(world->direction==4){
-            sp1->y = sp1->y + MOVING_STEP+1;
+            sp1->y = world->ligne[256][0].y - PLAYER_HEIGHT/2;
+            sp1->x = world->ligne[256][0].x - PLAYER_HEIGHT/2;
         }
         
     }
