@@ -6,6 +6,9 @@ struct sprite_s{
     float y;
     int h;
     int l;
+    int placement_x;
+    int placement_y;
+    int is_looking_for;
 };
 typedef struct sprite_s sprite_t;
 
@@ -20,11 +23,16 @@ struct world_s{
     int three_d_check ;
     float angle ;
     float mid_angle ;
+    int nb_key ;
+    int nb_enemy ;
     sprite_t* background;
     sprite_t wall[1000];
     sprite_t* player ;
     sprite_t **ligne;
     sprite_t *view_player ;
+    sprite_t *key ;//tableau
+    sprite_t *enemy ;//tableau
+    sprite_t *exit ;
 };
 typedef struct world_s world_t;
 
@@ -40,6 +48,8 @@ void init_environnement(world_t* world);
 void init_sprite(sprite_t *sprite,float x,float y,int h,int l);
 
 sprite_t** creer_ligne(int ligne, int colonne) ;
+
+sprite_t* creer_tableau(int nb_elements) ;
 
 void clean_data(world_t *world);
 
