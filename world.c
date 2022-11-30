@@ -420,6 +420,18 @@ int is_game_over(world_t *world){
     return world->gameover;
 }
 
+int is_looking(world_t* world, sprite_t sprite){
+    for(int i=0;i<513;i++){
+        for(int j=0;j<10000;j++){
+            int is_looking=sprites_collide_ligne(world->ligne[i][j], sprite);
+            if(is_looking==1){
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 void ligne(world_t* world,float player_a, int numero_ligne){
     float angle_radian = player_a*PI/180;
     float cx = world->player->x ;
@@ -439,12 +451,24 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                 is_over = 1 ;
                
             }
+            for(int t=0;i<world->nb_key;i++){
+                if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[i])){
+                    world->key[i].placement_x=numero_ligne;
+                    world->key[i].placement_y=incr;
+                    world->key[i].is_looking_for=1;
+                }
+            }
+
         } 
         
         incr++ ;
 
     }
     world->nb_point_ligne[numero_ligne] = incr ;  
+
+    for(int z=0;z<world->nb_key;z++){
+        //world->key[z].is_looking_for=is_looking(world,world->key[z]);
+    }
     
 }
 
