@@ -13,19 +13,28 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->player) ;
     clean_texture(textures->ligne) ;
     clean_texture( textures->bandes );
+    clean_texture(textures->key);
+    clean_texture(textures->exit);
+    clean_texture(textures->enemy) ;
 }
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures){
     textures->background = load_image( "ressources/fond.bmp", renderer);
     textures->sky = load_image( "ressources/carre_gris.bmp", renderer);
 
-    textures->wall = load_image( "ressources/carre_rouge.bmp", renderer) ;
+    textures->wall = load_image( "ressources/wall.bmp", renderer) ;
 
     textures->player = load_image("ressources/carre_bleu.bmp", renderer);
 
     textures->ligne = load_image("ressources/carre_blanc.bmp", renderer);
 
     textures->surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
+
+    textures->key = load_image("ressources/key.bmp", renderer) ;
+
+    textures->exit = load_image("ressources/carre_marron.bmp", renderer);
+
+    textures->enemy =load_image("ressources/carre_rouge.bmp", renderer) ;
 }
 
 void apply_background(SDL_Renderer * renderer, SDL_Texture * texture){
@@ -122,17 +131,24 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     for(int i=0;i<world->nb_mur;i++){
         apply_wall(world->wall[i],renderer,textures->wall);
     }
-    
-    
-    apply_sprite(renderer, textures->player, world->player) ;
 
-    
-    
-    /*for(int j = 0 ; j < 513 ; j++){
+    for(int j = 0 ; j < 513 ; j++){
         for(int i = 0 ; i < world->nb_point_ligne[j]; i++){
             apply_wall(world->ligne[j][i], renderer, textures->ligne) ;
         }
-    }*/
+    }
+
+    for(int i = 0 ; i < world->nb_key; i++){
+        apply_wall(world->key[i],renderer, textures->key) ;
+    }
+    
+    for(int i = 0 ; i < world->nb_enemy ; i++){
+        apply_wall(world->enemy[i],renderer, textures->enemy) ;
+    }    
+    apply_sprite(renderer, textures->player, world->player) ;
+    apply_sprite(renderer, textures->exit, world->exit) ;
+
+    
     
     update_screen(renderer);
 }

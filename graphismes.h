@@ -11,6 +11,9 @@ struct textures_s
     SDL_Texture* sky;
     SDL_Texture* bandes;
     SDL_Texture* wall;
+    SDL_Texture* key ;
+    SDL_Texture* exit;
+    SDL_Texture* enemy;
     SDL_Texture* player ;
     SDL_Texture* ligne ;
     SDL_Surface* surface;

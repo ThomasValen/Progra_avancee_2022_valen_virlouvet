@@ -24,9 +24,12 @@ void init_memoire(world_t* world){
     world->background = (sprite_t*)malloc(sizeof(sprite_t));
     world->player = (sprite_t*)malloc(sizeof(sprite_t));
     world->view_player = (sprite_t*)malloc(sizeof(sprite_t)) ;
+    world->exit = (sprite_t*)malloc(sizeof(sprite_t)) ;
 
     //world->wall = cree_murs(500);
     world->tab = changer_monde(world,world->hauteur_tab,world->longueur_tab );
+    world->key = creer_tableau(world->nb_key) ;
+    world->enemy = creer_tableau(world->nb_enemy) ;
     world->ligne = creer_ligne(516,2000) ;
 }
 
@@ -46,6 +49,10 @@ void init_valeurs(world_t* world){
     world->angle = 0 ;
 
     world->three_d_check=0;
+
+    world->nb_key = 0 ;
+
+    world->nb_enemy = 0 ;
     
     
 }
@@ -55,16 +62,36 @@ void init_environnement(world_t* world){
 	init_sprite(world->background,0,0, world->hauteur_tab*WALL_HEIGHT, world->longueur_tab*WALL_WIDTH);
 
     int indice_wall=0;
+    int indice_key = 0 ;
+    int indice_enemy = 0 ;
 	for(int i=0;i<(world->hauteur_tab);i++){
         for(int j = 0;j<(world->longueur_tab);j++){
             if(world->tab[i][j]==1){
                 init_sprite(&(world->wall[indice_wall]),(j*WALL_WIDTH),(i*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH);
                 indice_wall++;
-            }
-            if(world->tab[i][j]== 2){
+            }else if(world->tab[i][j]== 2){
                 init_sprite(world->player,(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH);
             }
+            else if(world->tab[i][j] == 4){
+                init_sprite(&(world->key[indice_key]),(j*KEY_WIDTH - PLAYER_WIDTH ),(i*KEY_HEIGHT - PLAYER_HEIGHT),KEY_HEIGHT, KEY_WIDTH);
+                indice_key++ ;
+            }
+            else if(world->tab[i][j] == 3){
+                init_sprite(world->exit,(j*WALL_WIDTH),(i*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH);
+            }
+            else if(world->tab[i][j]== 5){
+                init_sprite(&(world->enemy[indice_enemy]),(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH);
+                indice_enemy++ ;
+            }
         }
+        /*for(int i = 0 ; i <(world->hauteur_tab) ; i++ ){
+            for(int j = 0 ; j < (world->longueur_tab); j++){
+                printf(" %d ", world->tab[i][j]) ;
+            
+            }
+            printf("\n");
+        }
+        printf("\n") ;*/
     }
     float angle = world->angle ;
     for (int i = 0; i < 513; i++)
@@ -87,6 +114,7 @@ void init_environnement(world_t* world){
 void clean_data(world_t *world){
     free(world->background);
     free(world->player) ;
+    free(world->exit) ;
     //free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
     //free_murs(world->wall);
 }
@@ -162,10 +190,20 @@ int** changer_monde(world_t* world,int ligne,int colonne){
                 if(chara == '#'){
                     T[lignes][colonnes]=1;
                     world->nb_mur++ ;
-                }else if(chara == '.'){
+                }else if(chara == 'p'){
 
                     T[lignes][colonnes]= 2;
 
+                }else if(chara == '*'){
+                    T[lignes][colonnes] = 4 ;
+                    world->nb_key++ ;
+                }else if(chara == 's'){
+
+                    T[lignes][colonnes]= 3;
+
+                }else if(chara == 'e'){
+                    T[lignes][colonnes] = 5 ;
+                    world->nb_enemy++ ;
                 }else{
                     T[lignes][colonnes]=0;
                 }
@@ -180,6 +218,14 @@ int** changer_monde(world_t* world,int ligne,int colonne){
         } while (chara!=EOF);
         fclose(fichier);
     }
+    printf("\n") ;
+    return T;
+
+}
+
+sprite_t* creer_tableau(int nb_elements){
+    sprite_t* T = (sprite_t*)malloc(nb_elements*sizeof(sprite_t));
+    if(T == NULL) exit(EXIT_FAILURE);
     return T;
 }
 
@@ -202,6 +248,21 @@ int nb_murs(int **tab,int hauteur_tab,int longueur_tab){
         }
     }
     return count;
+}
+
+int two_sprites_collide(sprite_t *sp1, sprite_t *sp2){
+    int w1 = sp1->l ;
+    int w2 = sp2->l ;
+    int h1 = sp1->h;
+    int h2 = sp2->h;
+    int x1 = sp1->x ;
+    int x2 = sp2->x ;
+    int y1 = sp1->y ;
+    int y2 = sp2->y ;
+
+
+	return x1 +w1 > x2 && x1 < x2 + w2 && y1 +h1 >y2 && y1 <y2 +h2;
+    //return (abs(x1 - x2) <= (w1 + w2) / 2) && (abs(y1 - y2) <= (h1 + h2) / 2);
 }
 
 int sprites_collide(sprite_t *sp1, sprite_t sp2)
@@ -239,6 +300,31 @@ int sprites_collide_ligne(sprite_t sp1, sprite_t sp2)
 void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
 {
     int collision = sprites_collide(sp1, sp2);
+    if (collision == 1)
+    {
+        if(world->direction==1){
+            sp1->x = world->ligne[513][0].x - PLAYER_WIDTH/2;
+            sp1->y = world->ligne[513][0].y - PLAYER_HEIGHT/2;
+        }
+        if(world->direction==2){
+            sp1->x = world->ligne[515][0].x - PLAYER_HEIGHT/2;
+            sp1->y = world->ligne[515][0].y - PLAYER_HEIGHT/2;
+        }
+        if(world->direction==3){
+            sp1->y = world->ligne[514][0].y - PLAYER_HEIGHT/2;
+            sp1->x =  world->ligne[514][0].x - PLAYER_HEIGHT/2;
+        }
+        if(world->direction==4){
+            sp1->y = world->ligne[256][0].y - PLAYER_HEIGHT/2;
+            sp1->x = world->ligne[256][0].x - PLAYER_HEIGHT/2;
+        }
+        
+    }
+}
+
+void handle_two_sprites_collision(sprite_t *sp1, sprite_t *sp2, world_t *world)
+{
+    int collision = two_sprites_collide(sp1, sp2);
     if (collision == 1)
     {
         if(world->direction==1){
@@ -307,6 +393,20 @@ void update_data(world_t *world){
             mid_angle = angle ;
         }
     }
+
+    for(int i = 0; i < world->nb_key ; i++){
+        if(sprites_collide(world->player, world->key[i])){
+            world->nb_key = world->nb_key - 1 ;
+        }
+    }
+
+    if(two_sprites_collide(world->player, world->exit)){
+        if(world->nb_key == 0){
+            world->gameover = 1 ;
+        }else{
+            handle_two_sprites_collision(world->player, world->exit, world) ;
+        }
+    }
     angle = mid_angle + 90;
     ligne(world, angle, 513) ;
     angle = mid_angle + 180 ;
@@ -335,7 +435,7 @@ void ligne(world_t* world,float player_a, int numero_ligne){
         
         init_sprite(&(world->ligne[numero_ligne][incr]),cx, cy, 1, 1);
         for(int i =0 ; i < world->nb_mur; i++){
-            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->wall[i])){
+            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->wall[i]) || sprites_collide(world->exit, world->ligne[numero_ligne][incr]) ){
                 is_over = 1 ;
                
             }
