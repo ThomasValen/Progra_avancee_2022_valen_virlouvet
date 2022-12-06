@@ -6,6 +6,9 @@ struct sprite_s{
     float y;
     int h;
     int l;
+    int placement_x;
+    int placement_y;
+    int is_looking_for;
 };
 typedef struct sprite_s sprite_t;
 
@@ -29,8 +32,8 @@ struct world_s{
     sprite_t* player ;
     sprite_t **ligne;
     sprite_t *view_player ;
-    sprite_t *key ;
-    sprite_t *enemy ;
+    sprite_t *key ;//tableau
+    sprite_t *enemy ;//tableau
     sprite_t *exit ;
 };
 typedef struct world_s world_t;
