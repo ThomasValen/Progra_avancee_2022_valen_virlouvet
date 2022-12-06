@@ -22,6 +22,8 @@ struct world_s{
     float mid_angle ;
     int nb_key ;
     int nb_enemy ;
+    int nb_pv ;
+    int attack ;
     sprite_t* background;
     sprite_t wall[1000];
     sprite_t* player ;

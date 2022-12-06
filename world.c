@@ -53,6 +53,10 @@ void init_valeurs(world_t* world){
     world->nb_key = 0 ;
 
     world->nb_enemy = 0 ;
+
+    world->attack = 0 ;
+
+    world->nb_pv = 3 ;
     
     
 }
@@ -222,6 +226,18 @@ int** changer_monde(world_t* world,int ligne,int colonne){
     return T;
 
 }
+
+sprite_t* suppr(sprite_t* tab, sprite_t sprite, int nb_element){
+    for(int i = 0 ; i < nb_element; i++ ){
+        if(tab[i].x == sprite.x){
+            if(tab[i].y == sprite.y){
+                tab[i] = tab[i+1] ;
+            }  
+        }
+    }
+    return tab ;
+}
+
 
 sprite_t* creer_tableau(int nb_elements){
     sprite_t* T = (sprite_t*)malloc(nb_elements*sizeof(sprite_t));
@@ -396,7 +412,31 @@ void update_data(world_t *world){
 
     for(int i = 0; i < world->nb_key ; i++){
         if(sprites_collide(world->player, world->key[i])){
+            world->key = suppr(world->key, world->key[i], world->nb_key) ;
             world->nb_key = world->nb_key - 1 ;
+        }
+    }
+
+    for(int i = 0; i < world->nb_enemy ; i++){
+        if(sprites_collide(world->player, world->enemy[i])){
+            world->nb_pv = world->nb_pv - 1 ;
+            world->player->y = world->ligne[514][4].y - PLAYER_HEIGHT/2;
+            world->player->x =  world->ligne[514][4].x - PLAYER_HEIGHT/2;
+            if(world->nb_pv == 0){
+                world->gameover = 1 ;
+            }
+        }
+    }
+    if(world->attack == 1 ){
+        for(int i = 253 ; i < 258 ; i++){
+            for(int j = 8; j < 25 ; j++){
+                for(int z = 0 ; z < world->nb_enemy ; z++){
+                    if(sprites_collide_ligne(world->enemy[z], world->ligne[i][j])){
+                        world->enemy = suppr(world->enemy,world->enemy[z], world->nb_enemy) ;
+                    }
+                }
+            }
+
         }
     }
 

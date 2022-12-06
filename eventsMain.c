@@ -22,49 +22,50 @@ void handle_events_player(SDL_Event *event, world_t *world){
                 world->player->x = world->ligne[513][MOVING_STEP].x - PLAYER_WIDTH/2;
             
                 world->direction=1;
-            }else{
-                if (keystates[SDL_SCANCODE_W]){
-
-                    world->player->y = world->ligne[256][MOVING_STEP].y - PLAYER_HEIGHT/2;
-                    world->player->x = world->ligne[256][MOVING_STEP].x - PLAYER_WIDTH/2;
-
-                    world->direction=4;
-                }else{
-                    if (keystates[SDL_SCANCODE_S]){
-                        world->player->y = world->ligne[514][MOVING_STEP].y - PLAYER_HEIGHT/2;
-                        world->player->x = world->ligne[514][MOVING_STEP].x - PLAYER_WIDTH/2;
-                        world->direction=3;
-                    }else{
-                        if (keystates[SDL_SCANCODE_A]){
-                            world->player->y = world->ligne[515][MOVING_STEP].y - PLAYER_HEIGHT/2;
-                            world->player->x = world->ligne[515][MOVING_STEP].x - PLAYER_WIDTH/2;
-                            world->direction=2;
-                        }else{
-                            if (keystates[SDL_SCANCODE_E]){
-                                world->angle = world->angle + 3 ;
-                                if(world->angle >= 360){
-                                    world->angle = 0 ;
-                                }
-                            }else{
-                                if (keystates[SDL_SCANCODE_Q]){
-                                world->angle = world->angle - 3 ;
-                                if(world->angle <= 0){
-                                    world->angle = 360 ;
-                                }
-                            }
-                            }
-                        }
-
-                    }
-                    
-                }
-                
+                return; 
             }
-            
+            if (keystates[SDL_SCANCODE_W]){
+
+                world->player->y = world->ligne[256][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                world->player->x = world->ligne[256][MOVING_STEP].x - PLAYER_WIDTH/2;
+
+                world->direction=4;
+                return;
+            }
+            if (keystates[SDL_SCANCODE_S]){
+                world->player->y = world->ligne[514][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                world->player->x = world->ligne[514][MOVING_STEP].x - PLAYER_WIDTH/2;
+                world->direction=3;
+                return ;
+            }
+            if (keystates[SDL_SCANCODE_A]){
+                world->player->y = world->ligne[515][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                world->player->x = world->ligne[515][MOVING_STEP].x - PLAYER_WIDTH/2;
+                world->direction=2;
+                return ;
+            }
+            if (keystates[SDL_SCANCODE_E]){
+                world->angle = world->angle + 3 ;
+                if(world->angle >= 360){
+                    world->angle = 0 ;
+                }
+                return ;
+            }
+            if (keystates[SDL_SCANCODE_Q]){
+                world->angle = world->angle - 3 ;
+                if(world->angle <= 0){
+                    world->angle = 360 ;
+                }
+                return ;
+            }
+            if (keystates[SDL_SCANCODE_SPACE]){
+                world->attack = 1 ;
+            } 
             break;
 
         case SDL_KEYUP:
             world->direction=0;
+            world->attack = 0 ;
             break;
         default:
             break;
@@ -75,7 +76,7 @@ void handle_events(SDL_Event *event,world_t *world){
     const Uint8 *keystates;
 
     
-    while( SDL_PollEvent( event ) ) {       
+    while( SDL_PollEvent( event) ) {       
         handle_events_player(event, world) ;
         //Si l'utilisateur a cliqué sur le X de la fenêtre 
         if( event->type == SDL_QUIT ) {
