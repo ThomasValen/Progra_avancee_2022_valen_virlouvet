@@ -16,9 +16,10 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->key);
     clean_texture(textures->exit);
     clean_texture(textures->enemy) ;
+    free(textures->keys);
 }
 
-void init_textures(SDL_Renderer * renderer, textures_t *textures){
+void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world){
     textures->background = load_image( "ressources/fond.bmp", renderer);
     textures->sky = load_image( "ressources/carre_gris.bmp", renderer);
 
@@ -35,6 +36,8 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures){
     textures->exit = load_image("ressources/carre_marron.bmp", renderer);
 
     textures->enemy =load_image("ressources/carre_rouge.bmp", renderer) ;
+
+    textures->keys = (SDL_Rect*)malloc(world->nb_key*sizeof(SDL_Rect));
 }
 
 void apply_background(SDL_Renderer * renderer, SDL_Texture * texture){
@@ -67,12 +70,12 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     int x_incr=0;
     for(int i=0;i<513;i++){
         textures->tab_bandes[i].w=2;
-        textures->tab_bandes[i].h=32000/world->nb_point_ligne[i]/*/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180)*/;//a modif
+        textures->tab_bandes[i].h=30000/world->nb_point_ligne[i]/*/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180)*/;//a modif
         if(textures->tab_bandes[i].h<0){
             textures->tab_bandes[i].h=textures->tab_bandes[i].h*(-1);
         }
         textures->tab_bandes[i].x=x_incr;
-        textures->tab_bandes[i].y=SCREEN_HEIGHT/2 - (32000/world->nb_point_ligne[i]/*/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180)*/)/2;//a modif
+        textures->tab_bandes[i].y=SCREEN_HEIGHT/2 - (30000/world->nb_point_ligne[i]/*/cos((i*0.16+world->angle)*PI/180-(256*0.16+world->angle)*PI/180)*/)/2;//a modif
         x_incr=x_incr+2;
         
         //textures->bandes[i] = SDL_CreateTextureFromSurface(renderer, textures->surface);
@@ -100,16 +103,17 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
 
     for(int u=0;u<world->nb_key;u++){
         if(world->key[u].is_looking_for==1){
-            printf("HEHOOO");
-            SDL_Rect test;
-            test.w = 10000/(world->key[u].placement_y);
-            test.h = 10000/(world->key[u].placement_y);
+            printf("aaaa");
+            textures->keys[u].w = 10000/(world->key[u].placement_y);
+            textures->keys[u].h = 10000/(world->key[u].placement_y);
             //printf("");
-            test.x = world->key[u].placement_x*2-test.w/2;
-            test.y = SCREEN_HEIGHT/2/*world->key[u].placement_y*/;
+            textures->keys[u].x = world->key[u].placement_x*2-textures->keys[u].w/2;
+            textures->keys[u].y = SCREEN_HEIGHT/2 ;//world->key[u].placement_y
             
-            SDL_RenderCopy(renderer,textures->key,NULL,&test);
-            SDL_FillRect(textures->surface, &test,SDL_MapRGB(textures->surface->format, 0, 255, 0) );
+            SDL_RenderCopy(renderer,textures->key,NULL,&textures->keys[u]);
+            SDL_FillRect(textures->surface, &textures->keys[u],SDL_MapRGB(textures->surface->format, 0, 255, 0) );
+        }else{
+            printf("heuuu");
         }
         
     }
@@ -140,11 +144,11 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
         apply_wall(world->wall[i],renderer,textures->wall);
     }
 
-    for(int j = 0 ; j < 513 ; j++){
+    /*for(int j = 0 ; j < 513 ; j++){
         for(int i = 0 ; i < world->nb_point_ligne[j]; i++){
             apply_wall(world->ligne[j][i], renderer, textures->ligne) ;
         }
-    }
+    }*/
 
     for(int i = 0 ; i < world->nb_key; i++){
         apply_wall(world->key[i],renderer, textures->key) ;

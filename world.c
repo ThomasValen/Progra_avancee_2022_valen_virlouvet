@@ -59,7 +59,7 @@ void init_valeurs(world_t* world){
 
 void init_environnement(world_t* world){
 	//initialisation des sprites
-	init_sprite(world->background,0,0, world->hauteur_tab*WALL_HEIGHT, world->longueur_tab*WALL_WIDTH);
+	init_sprite(world->background,0,0, world->hauteur_tab*WALL_HEIGHT, world->longueur_tab*WALL_WIDTH,0);
 
     int indice_wall=0;
     int indice_key = 0 ;
@@ -67,20 +67,20 @@ void init_environnement(world_t* world){
 	for(int i=0;i<(world->hauteur_tab);i++){
         for(int j = 0;j<(world->longueur_tab);j++){
             if(world->tab[i][j]==1){
-                init_sprite(&(world->wall[indice_wall]),(j*WALL_WIDTH),(i*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH);
+                init_sprite(&(world->wall[indice_wall]),(j*WALL_WIDTH),(i*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH,0);
                 indice_wall++;
             }else if(world->tab[i][j]== 2){
-                init_sprite(world->player,(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH);
+                init_sprite(world->player,(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH,0);
             }
             else if(world->tab[i][j] == 4){
-                init_sprite(&(world->key[indice_key]),(j*KEY_WIDTH - PLAYER_WIDTH ),(i*KEY_HEIGHT - PLAYER_HEIGHT),KEY_HEIGHT, KEY_WIDTH);
+                init_sprite(&(world->key[indice_key]),(j*KEY_WIDTH - PLAYER_WIDTH ),(i*KEY_HEIGHT - PLAYER_HEIGHT),KEY_HEIGHT, KEY_WIDTH,indice_key+1);
                 indice_key++ ;
             }
             else if(world->tab[i][j] == 3){
-                init_sprite(world->exit,(j*WALL_WIDTH),(i*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH);
+                init_sprite(world->exit,(j*WALL_WIDTH),(i*WALL_HEIGHT),WALL_HEIGHT,WALL_WIDTH,0);
             }
             else if(world->tab[i][j]== 5){
-                init_sprite(&(world->enemy[indice_enemy]),(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH);
+                init_sprite(&(world->enemy[indice_enemy]),(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH,0);
                 indice_enemy++ ;
             }
         }
@@ -120,11 +120,12 @@ void clean_data(world_t *world){
 }
 
 
-void init_sprite(sprite_t *sprite,float x,float y,int h,int l){
+void init_sprite(sprite_t *sprite,float x,float y,int h,int l,int no_key){
     sprite->x=x;
     sprite->y=y;
     sprite->h=h;
     sprite->l=l;
+    sprite->no_key=no_key;
 }
 
 int sethauteur(){
@@ -422,7 +423,7 @@ int is_game_over(world_t *world){
 
 int is_looking(world_t* world, sprite_t sprite){
     for(int i=0;i<513;i++){
-        for(int j=0;j<10000;j++){
+        for(int j=0;j<world->nb_point_ligne[i];j++){
             int is_looking=sprites_collide_ligne(world->ligne[i][j], sprite);
             if(is_looking==1){
                 return 1;
@@ -445,17 +446,17 @@ void ligne(world_t* world,float player_a, int numero_ligne){
         cx = world->player->x + incr*vcos +PLAYER_WIDTH/2 ;
         cy = world->player->y + incr*vsin +PLAYER_HEIGHT/2 ;
         
-        init_sprite(&(world->ligne[numero_ligne][incr]),cx, cy, 1, 1);
+        init_sprite(&(world->ligne[numero_ligne][incr]),cx, cy, 1, 1,0);
         for(int i =0 ; i < world->nb_mur; i++){
             if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->wall[i]) || sprites_collide(world->exit, world->ligne[numero_ligne][incr]) ){
                 is_over = 1 ;
                
             }
-            for(int t=0;i<world->nb_key;i++){
-                if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[i])){
-                    world->key[i].placement_x=numero_ligne;
-                    world->key[i].placement_y=incr;
-                    world->key[i].is_looking_for=1;
+            for(int t=0;t<world->nb_key;t++){
+                if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[t])){
+                    world->key[t].placement_x=numero_ligne;//numero_ligne;
+                    world->key[t].placement_y=incr;//incr;
+                    world->key[t].is_looking_for=1;
                 }
             }
 
@@ -464,11 +465,10 @@ void ligne(world_t* world,float player_a, int numero_ligne){
         incr++ ;
 
     }
-    world->nb_point_ligne[numero_ligne] = incr ;  
-
-    for(int z=0;z<world->nb_key;z++){
-        //world->key[z].is_looking_for=is_looking(world,world->key[z]);
-    }
+    world->nb_point_ligne[numero_ligne] = incr ;
+    /*for(int z=0;z<world->nb_key;z++){
+        world->key[z].is_looking_for=is_looking(world,world->key[z]);
+    }*/
     
 }
 

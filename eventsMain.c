@@ -9,7 +9,7 @@
 void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world){ 
     init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
     init_data(world);
-    init_textures(*renderer,textures);
+    init_textures(*renderer,textures,world);
 }   
 
 void handle_events_player(SDL_Event *event, world_t *world){

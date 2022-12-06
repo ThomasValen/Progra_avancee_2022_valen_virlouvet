@@ -17,13 +17,14 @@ struct textures_s
     SDL_Texture* player ;
     SDL_Texture* ligne ;
     SDL_Surface* surface;
+    SDL_Rect * keys;
     SDL_Rect tab_bandes[513];
 };
 typedef struct textures_s textures_t;
 
 void clean_textures(textures_t *textures) ;
 
-void init_textures(SDL_Renderer * renderer, textures_t *textures);
+void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world);
 
 void apply_background(SDL_Renderer * renderer, SDL_Texture * texture);
 

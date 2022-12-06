@@ -6,6 +6,7 @@ struct sprite_s{
     float y;
     int h;
     int l;
+    int no_key;
     int placement_x;
     int placement_y;
     int is_looking_for;
@@ -45,7 +46,7 @@ void init_memoire(world_t* world);
 
 void init_environnement(world_t* world); 
 
-void init_sprite(sprite_t *sprite,float x,float y,int h,int l);
+void init_sprite(sprite_t *sprite,float x,float y,int h,int l,int no_key);
 
 sprite_t** creer_ligne(int ligne, int colonne) ;
 
