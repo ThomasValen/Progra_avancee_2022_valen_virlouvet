@@ -413,7 +413,7 @@ void update_data(world_t *world){
     for(int i = 0; i < world->nb_key ; i++){
         if(sprites_collide(world->player, world->key[i])){
             world->key = suppr(world->key, world->key[i], world->nb_key) ;
-            world->nb_key = world->nb_key - 1 ;
+            world->nb_key-- ;
         }
     }
 
@@ -491,13 +491,13 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                 is_over = 1 ;
                
             }
-            for(int t=0;i<world->nb_key;i++){
+            /*for(int t=0;i<world->nb_key;i++){
                 if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[i])){
                     world->key[i].placement_x=numero_ligne;
                     world->key[i].placement_y=incr;
                     world->key[i].is_looking_for=1;
                 }
-            }
+            }*/
 
         } 
         
@@ -505,10 +505,6 @@ void ligne(world_t* world,float player_a, int numero_ligne){
 
     }
     world->nb_point_ligne[numero_ligne] = incr ;  
-
-    for(int z=0;z<world->nb_key;z++){
-        //world->key[z].is_looking_for=is_looking(world,world->key[z]);
-    }
     
 }
 

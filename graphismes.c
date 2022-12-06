@@ -98,22 +98,14 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     
     Uint32 colorkey = SDL_MapRGB( textures->surface->format, 0, 255, 0 );
 
-    for(int u=0;u<world->nb_key;u++){
-        if(world->key[u].is_looking_for==1){
-            printf("HEHOOO");
-            SDL_Rect test;
-            test.w = 10000/(world->key[u].placement_y);
-            test.h = 10000/(world->key[u].placement_y);
-            //printf("");
-            test.x = world->key[u].placement_x*2-test.w/2;
-            test.y = SCREEN_HEIGHT/2/*world->key[u].placement_y*/;
-            
-            SDL_RenderCopy(renderer,textures->key,NULL,&test);
-            SDL_FillRect(textures->surface, &test,SDL_MapRGB(textures->surface->format, 0, 255, 0) );
-        }
-        
-    }
-    
+
+    SDL_Rect test;
+    test.x = SCREEN_WIDTH/2;
+    test.y = SCREEN_HEIGHT/2;
+    test.w = 200;
+    test.h = 200;
+    SDL_RenderCopy(renderer,textures->wall,NULL,&test);
+    SDL_FillRect(textures->surface, &test,SDL_MapRGB(textures->surface->format, 0, 255, 0) );
 
 
     SDL_SetColorKey( textures->surface, SDL_RLEACCEL , colorkey );
