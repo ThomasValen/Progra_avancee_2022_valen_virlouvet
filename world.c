@@ -57,6 +57,8 @@ void init_valeurs(world_t* world){
     world->attack = 0 ;
 
     world->nb_pv = 3 ;
+
+    world->is_attacking=0;
     
     
 }
@@ -491,13 +493,13 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                 is_over = 1 ;
                
             }
-            /*for(int t=0;i<world->nb_key;i++){
-                if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[i])){
-                    world->key[i].placement_x=numero_ligne;
-                    world->key[i].placement_y=incr;
-                    world->key[i].is_looking_for=1;
+            for(int t=0;t<world->nb_key;t++){
+                if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[t])){
+                    world->key[t].placement_x=numero_ligne;
+                    world->key[t].placement_y=incr;
+                    world->key[t].is_looking_for=1;
                 }
-            }*/
+            }
 
         } 
         

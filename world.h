@@ -28,6 +28,9 @@ struct world_s{
     int nb_pv ;
     int attack ;
     int nb_key_recup ;
+    float compteur_debut;
+    float compteur_fin;
+    int is_attacking;
     sprite_t* background;
     sprite_t wall[1000];
     sprite_t* player ;

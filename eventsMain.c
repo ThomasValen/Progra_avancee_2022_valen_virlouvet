@@ -59,7 +59,10 @@ void handle_events_player(SDL_Event *event, world_t *world){
                 return ;
             }
             if (keystates[SDL_SCANCODE_SPACE]){
-                world->attack = 1 ;
+                if(world->is_attacking==0){
+                    world->is_attacking=1;
+                    world->compteur_debut = (float)(SDL_GetTicks()/1000.);
+                }
             } 
             break;
 

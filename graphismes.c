@@ -16,6 +16,10 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->key);
     clean_texture(textures->exit);
     clean_texture(textures->enemy) ;
+    clean_texture(textures->epee1) ;
+    clean_texture(textures->epee2) ;
+    clean_texture(textures->epee3) ;
+    clean_texture(textures->epee4) ;
 }
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures){
@@ -35,6 +39,16 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures){
     textures->exit = load_image("ressources/carre_marron.bmp", renderer);
 
     textures->enemy =load_image("ressources/carre_rouge.bmp", renderer) ;
+
+    textures->epee1 =load_image("ressources/epees1.bmp", renderer) ;
+
+    textures->epee2 =load_image("ressources/epees2.bmp", renderer) ;
+
+    textures->epee3 =load_image("ressources/epees3.bmp", renderer) ;
+
+    textures->epee4 =load_image("ressources/epees4.bmp", renderer) ;
+
+
 }
 
 void apply_background(SDL_Renderer * renderer, SDL_Texture * texture){
@@ -120,6 +134,25 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     
 }
 
+void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* textures){
+    if(world->is_attacking==1){
+        if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==0){
+            apply_texture(textures->epee1, renderer,0,0) ;
+        }else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==1){
+            apply_texture(textures->epee2, renderer,0,0) ;
+        }
+        else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==2){
+            apply_texture(textures->epee3, renderer,0,0) ;
+        }else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==3){
+            world->attack = 1 ;
+            apply_texture(textures->epee4, renderer,0,0) ;
+        }
+    }else{
+        apply_texture(textures->epee1, renderer,0,0) ;
+    }
+
+}
+
 
 void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textures){
     clear_renderer(renderer) ;
@@ -149,6 +182,14 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     apply_sprite(renderer, textures->exit, world->exit) ;
 
     
+    animation_epee(renderer,world,textures);
+
+    if((float)(SDL_GetTicks()/1000.)- world->compteur_debut > 1.0){
+        world->is_attacking=0;
+    }
+    
+
+    printf("compteur_debut : %f   is_attacking : %d\n",world->compteur_debut,world->is_attacking);
     
     update_screen(renderer);
 }

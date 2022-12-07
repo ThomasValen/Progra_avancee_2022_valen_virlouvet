@@ -17,11 +17,17 @@ struct textures_s
     SDL_Texture* player ;
     SDL_Texture* ligne ;
     SDL_Surface* surface;
+    SDL_Texture* epee1;
+    SDL_Texture* epee2;
+    SDL_Texture* epee3;
+    SDL_Texture* epee4;
     SDL_Rect tab_bandes[513];
 };
 typedef struct textures_s textures_t;
 
 void clean_textures(textures_t *textures) ;
+
+void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* textures);
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures);
 
