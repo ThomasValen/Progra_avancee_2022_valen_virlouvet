@@ -29,7 +29,7 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
 
     textures->ligne = load_image("ressources/carre_blanc.bmp", renderer);
 
-    textures->surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
+    //textures->surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
 
     textures->key = load_image("ressources/key.bmp", renderer) ;
 
@@ -89,6 +89,7 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     couleur_fond.y=0;
     SDL_FillRect(textures->surface, &couleur_fond, SDL_MapRGB(textures->surface->format, 0, 255, 0));
 
+
     for(int y=0;y<513;y++){
         couleur = 255 - world->nb_point_ligne[y];
         if(couleur<0){
@@ -100,44 +101,25 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     
     
     Uint32 colorkey = SDL_MapRGB( textures->surface->format, 0, 255, 0 );
-
-<<<<<<< HEAD
-    for(int u=0;u<world->nb_key;u++){
-        if(world->key[u].is_looking_for==1){
-            printf("aaaa");
-            textures->keys[u].w = 10000/(world->key[u].placement_y);
-            textures->keys[u].h = 10000/(world->key[u].placement_y);
-            //printf("");
-            textures->keys[u].x = world->key[u].placement_x*2-textures->keys[u].w/2;
-            textures->keys[u].y = SCREEN_HEIGHT/2 ;//world->key[u].placement_y
-            
-            SDL_RenderCopy(renderer,textures->key,NULL,&textures->keys[u]);
-            SDL_FillRect(textures->surface, &textures->keys[u],SDL_MapRGB(textures->surface->format, 0, 255, 0) );
-        }else{
-            printf("heuuu");
-        }
-        
-    }
-    
-=======
-
-    SDL_Rect test;
-    test.x = SCREEN_WIDTH/2;
-    test.y = SCREEN_HEIGHT/2;
-    test.w = 200;
-    test.h = 200;
-    SDL_RenderCopy(renderer,textures->wall,NULL,&test);
-    SDL_FillRect(textures->surface, &test,SDL_MapRGB(textures->surface->format, 0, 255, 0) );
->>>>>>> 445987cfc0a5f98af57f2e980aef5675a6c746f1
-
-
     SDL_SetColorKey( textures->surface, SDL_RLEACCEL , colorkey );
     textures->bandes = SDL_CreateTextureFromSurface(renderer, textures->surface);
     apply_texture(textures->bandes,renderer,0,0);
 
+    SDL_Surface* surface2 = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
+    for(int u=0;u<world->nb_key;u++){
+        if(world->key[u].is_looking_for==1){
+            textures->keys[u].w = 10000/(world->key[u].placement_y);
+            textures->keys[u].h = 10000/(world->key[u].placement_y);
+            textures->keys[u].x = world->key[u].placement_x*2-textures->keys[u].w/2;
+            textures->keys[u].y = SCREEN_HEIGHT/2
+            SDL_FillRect(surface2, &textures->keys[u],SDL_MapRGB(surface2->format, 0, 255, 0) );
+            SDL_RenderCopy(renderer,textures->key,NULL,&textures->keys[u]);
+        }
+    }
+
     world->three_d_check=1;
     SDL_FreeSurface(textures->surface);
-    
+    SDL_FreeSurface(surface2);
 
 
     

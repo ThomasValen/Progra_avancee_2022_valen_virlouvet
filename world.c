@@ -414,7 +414,7 @@ void update_data(world_t *world){
     for(int i = 0; i < world->nb_key ; i++){
         if(sprites_collide(world->player, world->key[i])){
             world->key = suppr(world->key, world->key[i], world->nb_key) ;
-            world->nb_key-- ;
+            
         }
     }
 
@@ -498,7 +498,7 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                     world->key[t].placement_y=incr;//incr;
                     world->key[t].is_looking_for=1;
                 }
-            }*/
+            }
 
         } 
         
