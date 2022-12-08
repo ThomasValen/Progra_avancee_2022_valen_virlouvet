@@ -111,8 +111,8 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
             textures->keys[u].w = 10000/(world->key[u].placement_y);
             textures->keys[u].h = 10000/(world->key[u].placement_y);
             textures->keys[u].x = world->key[u].placement_x*2-textures->keys[u].w/2;
-            textures->keys[u].y = SCREEN_HEIGHT/2
-            SDL_FillRect(surface2, &textures->keys[u],SDL_MapRGB(surface2->format, 0, 255, 0) );
+            textures->keys[u].y = SCREEN_HEIGHT/2;
+            SDL_FillRect(surface2, &textures->keys[u],SDL_MapRGBA(surface2->format, 0, 254, 0,255) );
             SDL_RenderCopy(renderer,textures->key,NULL,&textures->keys[u]);
         }
     }
@@ -130,6 +130,21 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     clear_renderer(renderer) ;
     
     apply_texture(textures->sky,renderer,0,SCREEN_HEIGHT/2);
+
+
+    for(int z=0;z<world->nb_key;z++){
+            //printf("mur : %d      clef : %d\n",world->nb_point_ligne[world->key[z].placement_x],world->key[z].placement_y);
+            if(world->key[z].placement_y>=0 && world->key[z].placement_x >=0){
+                if( world->nb_point_ligne[world->key[z].placement_x]<=world->key[z].placement_y  ){
+                    setIsLooking(world,z,0);
+                }
+            }
+            
+        if(world->key[z].placement_x==512 ||world->key[z].placement_x==0 ){
+            setIsLooking(world,z,0);
+        }
+    }
+
     color_3d(renderer,world,textures);
     apply_background(renderer, textures->background) ;
 
