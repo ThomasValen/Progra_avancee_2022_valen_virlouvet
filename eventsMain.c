@@ -29,11 +29,11 @@ void handle_events_menu(SDL_Event *event, world_t *world){
                 }else{
                     if (keystates[SDL_SCANCODE_UP] && world->etat_menu == 0){
                         //SDL_Log("Keycode fleche haut"); // Affiche un message
-                        world->etat_menu--;
+                        world->etat_menu++;
                     }else{
                         if (keystates[SDL_SCANCODE_UP] && world->etat_menu == 1){
                             //SDL_Log("Keycode fleche haut"); // Affiche un message
-                            world->etat_menu++;
+                            world->etat_menu--;
                         }
                         }
                     }
@@ -97,7 +97,10 @@ void handle_events_player(SDL_Event *event, world_t *world){
                 return ;
             }
             if (keystates[SDL_SCANCODE_SPACE]){
-                world->attack = 1 ;
+                if(world->is_attacking==0){
+                    world->is_attacking=1;
+                    world->compteur_debut = (float)(SDL_GetTicks()/1000.);
+                }
             } 
             break;
 
@@ -129,7 +132,8 @@ void handle_events(SDL_Event *event,world_t *world){
          //si une touche est appuyée
          if(event->type == SDL_KEYDOWN){
 			if(event->key.keysym.sym == SDLK_ESCAPE){ //si la touche appuyée est 'Echap'
-				world->gameover = 1;
+				world->etat_menu = 0;
+                init_data(world);
             }
          }
     }

@@ -19,13 +19,21 @@ struct textures_s
     SDL_Texture* fond_ecran ;
     SDL_Texture* titre ;
     SDL_Texture* play ;
+    SDL_Texture* play_active ;
     SDL_Texture* button_exit ;
+    SDL_Texture* button_exit_active ;
     SDL_Surface* surface;
+    SDL_Texture* epee1;
+    SDL_Texture* epee2;
+    SDL_Texture* epee3;
+    SDL_Texture* epee4;
     SDL_Rect tab_bandes[513];
 };
 typedef struct textures_s textures_t;
 
 void clean_textures(textures_t *textures) ;
+
+void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* textures);
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures);
 

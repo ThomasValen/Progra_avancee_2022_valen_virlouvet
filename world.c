@@ -28,6 +28,7 @@ void init_memoire(world_t* world){
     world->menu = (sprite_t*)malloc(sizeof(sprite_t)) ;
     world->titre = (sprite_t*)malloc(sizeof(sprite_t));
     world->play = (sprite_t*)malloc(sizeof(sprite_t));
+    world->play = (sprite_t*)malloc(sizeof(sprite_t));
     
 
     //world->wall = cree_murs(500);
@@ -63,6 +64,7 @@ void init_valeurs(world_t* world){
 
     world->nb_pv = 3 ;
 
+    world->is_attacking=0;
     
     
 }
@@ -73,7 +75,7 @@ void init_environnement(world_t* world){
     init_sprite(world->menu, 0 , 0 ,SCREEN_HEIGHT, SCREEN_WIDTH);
     init_sprite(world->titre, SCREEN_WIDTH/2-300, 100, SCREEN_HEIGHT, SCREEN_WIDTH);
     init_sprite(world->play, SCREEN_WIDTH/2 -90, 300, SCREEN_HEIGHT, SCREEN_WIDTH);
-    init_sprite(world->exit, SCREEN_WIDTH/2 -90, 700, SCREEN_HEIGHT, SCREEN_WIDTH);
+    init_sprite(world->button_exit, SCREEN_WIDTH/2 -90, 500, SCREEN_HEIGHT, SCREEN_WIDTH);
 
     int indice_wall=0;
     int indice_key = 0 ;
@@ -434,7 +436,8 @@ void update_data(world_t *world){
             world->player->y = world->ligne[514][4].y - PLAYER_HEIGHT/2;
             world->player->x =  world->ligne[514][4].x - PLAYER_HEIGHT/2;
             if(world->nb_pv == 0){
-                world->gameover = 1 ;
+                world->etat_menu = 0 ;
+                init_data(world);
             }
         }
     }
@@ -454,7 +457,8 @@ void update_data(world_t *world){
 
     if(two_sprites_collide(world->player, world->exit)){
         if(world->nb_key_recup == world->nb_key){
-            world->gameover = 1 ;
+            world->etat_menu = 0 ;
+            init_data(world);
         }else{
             handle_two_sprites_collision(world->player, world->exit, world) ;
         }
@@ -503,13 +507,13 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                 is_over = 1 ;
                
             }
-            /*for(int t=0;i<world->nb_key;i++){
-                if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[i])){
-                    world->key[i].placement_x=numero_ligne;
-                    world->key[i].placement_y=incr;
-                    world->key[i].is_looking_for=1;
+            for(int t=0;t<world->nb_key;t++){
+                if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[t])){
+                    world->key[t].placement_x=numero_ligne;
+                    world->key[t].placement_y=incr;
+                    world->key[t].is_looking_for=1;
                 }
-            }*/
+            }
 
         } 
         

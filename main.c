@@ -39,28 +39,25 @@ int main( int argc, char* args[] ){
 
       do{
         init(&window,&renderer,&textures,&world); //initialisation du jeu
-        while(world.etat_menu < 3 ){
-          handle_events(&event, &world) ;
 
-          update_data(&world); 
-
-          refresh_graphics_menu(renderer, &world,&textures) ;
-        }
         while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
-          //gestion des évènements
-          handle_events(&event,&world);
+          if(world.etat_menu < 3 ){
+            handle_events(&event, &world) ;
 
-          update_data(&world) ;
+            update_data(&world); 
 
-          //rafraichissement de l'écran
-          refresh_graphics(renderer,&world,&textures);
+            refresh_graphics_menu(renderer, &world,&textures) ;
+          }else{
+            handle_events(&event,&world);
 
-          // pause de 10 ms pour controler la vitesse de rafraichissement
-          pause(10);
+            update_data(&world) ;
+
+            //rafraichissement de l'écran
+            refresh_graphics(renderer,&world,&textures);
+            // pause de 10 ms pour controler la vitesse de rafraichissement
+            pause(10);
+          }
         }
-
-
-
       }while(!is_game_over(&world));   //tant que le joueur n'a pas décider d'arrêter de jouer
 
 
