@@ -35,10 +35,17 @@ int main( int argc, char* args[] ){
     sprite_t *sprite;
 
     world.gameover = 0 ;
+    world.etat_menu = 0 ;
 
       do{
         init(&window,&renderer,&textures,&world); //initialisation du jeu
+        while(world.etat_menu < 3 ){
+          handle_events(&event, &world) ;
 
+          update_data(&world); 
+
+          refresh_graphics_menu(renderer, &world,&textures) ;
+        }
         while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
           //gestion des évènements
           handle_events(&event,&world);

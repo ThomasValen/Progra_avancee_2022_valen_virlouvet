@@ -16,6 +16,10 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->key);
     clean_texture(textures->exit);
     clean_texture(textures->enemy) ;
+    clean_texture(textures->fond_ecran);
+    clean_texture(textures->titre) ;
+    clean_texture(textures->play) ;
+    clean_texture(textures->button_exit) ;
 }
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures){
@@ -35,6 +39,11 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures){
     textures->exit = load_image("ressources/carre_marron.bmp", renderer);
 
     textures->enemy =load_image("ressources/carre_rouge.bmp", renderer) ;
+
+    textures->fond_ecran = load_image("ressources/fond_ecran.bmp", renderer) ;
+    textures->titre = load_image("ressources/titre.bmp",renderer) ;
+    textures->play = load_image("ressources/play.bmp", renderer) ;
+    textures->button_exit = load_image("ressources/exit.bmp", renderer) ;
 }
 
 void apply_background(SDL_Renderer * renderer, SDL_Texture * texture){
@@ -150,5 +159,27 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
 
     
     
+    update_screen(renderer);
+}
+
+void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* textures){
+    //on vide le renderer
+    clear_renderer(renderer);
+    //application des textures dans le renderer
+    if(world->etat_menu == 0){
+        apply_sprite(renderer, textures->fond_ecran,world->menu);
+        apply_sprite(renderer, textures->titre,world->titre);
+        apply_sprite(renderer, textures->play,world->play);
+        apply_sprite(renderer, textures->button_exit,world->exit);
+    }    
+    if(world->etat_menu == 1){
+        apply_sprite(renderer, textures->fond_ecran,world->menu);
+        apply_sprite(renderer, textures->titre,world->titre);
+       // apply_sprite(renderer, textures->pvp_normal,world->play);
+       // apply_sprite(renderer, textures->exit_normal,world->exit);
+    }
+    
+
+    // on met à jour l'écran
     update_screen(renderer);
 }

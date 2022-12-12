@@ -28,6 +28,7 @@ struct world_s{
     int nb_pv ;
     int attack ;
     int nb_key_recup ;
+    int etat_menu ;
     sprite_t* background;
     sprite_t wall[1000];
     sprite_t* player ;
@@ -36,6 +37,9 @@ struct world_s{
     sprite_t *key ;//tableau
     sprite_t *enemy ;//tableau
     sprite_t *exit ;
+    sprite_t *menu ;
+    sprite_t *titre;
+    sprite_t *play;
 };
 typedef struct world_s world_t;
 
