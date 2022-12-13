@@ -24,6 +24,7 @@ struct textures_s
     SDL_Texture* button_exit_active ;
     SDL_Surface* surface;
     SDL_Rect * keys;
+    SDL_Rect * enemys;
     SDL_Texture* epee1;
     SDL_Texture* epee2;
     SDL_Texture* epee3;

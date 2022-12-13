@@ -231,7 +231,7 @@ int** changer_monde(world_t* world,int ligne,int colonne){
         } while (chara!=EOF);
         fclose(fichier);
     }
-    printf("\n") ;
+    //printf("\n") ;
     return T;
 
 }
@@ -423,7 +423,8 @@ void update_data(world_t *world){
         if(sprites_collide(world->player, world->key[i])){
             world->key[i].x = -50 ;
             world->key[i].y = -50 ;
-            world->nb_key_recup++ ;
+            world->nb_key_recup++;
+            world->key[i].is_looking_for=0;
         }
     }
 
@@ -445,6 +446,7 @@ void update_data(world_t *world){
                     if(sprites_collide_ligne(world->enemy[z], world->ligne[i][j])){
                         world->enemy[z].x = -50 ;
                         world->enemy[z].y = -50 ;
+                        world->enemy[z].is_looking_for=0;
                     }
                 }
             }
@@ -489,6 +491,10 @@ void setIsLooking(world_t* world,int numero_clef,int valeur){
     world->key[numero_clef].is_looking_for=valeur;
 }
 
+void setIsLooking2(world_t* world,int numero_enemy,int valeur){
+    world->enemy[numero_enemy].is_looking_for=valeur;
+}
+
 void ligne(world_t* world,float player_a, int numero_ligne){
     float angle_radian = player_a*PI/180;
     float cx = world->player->x ;
@@ -508,21 +514,55 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                 is_over = 1 ;
                
             }
-            for(int t=0;t<world->nb_key;t++){
-                if(numero_ligne<513){
-                    if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[t])){
-                        world->key[t].placement_x=numero_ligne;//numero_ligne;
-                        world->key[t].placement_y=incr;//incr;
-                        world->key[t].is_looking_for=1;
+        } 
+
+        int a=0;
+            if(world->nb_key > world->nb_enemy){
+                for(int t=0;t<world->nb_key;t++){
+                    if(numero_ligne<513){
+                        if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[t])){
+                            world->key[t].placement_x=numero_ligne;//numero_ligne;
+                            world->key[t].placement_y=incr;//incr;
+                            world->key[t].is_looking_for=1;
+                        }
+                        if(a<world->nb_enemy){
+                            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->enemy[a])){
+                                world->enemy[a].placement_x=numero_ligne;//numero_ligne;
+                                world->enemy[a].placement_y=incr;//incr;
+                                world->enemy[a].is_looking_for=1;
+                            }
+                        }
+                        
                     }
+                    a++;
+                }
+                
+            }else{
+                for(int t=0;t<world->nb_enemy;t++){
+                    if(numero_ligne<513){
+                        if(a<world->nb_key){
+                            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[a])){
+                                world->key[a].placement_x=numero_ligne;//numero_ligne;
+                                world->key[a].placement_y=incr;//incr;
+                                world->key[a].is_looking_for=1;
+                            }
+                        }
+                        
+                        if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->enemy[t])){
+                            world->enemy[t].placement_x=numero_ligne;//numero_ligne;
+                            world->enemy[t].placement_y=incr;//incr;
+                            world->enemy[t].is_looking_for=1;
+                        }
+                    }
+                    a++;
                 }
             }
-
-        } 
         
         incr++ ;
+        //printf("%d",world->nb_enemy);
 
     }
+
     world->nb_point_ligne[numero_ligne] = incr ;  
     
 }

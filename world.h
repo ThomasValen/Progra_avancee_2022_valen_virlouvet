@@ -90,6 +90,7 @@ int PointIsInWall(int x,int y,sprite_t wall) ;
 int sprites_collide_ligne(sprite_t sp1, sprite_t sp2);
 
 void setIsLooking(world_t* world,int numero_clef,int valeur);
+void setIsLooking2(world_t* world,int numero_enemy,int valeur);
 
 
 void ligne(world_t* world,float player_a, int numero_ligne) ;

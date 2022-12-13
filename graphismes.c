@@ -17,6 +17,7 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->exit);
     clean_texture(textures->enemy) ;
     free(textures->keys);
+    free(textures->enemys);
     clean_texture(textures->fond_ecran);
     clean_texture(textures->titre) ;
     clean_texture(textures->play) ;
@@ -48,6 +49,7 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
     textures->enemy =load_image("ressources/carre_rouge.bmp", renderer) ;
 
     textures->keys = (SDL_Rect*)malloc(world->nb_key*sizeof(SDL_Rect));
+    textures->enemys = (SDL_Rect*)malloc(world->nb_enemy*sizeof(SDL_Rect));
     textures->fond_ecran = load_image("ressources/fond_ecran.bmp", renderer) ;
     textures->titre = load_image("ressources/titre.bmp",renderer) ;
     textures->play = load_image("ressources/play.bmp", renderer) ;
@@ -145,6 +147,21 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
         }
     }
 
+    for(int s=0;s<world->nb_enemy;s++){
+        if(world->enemy[s].is_looking_for==1){
+            textures->enemys[s].w = 10000/(world->enemy[s].placement_y);
+            textures->enemys[s].h = 10000/(world->enemy[s].placement_y);
+            textures->enemys[s].x = world->enemy[s].placement_x*2-textures->enemys[s].w/2;
+            textures->enemys[s].y = SCREEN_HEIGHT/2;
+            SDL_FillRect(surface2, &textures->enemys[s],SDL_MapRGBA(surface2->format, 0, 254, 0,255) );
+            SDL_RenderCopy(renderer,textures->wall,NULL,&textures->enemys[s]);
+        }
+    } 
+
+
+
+
+
     world->three_d_check=1;
     SDL_FreeSurface(textures->surface);
     SDL_FreeSurface(surface2);
@@ -180,6 +197,9 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
 
 
     for(int z=0;z<world->nb_key;z++){
+        if(world->key[z].is_looking_for==1){
+
+        
             //printf("mur : %d      clef : %d\n",world->nb_point_ligne[world->key[z].placement_x],world->key[z].placement_y);
             if(world->key[z].placement_y>=0 && world->key[z].placement_x >=0){
                 if( world->nb_point_ligne[world->key[z].placement_x]<=world->key[z].placement_y  ){
@@ -189,6 +209,22 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
             
         if(world->key[z].placement_x==512 ||world->key[z].placement_x==0 ){
             setIsLooking(world,z,0);
+        }
+        }
+    }
+
+    for(int t=0;t<world->nb_enemy;t++){
+        if(world->enemy[t].is_looking_for==1){
+            //printf("mur : %d      clef : %d\n",world->nb_point_ligne[world->key[z].placement_x],world->key[z].placement_y);
+            if(world->enemy[t].placement_y>=0 && world->enemy[t].placement_x >=0){
+                if( world->nb_point_ligne[world->enemy[t].placement_x]<world->enemy[t].placement_y  ){
+                    setIsLooking2(world,t,0);
+                }
+            }
+            //printf("x : %d\n",world->enemy[t].placement_x);
+        if(world->enemy[t].placement_x==512 ||world->enemy[t].placement_x< textures->enemys[t].w/4 ){
+            setIsLooking2(world,t,0);
+        }
         }
     }
 
@@ -223,7 +259,7 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     }
     
 
-    printf("compteur_debut : %f   is_attacking : %d\n",world->compteur_debut,world->is_attacking);
+    //printf("compteur_debut : %f   is_attacking : %d\n",world->compteur_debut,world->is_attacking);
     
     update_screen(renderer);
 }
