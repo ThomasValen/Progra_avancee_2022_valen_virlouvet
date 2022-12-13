@@ -25,6 +25,11 @@ void init_memoire(world_t* world){
     world->player = (sprite_t*)malloc(sizeof(sprite_t));
     world->view_player = (sprite_t*)malloc(sizeof(sprite_t)) ;
     world->exit = (sprite_t*)malloc(sizeof(sprite_t)) ;
+    world->menu = (sprite_t*)malloc(sizeof(sprite_t)) ;
+    world->titre = (sprite_t*)malloc(sizeof(sprite_t));
+    world->play = (sprite_t*)malloc(sizeof(sprite_t));
+    world->play = (sprite_t*)malloc(sizeof(sprite_t));
+    
 
     //world->wall = cree_murs(500);
     world->tab = changer_monde(world,world->hauteur_tab,world->longueur_tab );
@@ -51,12 +56,15 @@ void init_valeurs(world_t* world){
     world->three_d_check=0;
 
     world->nb_key = 0 ;
+    world->nb_key_recup = 0 ;
 
     world->nb_enemy = 0 ;
 
     world->attack = 0 ;
 
     world->nb_pv = 3 ;
+
+    world->is_attacking=0;
     
     
 }
@@ -64,6 +72,10 @@ void init_valeurs(world_t* world){
 void init_environnement(world_t* world){
 	//initialisation des sprites
 	init_sprite(world->background,0,0, world->hauteur_tab*WALL_HEIGHT, world->longueur_tab*WALL_WIDTH,0);
+    init_sprite(world->menu, 0 , 0 ,SCREEN_HEIGHT, SCREEN_WIDTH,0);
+    init_sprite(world->titre, SCREEN_WIDTH/2-300, 100, SCREEN_HEIGHT, SCREEN_WIDTH,0);
+    init_sprite(world->play, SCREEN_WIDTH/2 -90, 300, SCREEN_HEIGHT, SCREEN_WIDTH,0);
+    init_sprite(world->button_exit, SCREEN_WIDTH/2 -90, 500, SCREEN_HEIGHT, SCREEN_WIDTH,0);
 
     int indice_wall=0;
     int indice_key = 0 ;
@@ -409,8 +421,9 @@ void update_data(world_t *world){
 
     for(int i = 0; i < world->nb_key ; i++){
         if(sprites_collide(world->player, world->key[i])){
-            world->key = suppr(world->key, world->key[i], world->nb_key) ;
-            
+            world->key[i].x = -50 ;
+            world->key[i].y = -50 ;
+            world->nb_key_recup++ ;
         }
     }
 
@@ -420,7 +433,8 @@ void update_data(world_t *world){
             world->player->y = world->ligne[514][4].y - PLAYER_HEIGHT/2;
             world->player->x =  world->ligne[514][4].x - PLAYER_HEIGHT/2;
             if(world->nb_pv == 0){
-                world->gameover = 1 ;
+                world->etat_menu = 0 ;
+                init_data(world);
             }
         }
     }
@@ -429,7 +443,8 @@ void update_data(world_t *world){
             for(int j = 8; j < 25 ; j++){
                 for(int z = 0 ; z < world->nb_enemy ; z++){
                     if(sprites_collide_ligne(world->enemy[z], world->ligne[i][j])){
-                        world->enemy = suppr(world->enemy,world->enemy[z], world->nb_enemy) ;
+                        world->enemy[z].x = -50 ;
+                        world->enemy[z].y = -50 ;
                     }
                 }
             }
@@ -438,8 +453,9 @@ void update_data(world_t *world){
     }
 
     if(two_sprites_collide(world->player, world->exit)){
-        if(world->nb_key == 0){
-            world->gameover = 1 ;
+        if(world->nb_key_recup == world->nb_key){
+            world->etat_menu = 0 ;
+            init_data(world);
         }else{
             handle_two_sprites_collision(world->player, world->exit, world) ;
         }

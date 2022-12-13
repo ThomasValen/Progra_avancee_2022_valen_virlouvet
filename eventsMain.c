@@ -10,7 +10,45 @@ void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, w
     init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
     init_data(world);
     init_textures(*renderer,textures,world);
-}   
+}  
+
+void handle_events_menu(SDL_Event *event, world_t *world){
+     const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+        switch (event->type)
+        {
+        case SDL_KEYDOWN:
+            //SDL_Log("+key");
+
+            if (keystates[SDL_SCANCODE_DOWN] && world->etat_menu == 0){
+                //SDL_Log("Keycode fleche bas"); // Affiche un message
+                world->etat_menu++;
+            }else{
+                if (keystates[SDL_SCANCODE_DOWN] && world->etat_menu == 1){
+                    //SDL_Log("Keycode fleche bas"); // Affiche un message
+                    world->etat_menu--;
+                }else{
+                    if (keystates[SDL_SCANCODE_UP] && world->etat_menu == 0){
+                        //SDL_Log("Keycode fleche haut"); // Affiche un message
+                        world->etat_menu++;
+                    }else{
+                        if (keystates[SDL_SCANCODE_UP] && world->etat_menu == 1){
+                            //SDL_Log("Keycode fleche haut"); // Affiche un message
+                            world->etat_menu--;
+                        }
+                        }
+                    }
+                }
+
+            if(keystates[SDL_SCANCODE_RETURN] && world->etat_menu == 0){
+                world->etat_menu = 3;
+            }
+            if(keystates[SDL_SCANCODE_RETURN] && world->etat_menu == 1){
+                world->etat_menu = 3;
+                world->gameover = 1; 
+            }
+        break;
+    }
+}
 
 void handle_events_player(SDL_Event *event, world_t *world){
     const Uint8 *keystates = SDL_GetKeyboardState(NULL);
@@ -59,7 +97,10 @@ void handle_events_player(SDL_Event *event, world_t *world){
                 return ;
             }
             if (keystates[SDL_SCANCODE_SPACE]){
-                world->attack = 1 ;
+                if(world->is_attacking==0){
+                    world->is_attacking=1;
+                    world->compteur_debut = (float)(SDL_GetTicks()/1000.);
+                }
             } 
             break;
 
@@ -76,8 +117,13 @@ void handle_events(SDL_Event *event,world_t *world){
     const Uint8 *keystates;
 
     
-    while( SDL_PollEvent( event) ) {       
-        handle_events_player(event, world) ;
+    while( SDL_PollEvent( event) ) {      
+        if(world->etat_menu < 3){
+            handle_events_menu(event,world) ;
+        }else {
+            handle_events_player(event, world) ;
+        }
+       
         //Si l'utilisateur a cliqué sur le X de la fenêtre 
         if( event->type == SDL_QUIT ) {
             //On indique la fin du jeu
@@ -86,7 +132,8 @@ void handle_events(SDL_Event *event,world_t *world){
          //si une touche est appuyée
          if(event->type == SDL_KEYDOWN){
 			if(event->key.keysym.sym == SDLK_ESCAPE){ //si la touche appuyée est 'Echap'
-				world->gameover = 1;
+				world->etat_menu = 0;
+                init_data(world);
             }
          }
     }

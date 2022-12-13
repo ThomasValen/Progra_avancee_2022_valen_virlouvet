@@ -17,6 +17,16 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->exit);
     clean_texture(textures->enemy) ;
     free(textures->keys);
+    clean_texture(textures->fond_ecran);
+    clean_texture(textures->titre) ;
+    clean_texture(textures->play) ;
+    clean_texture(textures->play_active);
+    clean_texture(textures->button_exit) ;
+    clean_texture(textures->button_exit_active);
+    clean_texture(textures->epee1) ;
+    clean_texture(textures->epee2) ;
+    clean_texture(textures->epee3) ;
+    clean_texture(textures->epee4) ;
 }
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world){
@@ -38,6 +48,24 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
     textures->enemy =load_image("ressources/carre_rouge.bmp", renderer) ;
 
     textures->keys = (SDL_Rect*)malloc(world->nb_key*sizeof(SDL_Rect));
+    textures->fond_ecran = load_image("ressources/fond_ecran.bmp", renderer) ;
+    textures->titre = load_image("ressources/titre.bmp",renderer) ;
+    textures->play = load_image("ressources/play.bmp", renderer) ;
+    textures->play_active = load_image("ressources/play_active.bmp", renderer) ;
+    textures->button_exit = load_image("ressources/exit.bmp", renderer) ;
+    textures->button_exit_active = load_image("ressources/exit_active.bmp",renderer);
+     
+
+
+    textures->epee1 =load_image("ressources/epees1.bmp", renderer) ;
+
+    textures->epee2 =load_image("ressources/epees2.bmp", renderer) ;
+
+    textures->epee3 =load_image("ressources/epees3.bmp", renderer) ;
+
+    textures->epee4 =load_image("ressources/epees4.bmp", renderer) ;
+
+
 }
 
 void apply_background(SDL_Renderer * renderer, SDL_Texture * texture){
@@ -125,6 +153,25 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     
 }
 
+void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* textures){
+    if(world->is_attacking==1){
+        if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==0){
+            apply_texture(textures->epee1, renderer,0,0) ;
+        }else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==1){
+            apply_texture(textures->epee2, renderer,0,0) ;
+        }
+        else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==2){
+            apply_texture(textures->epee3, renderer,0,0) ;
+        }else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==3){
+            world->attack = 1 ;
+            apply_texture(textures->epee4, renderer,0,0) ;
+        }
+    }else{
+        apply_texture(textures->epee1, renderer,0,0) ;
+    }
+
+}
+
 
 void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textures){
     clear_renderer(renderer) ;
@@ -169,6 +216,36 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     apply_sprite(renderer, textures->exit, world->exit) ;
 
     
+    animation_epee(renderer,world,textures);
+
+    if((float)(SDL_GetTicks()/1000.)- world->compteur_debut > 1.0){
+        world->is_attacking=0;
+    }
     
+
+    printf("compteur_debut : %f   is_attacking : %d\n",world->compteur_debut,world->is_attacking);
+    
+    update_screen(renderer);
+}
+
+void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* textures){
+    //on vide le renderer
+    clear_renderer(renderer);
+    //application des textures dans le renderer
+    if(world->etat_menu == 0){
+        apply_sprite(renderer, textures->fond_ecran,world->menu);
+        apply_sprite(renderer, textures->titre,world->titre);
+        apply_sprite(renderer, textures->play_active,world->play);
+        apply_sprite(renderer, textures->button_exit,world->button_exit);
+    }    
+    if(world->etat_menu == 1){
+        apply_sprite(renderer, textures->fond_ecran,world->menu);
+        apply_sprite(renderer, textures->titre,world->titre);
+        apply_sprite(renderer, textures->play,world->play);
+        apply_sprite(renderer, textures->button_exit_active,world->button_exit);
+    }
+    
+
+    // on met à jour l'écran
     update_screen(renderer);
 }

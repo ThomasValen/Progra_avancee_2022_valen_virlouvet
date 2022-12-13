@@ -35,7 +35,7 @@ SDL_Texture *load_image(const char path[], SDL_Renderer *renderer)
     SDL_SetColorKey(tmp, SDL_TRUE, SDL_MapRGB(tmp->format, 255, 0, 255));
     texture = SDL_CreateTextureFromSurface(renderer, tmp);
     SDL_FreeSurface(tmp);
-    if(NULL == texture)
+    if(texture == NULL)
     {
         fprintf(stderr, "Erreur pendant creation de la texture liee a l'image chargee: %s", SDL_GetError());
         return NULL;
