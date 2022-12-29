@@ -3,6 +3,7 @@
 #include "sdl2-light.h"
 #include "sdl2-ttf-light.h"
 #include "world.h"
+#include <SDL2/SDL_render.h>
 
 
 
@@ -25,10 +26,12 @@ struct textures_s
     SDL_Texture* button_exit_active ;
     SDL_Surface* surface;
     SDL_Rect * keys;
+    SDL_Rect* enemys ;
     SDL_Texture* epee1;
     SDL_Texture* epee2;
     SDL_Texture* epee3;
     SDL_Texture* epee4;
+    SDL_Texture* squelette ;
     SDL_Texture* pv ;
     TTF_Font *font ;
     SDL_Rect tab_bandes[513];

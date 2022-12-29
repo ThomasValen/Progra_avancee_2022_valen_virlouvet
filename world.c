@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "world.h"
 #include <math.h> 
+//#include <score.h>
 #include "constante.h"
 
 void init_data(world_t * world){
@@ -30,6 +31,7 @@ void init_memoire(world_t* world){
     world->play = (sprite_t*)malloc(sizeof(sprite_t));
     world->button_exit = (sprite_t*)malloc(sizeof(sprite_t)) ;
     world->epee = (sprite_t*)malloc(sizeof(sprite_t)) ;
+    //world->score = cons_empty() ;
     
     
 
@@ -67,6 +69,8 @@ void init_valeurs(world_t* world){
     world->attack = 0 ;
 
     world->nb_pv = 3 ;
+
+    world->compteur_score = 0 ;
 
     world->stop = false ;
 
@@ -471,14 +475,14 @@ void mouvementEnemy(world_t *world){
 void position(world_t *world,int numero_enemy){
     if(world->enemy[numero_enemy].findPlayer){
         if(world->enemy[numero_enemy].y > world->player->y){
-            world->enemy[numero_enemy].y = world->enemy[numero_enemy].y - 2;
+            world->enemy[numero_enemy].y = world->enemy[numero_enemy].y - MOVING_ENEMY;
         }else if(world->enemy[numero_enemy].y < world->player->y){
-            world->enemy[numero_enemy].y = world->enemy[numero_enemy].y + 2;
+            world->enemy[numero_enemy].y = world->enemy[numero_enemy].y + MOVING_ENEMY;
         }
         if(world->enemy[numero_enemy].x > world->player->x){
-            world->enemy[numero_enemy].x = world->enemy[numero_enemy].x - 2 ;
+            world->enemy[numero_enemy].x = world->enemy[numero_enemy].x - MOVING_ENEMY ;
         }else if(world->enemy[numero_enemy].x < world->player->x){
-            world->enemy[numero_enemy].x = world->enemy[numero_enemy].x + 2 ;;
+            world->enemy[numero_enemy].x = world->enemy[numero_enemy].x + MOVING_ENEMY ;
         }
     }
 
@@ -510,9 +514,9 @@ void update_data(world_t *world){
     enemyAttack(world) ;
     mouvementEnemy(world) ;
     enemyCollision(world) ;
-    for(int i = 0 ; i < world->nb_enemy ; i++){
+    /*for(int i = 0 ; i < world->nb_enemy ; i++){
         position(world, i) ;
-    }
+    }*/
     if(world->attack == 1 ){
         for(int i = 253 ; i < 258 ; i++){
             for(int j = 8; j < 25 ; j++){
@@ -521,6 +525,7 @@ void update_data(world_t *world){
                         world->enemy[z].x = -50 ;
                         world->enemy[z].y = -50 ;
                         world->enemy[z].findPlayer = false ;
+                        world->compteur_score = world->compteur_score + 50 ;
                     }
                 }
             }
@@ -567,6 +572,10 @@ void setIsLooking(world_t* world,int numero_clef,int valeur){
     world->key[numero_clef].is_looking_for=valeur;
 }
 
+void setIsLooking2(world_t* world,int numero_enemy,int valeur){
+    world->enemy[numero_enemy].is_looking_for=valeur;
+}
+
 void ligne(world_t* world,float player_a, int numero_ligne){
     float angle_radian = player_a*PI/180;
     float cx = world->player->x ;
@@ -586,19 +595,50 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                 is_over = 1 ;
                
             }
-            for(int t=0;t<world->nb_key;t++){
-                if(numero_ligne<513){
-                    if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[t])){
-                        world->key[t].placement_x=numero_ligne;//numero_ligne;
-                        world->key[t].placement_y=incr;//incr;
-                        world->key[t].is_looking_for=1;
+        }    
+        int a=0;
+            if(world->nb_key > world->nb_enemy){
+                for(int t=0;t<world->nb_key;t++){
+                    if(numero_ligne<513){
+                        if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[t])){
+                            world->key[t].placement_x=numero_ligne;//numero_ligne;
+                            world->key[t].placement_y=incr;//incr;
+                            world->key[t].is_looking_for=1;
+                        }
+                        if(a<world->nb_enemy){
+                            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->enemy[a])){
+                                world->enemy[a].placement_x=numero_ligne;//numero_ligne;
+                                world->enemy[a].placement_y=incr;//incr;
+                                world->enemy[a].is_looking_for=1;
+                            }
+                        }
+                        
                     }
+                    a++;
+                }
+                
+            }else{
+                for(int t=0;t<world->nb_enemy;t++){
+                    if(numero_ligne<513){
+                        if(a<world->nb_key){
+                            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[a])){
+                                world->key[a].placement_x=numero_ligne;//numero_ligne;
+                                world->key[a].placement_y=incr;//incr;
+                                world->key[a].is_looking_for=1;
+                            }
+                        }
+                        
+                        if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->enemy[t])){
+                            world->enemy[t].placement_x=numero_ligne;//numero_ligne;
+                            world->enemy[t].placement_y=incr;//incr;
+                            world->enemy[t].is_looking_for=1;
+                        }
+                    }
+                    a++;
                 }
             }
-        } 
         
         incr++ ;
-
     }
     world->nb_point_ligne[numero_ligne] = incr ;  
     

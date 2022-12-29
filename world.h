@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "score.h"
 
 struct sprite_s{
     float x;
@@ -39,6 +40,8 @@ struct world_s{
     float compteur_fin;
     int is_attacking;
     bool hideMap ;
+    int compteur_score ;
+    //score_t score ;
     sprite_t* background;
     sprite_t*  wall;
     sprite_t* player ;
@@ -98,6 +101,8 @@ int PointIsInWall(int x,int y,sprite_t wall) ;
 int sprites_collide_ligne(sprite_t sp1, sprite_t sp2);
 
 void setIsLooking(world_t* world,int numero_clef,int valeur);
+
+void setIsLooking2(world_t* world,int numero_enemy,int valeur) ;
 
 
 void ligne(world_t* world,float player_a, int numero_ligne) ;
