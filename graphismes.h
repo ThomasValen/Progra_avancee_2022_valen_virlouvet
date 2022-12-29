@@ -10,6 +10,7 @@ struct textures_s
     SDL_Texture* background;
     SDL_Texture* sky;
     SDL_Texture* bandes;
+    SDL_Texture* squelette;
     SDL_Texture* wall;
     SDL_Texture* key ;
     SDL_Texture* exit;

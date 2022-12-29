@@ -16,6 +16,7 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->key);
     clean_texture(textures->exit);
     clean_texture(textures->enemy) ;
+    clean_texture(textures->squelette);
     free(textures->keys);
     free(textures->enemys);
     clean_texture(textures->fond_ecran);
@@ -47,6 +48,8 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
     textures->exit = load_image("ressources/carre_marron.bmp", renderer);
 
     textures->enemy =load_image("ressources/carre_rouge.bmp", renderer) ;
+
+    textures->squelette=load_image("ressources/skeleton.bmp", renderer) ;
 
     textures->keys = (SDL_Rect*)malloc(world->nb_key*sizeof(SDL_Rect));
     textures->enemys = (SDL_Rect*)malloc(world->nb_enemy*sizeof(SDL_Rect));
@@ -149,12 +152,12 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
 
     for(int s=0;s<world->nb_enemy;s++){
         if(world->enemy[s].is_looking_for==1){
-            textures->enemys[s].w = 10000/(world->enemy[s].placement_y);
-            textures->enemys[s].h = 10000/(world->enemy[s].placement_y);
+            textures->enemys[s].w = 10000/(world->enemy[s].placement_y)*2;
+            textures->enemys[s].h = 10000/(world->enemy[s].placement_y)*3;
             textures->enemys[s].x = world->enemy[s].placement_x*2-textures->enemys[s].w/2;
-            textures->enemys[s].y = SCREEN_HEIGHT/2;
+            textures->enemys[s].y = SCREEN_HEIGHT/2-textures->enemys[s].w/3;
             SDL_FillRect(surface2, &textures->enemys[s],SDL_MapRGBA(surface2->format, 0, 254, 0,255) );
-            SDL_RenderCopy(renderer,textures->wall,NULL,&textures->enemys[s]);
+            SDL_RenderCopy(renderer,textures->squelette,NULL,&textures->enemys[s]);
         }
     } 
 
