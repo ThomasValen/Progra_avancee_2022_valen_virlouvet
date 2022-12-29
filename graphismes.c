@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "graphismes.h"
 #include "constante.h"
+#include "sdl2-ttf-light.h"
 #include "world.h"
 #include <math.h> 
 #include "sdl2-light.h"
@@ -27,6 +28,8 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->epee2) ;
     clean_texture(textures->epee3) ;
     clean_texture(textures->epee4) ;
+    clean_texture(textures->pv) ;
+    clean_font(textures->font) ;
 }
 
 void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world){
@@ -54,7 +57,7 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
     textures->play_active = load_image("ressources/play_active.bmp", renderer) ;
     textures->button_exit = load_image("ressources/exit.bmp", renderer) ;
     textures->button_exit_active = load_image("ressources/exit_active.bmp",renderer);
-     
+    textures->pv = load_image("ressources/coeur.bmp", renderer) ;
 
 
     textures->epee1 =load_image("ressources/epees1.bmp", renderer) ;
@@ -64,6 +67,8 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
     textures->epee3 =load_image("ressources/epees3.bmp", renderer) ;
 
     textures->epee4 =load_image("ressources/epees4.bmp", renderer) ;
+
+    textures->font = load_font("ressources/arial.ttf", 14);
 
 
 }
@@ -156,20 +161,40 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
 void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* textures){
     if(world->is_attacking==1){
         if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==0){
-            apply_texture(textures->epee1, renderer,0,0) ;
+            apply_sprite(renderer,textures->epee1, world->epee) ;
         }else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==1){
-            apply_texture(textures->epee2, renderer,0,0) ;
+            apply_sprite(renderer,textures->epee2, world->epee) ;
         }
         else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==2){
-            apply_texture(textures->epee3, renderer,0,0) ;
+            apply_sprite(renderer,textures->epee3, world->epee) ;
         }else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==3){
             world->attack = 1 ;
-            apply_texture(textures->epee4, renderer,0,0) ;
+            apply_sprite(renderer,textures->epee4, world->epee) ;
         }
     }else{
-        apply_texture(textures->epee1, renderer,0,0) ;
+        apply_sprite(renderer,textures->epee1, world->epee) ;
     }
 
+}
+
+void afficher_miniMap(SDL_Renderer * renderer, world_t* world, textures_t* textures){
+    apply_sprite(renderer, textures->background, world->background) ;
+    for(int j = 0 ; j < 513 ; j++){
+        for(int i = 0 ; i < world->nb_point_ligne[j]; i++){
+            apply_wall(world->ligne[j][i], renderer, textures->ligne) ;
+        }
+    }
+    for(int i=0;i<world->nb_mur;i++){
+        apply_wall(world->wall[i],renderer,textures->wall);
+    }
+    for(int i = 0 ; i < world->nb_key; i++){
+        apply_wall(world->key[i],renderer, textures->key) ;
+    }
+    for(int i = 0 ; i < world->nb_enemy ; i++){
+        apply_wall(world->enemy[i],renderer, textures->enemy) ;
+    }    
+    apply_sprite(renderer, textures->player, world->player) ;
+    apply_sprite(renderer, textures->exit, world->exit) ;
 }
 
 
@@ -177,6 +202,7 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     clear_renderer(renderer) ;
     
     apply_texture(textures->sky,renderer,0,SCREEN_HEIGHT/2);
+    
 
 
     for(int z=0;z<world->nb_key;z++){
@@ -193,37 +219,35 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     }
 
     color_3d(renderer,world,textures);
-    apply_background(renderer, textures->background) ;
 
-    for(int i=0;i<world->nb_mur;i++){
-        apply_wall(world->wall[i],renderer,textures->wall);
-    }
 
-    /*for(int j = 0 ; j < 513 ; j++){
-        for(int i = 0 ; i < world->nb_point_ligne[j]; i++){
-            apply_wall(world->ligne[j][i], renderer, textures->ligne) ;
-        }
-    }*/
 
-    for(int i = 0 ; i < world->nb_key; i++){
-        apply_wall(world->key[i],renderer, textures->key) ;
-    }
-    
-    for(int i = 0 ; i < world->nb_enemy ; i++){
-        apply_wall(world->enemy[i],renderer, textures->enemy) ;
-    }    
-    apply_sprite(renderer, textures->player, world->player) ;
-    apply_sprite(renderer, textures->exit, world->exit) ;
+
 
     
     animation_epee(renderer,world,textures);
+
+    if(!world->hideMap){
+        afficher_miniMap(renderer, world, textures) ;
+    }
+
+    for(int p = 0 ; p < world->nb_pv ; p++){
+        apply_wall( world->pv[p], renderer,textures->pv);
+    }
+
+    if(world->etat_menu < 3){
+        char fin_du_jeu[1000];
+        sprintf(fin_du_jeu, "Vous avez gagné !!") ;
+        apply_text(renderer, SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2, 200, 50, fin_du_jeu,textures->font) ;
+        pause(1500) ;
+    }
 
     if((float)(SDL_GetTicks()/1000.)- world->compteur_debut > 1.0){
         world->is_attacking=0;
     }
     
 
-    printf("compteur_debut : %f   is_attacking : %d\n",world->compteur_debut,world->is_attacking);
+    //printf("compteur_debut : %f   is_attacking : %d\n",world->compteur_debut,world->is_attacking);
     
     update_screen(renderer);
 }
@@ -249,3 +273,9 @@ void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* te
     // on met à jour l'écran
     update_screen(renderer);
 }
+
+void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world){ 
+    init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
+    init_data(world);
+    init_textures(*renderer,textures,world);
+}  

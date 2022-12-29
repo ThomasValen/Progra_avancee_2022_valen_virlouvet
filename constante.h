@@ -15,6 +15,9 @@
 
 #define WALL_HEIGHT 12
 
+#define PV_WIDTH 50
+#define PV_HEIGHT 50
+
 #define PLAYER_WIDTH 6 //moitié d'un mur
 
 #define PLAYER_HEIGHT 6
