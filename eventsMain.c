@@ -1,50 +1,58 @@
 #include "graphismes.h"
+#include "sdl2-ttf-light.h"
 #include "world.h"
 #include "constante.h"
 #include "sdl2-light.h"
 #include "eventsMain.h"
+#include <SDL2/SDL_events.h>
+#include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_scancode.h>
 
 
-
-void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world){ 
-    init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
-    init_data(world);
-    init_textures(*renderer,textures,world);
-}  
 
 void handle_events_menu(SDL_Event *event, world_t *world){
      const Uint8 *keystates = SDL_GetKeyboardState(NULL);
+        SDL_Rect box ;
         switch (event->type)
         {
         case SDL_KEYDOWN:
             //SDL_Log("+key");
+            /*if(event->motion.y > 0 && event->motion.x > 0 && event->motion.y < 100 && event->motion.x < 100){
+                world->etat_menu = 0 ;
+            }else {
+                world->etat_menu = 1 ;
+            }*/
 
-            if (keystates[SDL_SCANCODE_DOWN] && world->etat_menu == 0){
+            if (keystates[SDL_SCANCODE_S] && world->etat_menu == 0){
                 //SDL_Log("Keycode fleche bas"); // Affiche un message
                 world->etat_menu++;
             }else{
-                if (keystates[SDL_SCANCODE_DOWN] && world->etat_menu == 1){
+                if (keystates[SDL_SCANCODE_S] && world->etat_menu == 1){
                     //SDL_Log("Keycode fleche bas"); // Affiche un message
                     world->etat_menu--;
                 }else{
-                    if (keystates[SDL_SCANCODE_UP] && world->etat_menu == 0){
+                    if (keystates[SDL_SCANCODE_W] && world->etat_menu == 0){
                         //SDL_Log("Keycode fleche haut"); // Affiche un message
                         world->etat_menu++;
                     }else{
-                        if (keystates[SDL_SCANCODE_UP] && world->etat_menu == 1){
+                        if (keystates[SDL_SCANCODE_W] && world->etat_menu == 1){
                             //SDL_Log("Keycode fleche haut"); // Affiche un message
                             world->etat_menu--;
                         }
-                        }
                     }
                 }
-
+            }
             if(keystates[SDL_SCANCODE_RETURN] && world->etat_menu == 0){
                 world->etat_menu = 3;
             }
             if(keystates[SDL_SCANCODE_RETURN] && world->etat_menu == 1){
-                world->etat_menu = 3;
                 world->gameover = 1; 
+            }
+            if (keystates[SDL_SCANCODE_ESCAPE]) {
+                world->gameover = 1 ;
+            }
+            if(keystates[SDL_QUIT]){
+                world->gameover = 1 ;
             }
         break;
     }
@@ -55,6 +63,7 @@ void handle_events_player(SDL_Event *event, world_t *world){
     switch (event-> type)
         {
         case SDL_KEYDOWN:
+<<<<<<< HEAD
             if (keystates[SDL_SCANCODE_D]){
                 world->player->y = world->ligne[513][MOVING_STEP].y - PLAYER_HEIGHT/2;
                 world->player->x = world->ligne[513][MOVING_STEP].x - PLAYER_WIDTH/2;
@@ -62,10 +71,22 @@ void handle_events_player(SDL_Event *event, world_t *world){
                 world->direction=1; 
             }
             if (keystates[SDL_SCANCODE_W]){
+=======
+            if(!world->stop){
+                if (keystates[SDL_SCANCODE_D]){
+                    world->player->y = world->ligne[513][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                    world->player->x = world->ligne[513][MOVING_STEP].x - PLAYER_WIDTH/2;
+                
+                    world->direction=1;
+                    return; 
+                }
+                if (keystates[SDL_SCANCODE_W]){
+>>>>>>> c82490ecbcf1ca5ca5c6d3dccaf1120d3d2d811e
 
-                world->player->y = world->ligne[256][MOVING_STEP].y - PLAYER_HEIGHT/2;
-                world->player->x = world->ligne[256][MOVING_STEP].x - PLAYER_WIDTH/2;
+                    world->player->y = world->ligne[256][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                    world->player->x = world->ligne[256][MOVING_STEP].x - PLAYER_WIDTH/2;
 
+<<<<<<< HEAD
                 world->direction=4;
             }
             if (keystates[SDL_SCANCODE_S]){
@@ -94,10 +115,58 @@ void handle_events_player(SDL_Event *event, world_t *world){
                 if(world->is_attacking==0){
                     world->is_attacking=1;
                     world->compteur_debut = (float)(SDL_GetTicks()/1000.);
+=======
+                    world->direction=4;
+                    return;
                 }
-            } 
-            break;
-
+                if (keystates[SDL_SCANCODE_S]){
+                    world->player->y = world->ligne[514][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                    world->player->x = world->ligne[514][MOVING_STEP].x - PLAYER_WIDTH/2;
+                    world->direction=3;
+                    return ;
+                }
+                if (keystates[SDL_SCANCODE_A]){
+                    world->player->y = world->ligne[515][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                    world->player->x = world->ligne[515][MOVING_STEP].x - PLAYER_WIDTH/2;
+                    world->direction=2;
+                    return ;
+>>>>>>> c82490ecbcf1ca5ca5c6d3dccaf1120d3d2d811e
+                }
+                if (keystates[SDL_SCANCODE_E]){
+                    world->angle = world->angle + 3 ;
+                    if(world->angle >= 360){
+                        world->angle = 0 ;
+                    }
+                    return ;
+                }
+                if (keystates[SDL_SCANCODE_Q]){
+                    world->angle = world->angle - 3 ;
+                    if(world->angle <= 0){
+                        world->angle = 360 ;
+                    }
+                    return ;
+                }
+                if (keystates[SDL_SCANCODE_SPACE]){
+                    if(world->is_attacking==0){
+                        world->is_attacking=1;
+                        world->compteur_debut = (float)(SDL_GetTicks()/1000.);
+                    }
+                }
+                if(keystates[SDL_SCANCODE_M]){
+                    world->hideMap = !world->hideMap ;
+                    world->stop = !world->stop ;
+                } 
+                if(keystates[SDL_SCANCODE_ESCAPE]){ //si la touche appuyée est 'Echap'
+                    world->etat_menu = 0;
+                    init_data(world);
+                }
+                break;
+            }else {
+                if(keystates[SDL_SCANCODE_M]){
+                    world->hideMap = !world->hideMap ;
+                    world->stop = !world->stop ;
+                } 
+            }   
         case SDL_KEYUP:
             world->direction=0;
             world->attack = 0 ;
@@ -124,12 +193,7 @@ void handle_events(SDL_Event *event,world_t *world){
             world->gameover = 1;
         }
          //si une touche est appuyée
-         if(event->type == SDL_KEYDOWN){
-			if(event->key.keysym.sym == SDLK_ESCAPE){ //si la touche appuyée est 'Echap'
-				world->etat_menu = 0;
-                init_data(world);
-            }
-         }
+
     }
 
 }

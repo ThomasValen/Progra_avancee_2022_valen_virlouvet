@@ -1,6 +1,7 @@
 #ifndef __GRAPHISMES__H__
 #define __GRAPHISMES__H__
 #include "sdl2-light.h"
+#include "sdl2-ttf-light.h"
 #include "world.h"
 
 
@@ -30,6 +31,8 @@ struct textures_s
     SDL_Texture* epee2;
     SDL_Texture* epee3;
     SDL_Texture* epee4;
+    SDL_Texture* pv ;
+    TTF_Font *font ;
     SDL_Rect tab_bandes[513];
 };
 typedef struct textures_s textures_t;
@@ -44,6 +47,9 @@ void apply_background(SDL_Renderer * renderer, SDL_Texture * texture);
 void refresh_graphics(SDL_Renderer * renderer, world_t *world, textures_t *textures);
 
 void refresh_graphics_menu(SDL_Renderer * renderer, world_t *world, textures_t *textures);
+
+void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world); 
+
 
 
 #endif

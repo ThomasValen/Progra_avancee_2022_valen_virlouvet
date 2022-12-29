@@ -1,5 +1,8 @@
 #ifndef __WORLD__H__
 #define __WORLD__H__
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 struct sprite_s{
     float x;
@@ -10,10 +13,12 @@ struct sprite_s{
     int placement_x;
     int placement_y;
     int is_looking_for;
+    bool findPlayer ;
 };
 typedef struct sprite_s sprite_t;
 
 struct world_s{
+    bool stop ;
     int gameover ;
     int direction;//1 = droite  2 = gauche  3 = bas 4 = haut
     int longueur_tab;
@@ -33,8 +38,9 @@ struct world_s{
     float compteur_debut;
     float compteur_fin;
     int is_attacking;
+    bool hideMap ;
     sprite_t* background;
-    sprite_t wall[1000];
+    sprite_t*  wall;
     sprite_t* player ;
     sprite_t **ligne;
     sprite_t *view_player ;
@@ -45,6 +51,8 @@ struct world_s{
     sprite_t *titre;
     sprite_t *play;
     sprite_t *button_exit ;
+    sprite_t* epee ;
+    sprite_t* pv ;
 };
 typedef struct world_s world_t;
 
