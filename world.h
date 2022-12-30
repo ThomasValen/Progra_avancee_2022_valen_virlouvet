@@ -43,6 +43,8 @@ struct world_s{
     bool readScore ;
     int compteur_score ;
 
+    int nb_bandes_sortie;
+    int no_ligne_db_sortie;
     int top[5] ;
     score_t score ;
     sprite_t* background;

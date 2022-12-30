@@ -61,6 +61,9 @@ void init_valeurs(world_t* world){
 
     world->angle = 180 ;
 
+    world->nb_bandes_sortie=0;
+    world->no_ligne_db_sortie=-1;
+
     world->three_d_check=0;
 
     world->nb_key = 0 ;
@@ -499,6 +502,8 @@ void update_data(world_t *world){
     }
     float angle = world->angle ;
     float mid_angle = 0 ;
+    
+    world->nb_bandes_sortie=0;
     for (int i = 0; i < 513; i++)
     {
         ligne(world, angle, i) ;
@@ -519,9 +524,9 @@ void update_data(world_t *world){
     enemyAttack(world) ;
     mouvementEnemy(world) ;
     enemyCollision(world) ;
-    /*for(int i = 0 ; i < world->nb_enemy ; i++){
+    for(int i = 0 ; i < world->nb_enemy ; i++){
         position(world, i) ;
-    }*/
+    }
     if(world->attack == 1 ){
         for(int i = 240 ; i < 280 ; i++){
             for(int j = 8; j < 40 ; j++){
@@ -529,6 +534,7 @@ void update_data(world_t *world){
                     if(sprites_collide_ligne(world->enemy[z], world->ligne[i][j])){
                         world->enemy[z].x = -50 ;
                         world->enemy[z].y = -50 ;
+                        setIsLooking2(world,z,0);
                         world->enemy[z].findPlayer = false ;
                         world->compteur_score = world->compteur_score + 50 ;
                     }
@@ -596,11 +602,23 @@ void ligne(world_t* world,float player_a, int numero_ligne){
         
         init_sprite(&(world->ligne[numero_ligne][incr]),cx, cy, 1, 1,0);
         for(int i =0 ; i < world->nb_mur; i++){
-            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->wall[i]) || sprites_collide(world->exit, world->ligne[numero_ligne][incr]) ){
+            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->wall[i])){
                 is_over = 1 ;
-               
             }
         }    
+
+        if(sprites_collide(world->exit, world->ligne[numero_ligne][incr])){
+            is_over = 1; 
+            if(world->nb_bandes_sortie == 0){
+                world->no_ligne_db_sortie=numero_ligne;
+                //printf("%d   %d\n",world->no_ligne_db_sortie,numero_ligne*2);
+                
+                
+            }printf("%d  %d\n",world->nb_bandes_sortie,world->no_ligne_db_sortie);
+            world->nb_bandes_sortie++;
+        }
+
+
         int a=0;
             if(world->nb_key > world->nb_enemy){
                 for(int t=0;t<world->nb_key;t++){
@@ -627,6 +645,7 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                     if(numero_ligne<513){
                         if(a<world->nb_key){
                             if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[a])){
+                                
                                 world->key[a].placement_x=numero_ligne;//numero_ligne;
                                 world->key[a].placement_y=incr;//incr;
                                 world->key[a].is_looking_for=1;
@@ -646,6 +665,7 @@ void ligne(world_t* world,float player_a, int numero_ligne){
         incr++ ;
     }
     world->nb_point_ligne[numero_ligne] = incr ;  
+
     
 }
 

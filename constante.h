@@ -26,8 +26,8 @@
 
 #define KEY_HEIGHT 12
 
-#define ENEMY_WIDTH 6
-#define ENEMY_HEIGHT 6
+#define ENEMY_WIDTH 1
+#define ENEMY_HEIGHT 1
 
 #define MOVING_STEP 3
 

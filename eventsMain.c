@@ -64,6 +64,7 @@ void handle_events_player(SDL_Event *event, world_t *world){
     switch (event-> type)
         {
         case SDL_KEYDOWN:
+            
             if(!world->stop){
                 if (keystates[SDL_SCANCODE_D]){
                     world->player->y = world->ligne[513][MOVING_STEP].y - PLAYER_HEIGHT/2;

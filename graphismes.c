@@ -101,6 +101,7 @@ void apply_sprite(SDL_Renderer* renderer, SDL_Texture* texture, sprite_t *sprite
 
 void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     int couleur;
+    int couleur2;
     textures->surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
     
     if(world->three_d_check==1){
@@ -132,13 +133,26 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
 
 
     for(int y=0;y<513;y++){
-        couleur = 255 - world->nb_point_ligne[y];
+        couleur = 254 - world->nb_point_ligne[y];
         if(couleur<0){
             couleur=0;
         }
         SDL_FillRect(textures->surface, &textures->tab_bandes[y], SDL_MapRGB(textures->surface->format, couleur, 0, 0));
+        //printf("%d\n",world->no_ligne_db_sortie);
+        if(y==world->no_ligne_db_sortie){
+            couleur2 = 255 - world->nb_point_ligne[y];
+            if(couleur2<0){
+                couleur2=0;
+            }
+            for(int f=0;f<world->nb_bandes_sortie;f++){
+                SDL_FillRect(textures->surface, &textures->tab_bandes[y], SDL_MapRGB(textures->surface->format, 0, couleur2, 0));
+                y++;
+            }
+        }
         
     }
+    //SDL_FillRect(textures->surface, &textures->tab_bandes[100], SDL_MapRGB(textures->surface->format, 0, 255, 0));
+    //SDL_FillRect(textures->surface, &textures->tab_bandes[101], SDL_MapRGB(textures->surface->format, 0, 255, 0));
     
     
     Uint32 colorkey = SDL_MapRGB( textures->surface->format, 0, 255, 0 );
@@ -184,6 +198,7 @@ void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* texture
             apply_sprite(renderer,textures->epee2, world->epee) ;
         }
         else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==2){
+            world->attack = 1 ;
             apply_sprite(renderer,textures->epee3, world->epee) ;
         }else if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==3){
             world->attack = 1 ;
@@ -235,6 +250,16 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
             setIsLooking(world,z,0);
         }
     }
+
+    for(int t=0;t<world->nb_enemy;t++){
+        if(world->enemy[t].placement_x>510){
+            setIsLooking2(world,t,0);
+        }
+    }
+
+    color_3d(renderer,world,textures);
+
+
     for(int t=0;t<world->nb_enemy;t++){
         if(world->enemy[t].is_looking_for==1){
             //printf("mur : %d      clef : %d\n",world->nb_point_ligne[world->key[z].placement_x],world->key[z].placement_y);
@@ -244,15 +269,22 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
                 }
             }
             //printf("x : %d\n",world->enemy[t].placement_x);
+<<<<<<< HEAD
             if(world->enemy[t].placement_x==512 ||world->enemy[t].placement_x == 0 ){
+=======
+            if(world->enemy[t].placement_x< textures->enemys[t].w/8 ){
+>>>>>>> f65a50ed72ca6f6f2f954e3c8b4f22a2cfb9779f
                 setIsLooking2(world,t,0);
             }
         }
     }
 
+<<<<<<< HEAD
     color_3d(renderer,world,textures);
 
 
+=======
+>>>>>>> f65a50ed72ca6f6f2f954e3c8b4f22a2cfb9779f
     animation_epee(renderer,world,textures);
 
     if(!world->hideMap){
@@ -302,6 +334,16 @@ void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* te
     for(int i=0; i<5; i++){
         sprintf(resultat, "%d-     %d",i+1,world->top[i]);
         apply_text(renderer,100,250 + 60 *i, 100, 50, resultat,textures->font);
+    }
+    
+    char text_score[1000];
+    char score[1000];
+    top5(world->score, world) ;
+    sprintf(text_score, "score :") ;
+    apply_text(renderer, 50, 200, 200, 50, text_score,textures->font) ;
+    for(int i=0; i<5; i++){
+        sprintf(score, "%d-     %d",i+1,world->top[i]);
+        apply_text(renderer,100,250 + 60 *i, 100, 50, score,textures->font);
     }
     
 

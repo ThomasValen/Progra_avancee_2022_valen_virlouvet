@@ -60,6 +60,7 @@ void free_score(score_t score){
     free(score) ;
 }
 
+<<<<<<< HEAD
 score_t ajouter_score(int new_score, score_t score){
     score = cons(new_score,score) ;
     return score ;
@@ -74,6 +75,17 @@ void toString(score_t score){
     }else{
         printf("je suis vide") ;
     }    
+=======
+void ajouter_score(int new_score, score_t score){
+    score = cons(new_score,suivant(score)) ;
+}
+
+void toString(score_t score){
+    while(!is_empty(score)){
+        printf("nombre : %d \n", score->nombre) ;
+        suivant(score) ;
+    }
+>>>>>>> f65a50ed72ca6f6f2f954e3c8b4f22a2cfb9779f
 }
 
 
