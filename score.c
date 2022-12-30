@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
-//#include "score.h"
+#include "score.h"
+#include "world.h"
 
 score_t cons_empty(){
     return NULL ;
@@ -60,7 +60,20 @@ void free_score(score_t score){
     free(score) ;
 }
 
-void ajouter_score(int new_score, score_t score){
-    cons(new_score,score) ;
+score_t ajouter_score(int new_score, score_t score){
+    score = cons(new_score,score) ;
+    return score ;
 }
+
+void toString(score_t score){
+    if(!is_empty(score)){
+        while(!is_empty(score)){
+            printf("nombre : %d \n", score->nombre) ;
+            score = suivant(score) ;
+        }
+    }else{
+        printf("je suis vide") ;
+    }    
+}
+
 

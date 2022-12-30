@@ -1,10 +1,11 @@
 #include <SDL2/SDL.h>
+#include <bits/types/FILE.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include "world.h"
 #include <math.h> 
-//#include <score.h>
+#include "score.h"
 #include "constante.h"
 
 void init_data(world_t * world){
@@ -31,7 +32,8 @@ void init_memoire(world_t* world){
     world->play = (sprite_t*)malloc(sizeof(sprite_t));
     world->button_exit = (sprite_t*)malloc(sizeof(sprite_t)) ;
     world->epee = (sprite_t*)malloc(sizeof(sprite_t)) ;
-    //world->score = cons_empty() ;
+    world->compteur_key = (sprite_t*)malloc(sizeof(sprite_t)) ;
+    world->score = cons_empty() ;
     
     
 
@@ -77,6 +79,7 @@ void init_valeurs(world_t* world){
     world->is_attacking=0;
 
     world->hideMap = true ;
+    world->readScore = true ;
     
     
 }
@@ -89,6 +92,7 @@ void init_environnement(world_t* world){
     init_sprite(world->play, SCREEN_WIDTH/2 -90, 300, SCREEN_HEIGHT, SCREEN_WIDTH,0);
     init_sprite(world->button_exit, SCREEN_WIDTH/2 -90, 500, SCREEN_HEIGHT, SCREEN_WIDTH,0);
     init_sprite(world->epee, SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2, 0, 0, 0) ;
+    init_sprite(world->compteur_key, SCREEN_WIDTH - 100, 100,50 , 150, 0);
     for (int p = 0; p < 3; p++) {
         init_sprite(&(world->pv[p]),(50*p)+ 50 , SCREEN_HEIGHT-200, PV_HEIGHT, PV_WIDTH, 0) ;
     }
@@ -150,6 +154,8 @@ void clean_data(world_t *world){
     free(world->titre) ;
     free(world->menu) ;
     free(world->epee) ;
+    free(world->compteur_key);
+    //free_score(world->score) ;
     //free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
     //free_murs(world->wall);
 }
@@ -435,7 +441,6 @@ void enemyAttack(world_t *world){
             world->player->x =  world->ligne[514][15].x - PLAYER_HEIGHT/2;
             if(world->nb_pv == 0){
                 world->etat_menu = 0 ;
-                init_data(world);
             }
         }
     }
@@ -461,7 +466,7 @@ void enemyCollision(world_t *world){
 
 void mouvementEnemy(world_t *world){
     for(int i = 0 ; i < world->nb_enemy ; i++){
-        for(int j = 0 ; j < 515 ; j++){
+        for(int j = 0 ; j < 513 ; j++){
             for(int z = 0 ; z < world->nb_point_ligne[j]; z++){
                 if(sprites_collide_ligne(world->enemy[i], world->ligne[j][z])){
                     world->enemy[i].findPlayer = true ;
@@ -518,8 +523,8 @@ void update_data(world_t *world){
         position(world, i) ;
     }*/
     if(world->attack == 1 ){
-        for(int i = 253 ; i < 258 ; i++){
-            for(int j = 8; j < 25 ; j++){
+        for(int i = 240 ; i < 280 ; i++){
+            for(int j = 8; j < 40 ; j++){
                 for(int z = 0 ; z < world->nb_enemy ; z++){
                     if(sprites_collide_ligne(world->enemy[z], world->ligne[i][j])){
                         world->enemy[z].x = -50 ;
@@ -538,7 +543,6 @@ void update_data(world_t *world){
     if(two_sprites_collide(world->player, world->exit)){
         if(world->nb_key_recup == world->nb_key){
             world->etat_menu = 0 ;
-            init_data(world);
         }else{
             handle_two_sprites_collision(world->player, world->exit, world) ;
         }
@@ -549,6 +553,7 @@ void update_data(world_t *world){
     ligne(world,angle, 514) ;
     angle = mid_angle + 270 ;
     ligne(world,angle,515) ;
+
 
 }
 
@@ -642,6 +647,59 @@ void ligne(world_t* world,float player_a, int numero_ligne){
     }
     world->nb_point_ligne[numero_ligne] = incr ;  
     
+}
+
+void top5(score_t score, world_t* world){
+    int top5 = 0, top4 = 0, top3 = 0, top2 = 0, top1 = 0;
+    int transition = 0 ;
+    while (!is_empty(score)) {
+        if(top5 < score->nombre){
+            top5 = score->nombre ;
+        }
+        if(top4 < top5){
+            transition = top4 ;
+            top4 = top5 ;
+            top5 = transition ; 
+        }
+        if(top3 < top4){
+            transition = top3 ;
+            top3 = top4 ;
+            top4 = transition ; 
+        }if(top2 < top3){
+            transition = top2 ;
+            top2 = top3 ;
+            top3 = transition ; 
+        }
+        if(top1 < top2){
+            transition = top1 ;
+            top1 = top2 ;
+            top2 = transition ; 
+        }
+        score = suivant(score) ;
+    }
+    world->top[0] = top1 ;
+    world->top[1] = top2 ;
+    world->top[2] = top3 ;
+    world->top[3] = top4 ;
+    world->top[4] = top5 ;
+
+    
+}
+
+void scorefin(world_t* world){
+    world->score = ajouter_score(world->compteur_score, world->score) ;
+
+    FILE *fichier ;
+    fichier = fopen("score.txt", "w") ;
+    if(fichier != NULL){
+        while(!is_empty(world->score)){
+            fprintf(fichier, "%d* \n", world->score->nombre);
+            world->score =suivant(world->score) ;
+        }
+        fclose(fichier) ;
+    }
+
+
 }
 
 

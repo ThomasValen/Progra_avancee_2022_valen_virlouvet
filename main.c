@@ -1,8 +1,10 @@
+#include "score.h"
 #include "sdl2-light.h"
 #include "world.h"
 #include "graphismes.h"
 #include "constante.h"
 #include "eventsMain.h"
+#include <stdio.h>
 
 
 /**
@@ -42,11 +44,16 @@ int main( int argc, char* args[] ){
 
         while(!is_game_over(&world)){ //tant que le jeu n'est pas fini
           if(world.etat_menu < 3 ){
+            if(world.readScore){
+              affichage_score(renderer, &world) ;
+              world.readScore = !world.readScore ;
+            }
             handle_events(&event, &world) ;
 
             update_data(&world); 
 
             refresh_graphics_menu(renderer, &world,&textures) ;
+
           }else{
             handle_events(&event,&world);
 
@@ -54,6 +61,10 @@ int main( int argc, char* args[] ){
 
             //rafraichissement de l'écran
             refresh_graphics(renderer,&world,&textures);
+            if(world.etat_menu < 3){
+              scorefin(&world) ;
+              init_data(&world) ;
+            }
             // pause de 10 ms pour controler la vitesse de rafraichissement
             pause(10);
           }

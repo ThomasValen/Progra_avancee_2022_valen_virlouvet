@@ -1,4 +1,5 @@
 #include "graphismes.h"
+#include "score.h"
 #include "sdl2-ttf-light.h"
 #include "world.h"
 #include "constante.h"
@@ -117,7 +118,6 @@ void handle_events_player(SDL_Event *event, world_t *world){
                 } 
                 if(keystates[SDL_SCANCODE_ESCAPE]){ //si la touche appuyée est 'Echap'
                     world->etat_menu = 0;
-                    init_data(world);
                 }
                 break;
             }else {

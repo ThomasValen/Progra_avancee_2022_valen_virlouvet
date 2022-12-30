@@ -40,9 +40,13 @@ struct world_s{
     float compteur_fin;
     int is_attacking;
     bool hideMap ;
+    bool readScore ;
     int compteur_score ;
-    //score_t score ;
+
+    int top[5] ;
+    score_t score ;
     sprite_t* background;
+    sprite_t* compteur_key ;
     sprite_t*  wall;
     sprite_t* player ;
     sprite_t **ligne;
@@ -106,6 +110,10 @@ void setIsLooking2(world_t* world,int numero_enemy,int valeur) ;
 
 
 void ligne(world_t* world,float player_a, int numero_ligne) ;
+
+void top5(score_t score, world_t* world) ;
+
+void scorefin(world_t* world) ;
 
 
 #endif

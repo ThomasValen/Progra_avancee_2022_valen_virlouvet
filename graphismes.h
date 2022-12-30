@@ -1,5 +1,6 @@
 #ifndef __GRAPHISMES__H__
 #define __GRAPHISMES__H__
+#include "score.h"
 #include "sdl2-light.h"
 #include "sdl2-ttf-light.h"
 #include "world.h"
@@ -24,6 +25,7 @@ struct textures_s
     SDL_Texture* play_active ;
     SDL_Texture* button_exit ;
     SDL_Texture* button_exit_active ;
+    SDL_Texture* compteur_key ;
     SDL_Surface* surface;
     SDL_Rect * keys;
     SDL_Rect* enemys ;
@@ -48,6 +50,8 @@ void apply_background(SDL_Renderer * renderer, SDL_Texture * texture);
 void refresh_graphics(SDL_Renderer * renderer, world_t *world, textures_t *textures);
 
 void refresh_graphics_menu(SDL_Renderer * renderer, world_t *world, textures_t *textures);
+
+void affichage_score(SDL_Renderer* renderer, world_t* world) ;
 
 void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world); 
 

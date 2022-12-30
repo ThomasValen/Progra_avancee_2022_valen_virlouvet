@@ -7,7 +7,7 @@
 
 struct score_s{
     int nombre;
-    //score_s *suivant;
+    struct score_s *suivant;
 };
 typedef struct score_s *score_t;
 
@@ -27,7 +27,8 @@ void change_suivant(score_t score, score_t new_score) ;
 
 void free_score(score_t score) ;
 
-void ajouter_score(int new_score, score_t score) ;
+score_t ajouter_score(int new_score, score_t score) ;
 
+void toString(score_t score) ;
 
 #endif

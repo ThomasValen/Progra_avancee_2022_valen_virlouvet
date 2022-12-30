@@ -5,7 +5,7 @@
 #include "sdl2-ttf-light.h"
 #include "world.h"
 #include <math.h> 
-//#include "score.h"
+#include "score.h"
 #include "sdl2-light.h"
 
 void clean_textures(textures_t *textures){
@@ -29,6 +29,7 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->epee2) ;
     clean_texture(textures->epee3) ;
     clean_texture(textures->epee4) ;
+    clean_texture(textures->compteur_key) ;
     clean_texture(textures->pv) ;
     clean_texture(textures->squelette);
     free(textures->enemys);
@@ -72,6 +73,8 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
     textures->epee3 =load_image("ressources/epees3.bmp", renderer) ;
 
     textures->epee4 =load_image("ressources/epees4.bmp", renderer) ;
+
+    textures->compteur_key = load_image("ressources/compteur_key.bmp", renderer);
 
     textures->font = load_font("ressources/arial.ttf", 14);
 
@@ -241,7 +244,7 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
                 }
             }
             //printf("x : %d\n",world->enemy[t].placement_x);
-            if(world->enemy[t].placement_x==512 ||world->enemy[t].placement_x< textures->enemys[t].w/4 ){
+            if(world->enemy[t].placement_x==512 ||world->enemy[t].placement_x == 0 ){
                 setIsLooking2(world,t,0);
             }
         }
@@ -250,26 +253,19 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     color_3d(renderer,world,textures);
 
 
-
-
-
-    
     animation_epee(renderer,world,textures);
 
     if(!world->hideMap){
         afficher_miniMap(renderer, world, textures) ;
     }
-
+    
+    apply_sprite(renderer, textures->compteur_key, world->compteur_key) ;
+    char nbkey[10] ;
+    sprintf(nbkey," %d/%d ", world->nb_key_recup, world->nb_key) ;
+    apply_text(renderer,SCREEN_WIDTH - 150, 100,50 , 50, nbkey,textures->font) ;
+    
     for(int p = 0 ; p < world->nb_pv ; p++){
         apply_wall( world->pv[p], renderer,textures->pv);
-    }
-
-    if(world->etat_menu < 3){
-        char fin_du_jeu[1000];
-        sprintf(fin_du_jeu, "Vous avez gagné !!") ;
-        apply_text(renderer, SCREEN_WIDTH/2 - 200, SCREEN_HEIGHT/2, 200, 50, fin_du_jeu,textures->font) ;
-        //ajouter_score(world->compteur_score, world->score) ;
-        pause(1500) ;
     }
 
     if((float)(SDL_GetTicks()/1000.)- world->compteur_debut > 1.0){
@@ -298,14 +294,54 @@ void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* te
         apply_sprite(renderer, textures->play,world->play);
         apply_sprite(renderer, textures->button_exit_active,world->button_exit);
     }
+
+    char text_score[1000];
+    char resultat[1000];
+    sprintf(text_score, "score :") ;
+    apply_text(renderer, 50, 200, 200, 50, text_score,textures->font) ;
+    for(int i=0; i<5; i++){
+        sprintf(resultat, "%d-     %d",i+1,world->top[i]);
+        apply_text(renderer,100,250 + 60 *i, 100, 50, resultat,textures->font);
+    }
     
 
     // on met à jour l'écran
     update_screen(renderer);
 }
 
+void affichage_score(SDL_Renderer* renderer, world_t* world){
+    FILE* fichier = NULL;
+    char chara ;
+    char nombre[1000] ;
+    int score_joueur = 0 ;
+    int incr = 0 ;
+    fichier =fopen("score.txt", "r");
+    if(fichier !=NULL){
+       do{
+            chara = fgetc(fichier);
+            if(chara!=EOF){
+                if(chara == '*'){
+                    score_joueur = atoi(nombre) ;
+                    world->score = ajouter_score(score_joueur, world->score) ;
+                    memset(nombre, 0, incr) ;
+                    incr = 0 ;
+                }else{
+                    nombre[incr] = chara ;
+                    incr++ ;
+                }    
+            }
+            
+            
+        } while (chara!=EOF);
+        fclose(fichier); 
+    }
+    top5(world->score, world) ;
+}
+
 void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world){ 
     init_sdl(window,renderer,SCREEN_WIDTH, SCREEN_HEIGHT);
     init_data(world);
+    init_ttf() ;
     init_textures(*renderer,textures,world);
+
 }  
