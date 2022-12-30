@@ -269,22 +269,12 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
                 }
             }
             //printf("x : %d\n",world->enemy[t].placement_x);
-<<<<<<< HEAD
-            if(world->enemy[t].placement_x==512 ||world->enemy[t].placement_x == 0 ){
-=======
             if(world->enemy[t].placement_x< textures->enemys[t].w/8 ){
->>>>>>> f65a50ed72ca6f6f2f954e3c8b4f22a2cfb9779f
                 setIsLooking2(world,t,0);
             }
         }
     }
 
-<<<<<<< HEAD
-    color_3d(renderer,world,textures);
-
-
-=======
->>>>>>> f65a50ed72ca6f6f2f954e3c8b4f22a2cfb9779f
     animation_epee(renderer,world,textures);
 
     if(!world->hideMap){
@@ -325,15 +315,6 @@ void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* te
         apply_sprite(renderer, textures->titre,world->titre);
         apply_sprite(renderer, textures->play,world->play);
         apply_sprite(renderer, textures->button_exit_active,world->button_exit);
-    }
-
-    char text_score[1000];
-    char resultat[1000];
-    sprintf(text_score, "score :") ;
-    apply_text(renderer, 50, 200, 200, 50, text_score,textures->font) ;
-    for(int i=0; i<5; i++){
-        sprintf(resultat, "%d-     %d",i+1,world->top[i]);
-        apply_text(renderer,100,250 + 60 *i, 100, 50, resultat,textures->font);
     }
     
     char text_score[1000];
