@@ -22,7 +22,5 @@ void handle_events(SDL_Event *event,world_t *world);
  * \param world le monde
  */
 
-void init(SDL_Window **window, SDL_Renderer ** renderer, textures_t *textures, world_t * world); 
-
 
 #endif

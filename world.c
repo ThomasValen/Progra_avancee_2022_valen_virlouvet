@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "world.h"
 #include <math.h> 
+#include "score.h"
 #include "constante.h"
 
 void init_data(world_t * world){
@@ -30,6 +31,7 @@ void init_memoire(world_t* world){
     world->play = (sprite_t*)malloc(sizeof(sprite_t));
     world->button_exit = (sprite_t*)malloc(sizeof(sprite_t)) ;
     world->epee = (sprite_t*)malloc(sizeof(sprite_t)) ;
+    world->score = cons_empty() ;
     
     
 
@@ -57,6 +59,9 @@ void init_valeurs(world_t* world){
 
     world->angle = 180 ;
 
+    world->nb_bandes_sortie=0;
+    world->no_ligne_db_sortie=-1;
+
     world->three_d_check=0;
 
     world->nb_key = 0 ;
@@ -67,6 +72,8 @@ void init_valeurs(world_t* world){
     world->attack = 0 ;
 
     world->nb_pv = 3 ;
+
+    world->compteur_score = 0 ;
 
     world->stop = false ;
 
@@ -250,7 +257,7 @@ int** changer_monde(world_t* world,int ligne,int colonne){
         } while (chara!=EOF);
         fclose(fichier);
     }
-    //printf("\n") ;
+    printf("\n") ;
     return T;
 
 }
@@ -457,7 +464,7 @@ void enemyCollision(world_t *world){
 
 void mouvementEnemy(world_t *world){
     for(int i = 0 ; i < world->nb_enemy ; i++){
-        for(int j = 0 ; j < 515 ; j++){
+        for(int j = 0 ; j < 513 ; j++){
             for(int z = 0 ; z < world->nb_point_ligne[j]; z++){
                 if(sprites_collide_ligne(world->enemy[i], world->ligne[j][z])){
                     world->enemy[i].findPlayer = true ;
@@ -471,14 +478,14 @@ void mouvementEnemy(world_t *world){
 void position(world_t *world,int numero_enemy){
     if(world->enemy[numero_enemy].findPlayer){
         if(world->enemy[numero_enemy].y > world->player->y){
-            world->enemy[numero_enemy].y = world->enemy[numero_enemy].y - 2;
+            world->enemy[numero_enemy].y = world->enemy[numero_enemy].y - MOVING_ENEMY;
         }else if(world->enemy[numero_enemy].y < world->player->y){
-            world->enemy[numero_enemy].y = world->enemy[numero_enemy].y + 2;
+            world->enemy[numero_enemy].y = world->enemy[numero_enemy].y + MOVING_ENEMY;
         }
         if(world->enemy[numero_enemy].x > world->player->x){
-            world->enemy[numero_enemy].x = world->enemy[numero_enemy].x - 2 ;
+            world->enemy[numero_enemy].x = world->enemy[numero_enemy].x - MOVING_ENEMY ;
         }else if(world->enemy[numero_enemy].x < world->player->x){
-            world->enemy[numero_enemy].x = world->enemy[numero_enemy].x + 2 ;;
+            world->enemy[numero_enemy].x = world->enemy[numero_enemy].x + MOVING_ENEMY ;
         }
     }
 
@@ -490,6 +497,8 @@ void update_data(world_t *world){
     }
     float angle = world->angle ;
     float mid_angle = 0 ;
+    
+    world->nb_bandes_sortie=0;
     for (int i = 0; i < 513; i++)
     {
         ligne(world, angle, i) ;
@@ -503,8 +512,7 @@ void update_data(world_t *world){
         if(sprites_collide(world->player, world->key[i])){
             world->key[i].x = -50 ;
             world->key[i].y = -50 ;
-            world->nb_key_recup++;
-            world->key[i].is_looking_for=0;
+            world->nb_key_recup++ ;
         }
     }
 
@@ -521,8 +529,9 @@ void update_data(world_t *world){
                     if(sprites_collide_ligne(world->enemy[z], world->ligne[i][j])){
                         world->enemy[z].x = -50 ;
                         world->enemy[z].y = -50 ;
-                        world->enemy[z].is_looking_for=0;
+                        setIsLooking2(world,z,0);
                         world->enemy[z].findPlayer = false ;
+                        world->compteur_score = world->compteur_score + 50 ;
                     }
                 }
             }
@@ -588,11 +597,22 @@ void ligne(world_t* world,float player_a, int numero_ligne){
         
         init_sprite(&(world->ligne[numero_ligne][incr]),cx, cy, 1, 1,0);
         for(int i =0 ; i < world->nb_mur; i++){
-            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->wall[i]) || sprites_collide(world->exit, world->ligne[numero_ligne][incr]) ){
+            if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->wall[i])){
                 is_over = 1 ;
-               
             }
-        } 
+        }    
+
+        if(sprites_collide(world->exit, world->ligne[numero_ligne][incr])){
+            is_over = 1; 
+            if(world->nb_bandes_sortie == 0){
+                world->no_ligne_db_sortie=numero_ligne;
+                //printf("%d   %d\n",world->no_ligne_db_sortie,numero_ligne*2);
+                
+                
+            }printf("%d  %d\n",world->nb_bandes_sortie,world->no_ligne_db_sortie);
+            world->nb_bandes_sortie++;
+        }
+
 
         int a=0;
             if(world->nb_key > world->nb_enemy){
@@ -620,6 +640,7 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                     if(numero_ligne<513){
                         if(a<world->nb_key){
                             if (sprites_collide_ligne(world->ligne[numero_ligne][incr], world->key[a])){
+                                
                                 world->key[a].placement_x=numero_ligne;//numero_ligne;
                                 world->key[a].placement_y=incr;//incr;
                                 world->key[a].is_looking_for=1;
@@ -637,11 +658,46 @@ void ligne(world_t* world,float player_a, int numero_ligne){
             }
         
         incr++ ;
-        //printf("%d",world->nb_enemy);
-
     }
-
     world->nb_point_ligne[numero_ligne] = incr ;  
+
+    
+}
+
+void top5(score_t score, world_t* world){
+    int top5 = 0, top4 = 0, top3 = 0, top2 = 0, top1 = 0;
+    int transition = 0 ;
+    while (!is_empty(score)) {
+        if(top5 < score->nombre){
+            top5 = score->nombre ;
+        }
+        if(top4 < top5){
+            transition = top4 ;
+            top4 = top5 ;
+            top5 = transition ; 
+        }
+        if(top3 < top4){
+            transition = top3 ;
+            top3 = top4 ;
+            top4 = transition ; 
+        }if(top2 < top3){
+            transition = top2 ;
+            top2 = top3 ;
+            top3 = transition ; 
+        }
+        if(top1 < top2){
+            transition = top1 ;
+            top1 = top2 ;
+            top2 = transition ; 
+        }
+        suivant(score) ;
+    }
+    world->top[0] = top1 ;
+    world->top[1] = top2 ;
+    world->top[2] = top3 ;
+    world->top[3] = top4 ;
+    world->top[4] = top5 ;
+
     
 }
 

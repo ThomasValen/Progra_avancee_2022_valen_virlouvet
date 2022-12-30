@@ -1,4 +1,5 @@
 #include "graphismes.h"
+#include "score.h"
 #include "sdl2-ttf-light.h"
 #include "world.h"
 #include "constante.h"
@@ -63,15 +64,7 @@ void handle_events_player(SDL_Event *event, world_t *world){
     switch (event-> type)
         {
         case SDL_KEYDOWN:
-<<<<<<< HEAD
-            if (keystates[SDL_SCANCODE_D]){
-                world->player->y = world->ligne[513][MOVING_STEP].y - PLAYER_HEIGHT/2;
-                world->player->x = world->ligne[513][MOVING_STEP].x - PLAYER_WIDTH/2;
             
-                world->direction=1; 
-            }
-            if (keystates[SDL_SCANCODE_W]){
-=======
             if(!world->stop){
                 if (keystates[SDL_SCANCODE_D]){
                     world->player->y = world->ligne[513][MOVING_STEP].y - PLAYER_HEIGHT/2;
@@ -81,41 +74,10 @@ void handle_events_player(SDL_Event *event, world_t *world){
                     return; 
                 }
                 if (keystates[SDL_SCANCODE_W]){
->>>>>>> c82490ecbcf1ca5ca5c6d3dccaf1120d3d2d811e
 
                     world->player->y = world->ligne[256][MOVING_STEP].y - PLAYER_HEIGHT/2;
                     world->player->x = world->ligne[256][MOVING_STEP].x - PLAYER_WIDTH/2;
 
-<<<<<<< HEAD
-                world->direction=4;
-            }
-            if (keystates[SDL_SCANCODE_S]){
-                world->player->y = world->ligne[514][MOVING_STEP].y - PLAYER_HEIGHT/2;
-                world->player->x = world->ligne[514][MOVING_STEP].x - PLAYER_WIDTH/2;
-                world->direction=3;
-            }
-            if (keystates[SDL_SCANCODE_A]){
-                world->player->y = world->ligne[515][MOVING_STEP].y - PLAYER_HEIGHT/2;
-                world->player->x = world->ligne[515][MOVING_STEP].x - PLAYER_WIDTH/2;
-                world->direction=2;
-            }
-            if (keystates[SDL_SCANCODE_E]){
-                world->angle = world->angle + 3 ;
-                if(world->angle >= 360){
-                    world->angle = 0 ;
-                }
-            }
-            if (keystates[SDL_SCANCODE_Q]){
-                world->angle = world->angle - 3 ;
-                if(world->angle <= 0){
-                    world->angle = 360 ;
-                }
-            }
-            if (keystates[SDL_SCANCODE_SPACE]){
-                if(world->is_attacking==0){
-                    world->is_attacking=1;
-                    world->compteur_debut = (float)(SDL_GetTicks()/1000.);
-=======
                     world->direction=4;
                     return;
                 }
@@ -130,7 +92,6 @@ void handle_events_player(SDL_Event *event, world_t *world){
                     world->player->x = world->ligne[515][MOVING_STEP].x - PLAYER_WIDTH/2;
                     world->direction=2;
                     return ;
->>>>>>> c82490ecbcf1ca5ca5c6d3dccaf1120d3d2d811e
                 }
                 if (keystates[SDL_SCANCODE_E]){
                     world->angle = world->angle + 3 ;

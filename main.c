@@ -1,3 +1,4 @@
+#include "score.h"
 #include "sdl2-light.h"
 #include "world.h"
 #include "graphismes.h"
@@ -54,6 +55,12 @@ int main( int argc, char* args[] ){
 
             //rafraichissement de l'écran
             refresh_graphics(renderer,&world,&textures);
+            if(world.etat_menu < 3){
+              printf("je rentre dans la fin") ;
+              ajouter_score(world.compteur_score, world.score) ;
+              toString(world.score) ;
+              
+            }
             // pause de 10 ms pour controler la vitesse de rafraichissement
             pause(10);
           }
