@@ -276,7 +276,7 @@ int** changer_monde(world_t* world,int ligne,int colonne){
         } while (chara!=EOF);
         fclose(fichier);
     }
-    printf("\n") ;
+    //printf("\n") ;
     return T;
 
 }
@@ -493,12 +493,12 @@ void mouvementEnemy(world_t *world){
         for(int j = 0 ; j < 513 ; j++){
             for(int z = 0 ; z < world->nb_point_ligne[j]; z++){
                 if(sprites_collide_ligne(world->enemy[i], world->ligne[j][z])){
-                    printf("%d",world->enemy[i].ishitting);
+                    //printf("%d",world->enemy[i].ishitting);
                     if((float)(SDL_GetTicks()/1000.)- world->compteur_debut2 > 2.0){
-                        printf("truc : %f\n\n",(float)(SDL_GetTicks()/1000.)- world->compteur_debut2);
+                        //printf("truc : %f\n\n",(float)(SDL_GetTicks()/1000.)- world->compteur_debut2);
                         world->enemy[i].ishitting=false;
                     }
-                    printf("%d",world->enemy[i].ishitting);
+                    //printf("%d",world->enemy[i].ishitting);
                     if(world->enemy[i].ishitting==false){
                         world->enemy[i].findPlayer = true ;
                     }else{
@@ -647,7 +647,7 @@ void ligne(world_t* world,float player_a, int numero_ligne){
                 //printf("%d   %d\n",world->no_ligne_db_sortie,numero_ligne*2);
                 
                 
-            }printf("%d  %d\n",world->nb_bandes_sortie,world->no_ligne_db_sortie);
+            }//printf("%d  %d\n",world->nb_bandes_sortie,world->no_ligne_db_sortie);
             world->nb_bandes_sortie++;
         }
 
