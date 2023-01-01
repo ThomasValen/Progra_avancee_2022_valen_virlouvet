@@ -63,6 +63,7 @@ int main( int argc, char* args[] ){
             refresh_graphics(renderer,&world,&textures);
             if(world.etat_menu < 3){
               scorefin(&world) ;
+              pause(2000) ;
               init_data(&world) ;
             }
             // pause de 10 ms pour controler la vitesse de rafraichissement

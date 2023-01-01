@@ -64,6 +64,7 @@ struct world_s{
     sprite_t *button_exit ;
     sprite_t* epee ;
     sprite_t* pv ;
+    sprite_t* you_died ;
 };
 typedef struct world_s world_t;
 
