@@ -11,6 +11,7 @@
 void clean_textures(textures_t *textures){
     clean_texture(textures->background) ;
     clean_texture(textures->sky);
+    clean_texture(textures->ground) ;
     clean_texture(textures->wall);
     clean_texture(textures->player) ;
     clean_texture(textures->ligne) ;
@@ -41,6 +42,7 @@ void clean_textures(textures_t *textures){
 void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world){
     textures->background = load_image( "ressources/fond.bmp", renderer);
     textures->sky = load_image( "ressources/carre_gris.bmp", renderer);
+    textures->ground = load_image("ressources/carre_gris_reverse.bmp", renderer);
 
     textures->wall = load_image( "ressources/wall.bmp", renderer) ;
 
@@ -239,6 +241,7 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     clear_renderer(renderer) ;
     
     apply_texture(textures->sky,renderer,0,SCREEN_HEIGHT/2);
+    apply_texture(textures->ground,renderer, 0, 0) ;
     
 
 
@@ -303,6 +306,9 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
             apply_sprite(renderer, textures->you_died, world->you_died) ;
         }else if(world->nb_key_recup == world->nb_key){
             apply_sprite(renderer, textures->you_escaped, world->you_died) ;
+            char score[1000];
+            sprintf(score, "Votre score : %d", world->compteur_score) ;
+            apply_text(renderer, SCREEN_WIDTH/2-200, SCREEN_HEIGHT- 250, 200, 50, score,textures->font) ;
         }
         
     }
@@ -333,11 +339,11 @@ void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* te
     char text_score[1000];
     char score[1000];
     top5(world->score, world) ;
-    sprintf(text_score, "score :") ;
-    apply_text(renderer, 50, 200, 200, 50, text_score,textures->font) ;
+    sprintf(text_score, "Score :") ;
+    apply_text(renderer, 50, 250, 200, 50, text_score,textures->font) ;
     for(int i=0; i<5; i++){
         sprintf(score, "%d-     %d",i+1,world->top[i]);
-        apply_text(renderer,100,250 + 60 *i, 100, 50, score,textures->font);
+        apply_text(renderer,100,300 + 60 *i, 100, 50, score,textures->font);
     }
     
 

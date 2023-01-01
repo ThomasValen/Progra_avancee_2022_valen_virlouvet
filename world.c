@@ -84,6 +84,8 @@ void init_valeurs(world_t* world){
 
     world->hideMap = true ;
     world->readScore = true ;
+
+    world->compteur_debut2=10000;
     
     
 }
@@ -125,6 +127,7 @@ void init_environnement(world_t* world){
             else if(world->tab[i][j]== 5){
                 init_sprite(&(world->enemy[indice_enemy]),(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH,0);
                 world->enemy[indice_enemy].findPlayer = false ;
+                world->enemy[indice_enemy].ishitting = false ;
                 indice_enemy++ ;
                 
             }
@@ -229,6 +232,7 @@ int** changer_monde(world_t* world,int ligne,int colonne){
     int lignes = 0;
     int colonnes = 0;
     fichier =fopen("map.txt","r");
+    int sortie = 0 ;
 
  
     if (fichier != NULL){
@@ -246,8 +250,14 @@ int** changer_monde(world_t* world,int ligne,int colonne){
                     T[lignes][colonnes] = 4 ;
                     world->nb_key++ ;
                 }else if(chara == 's'){
-
-                    T[lignes][colonnes]= 3;
+                    if (sortie == 0) {
+                        T[lignes][colonnes]= 3;
+                        sortie++ ;
+                    }else{
+                        T[lignes][colonnes]=1;
+                        world->nb_mur++ ;
+                    }
+                    
 
                 }else if(chara == 'e'){
                     T[lignes][colonnes] = 5 ;
@@ -443,18 +453,19 @@ void enemyAttack(world_t *world){
     for(int i = 0; i < world->nb_enemy ; i++){
         if(sprites_collide(world->player, world->enemy[i])){
             world->nb_pv = world->nb_pv - 1 ;
-            for (int j = 0;  j < world->nb_mur; j++) {
-                for (int recule = RECULE; recule > 0; recule--) {
-                    if (!sprites_collide_ligne(world->ligne[514][RECULE], world->wall[i])) {
-                        world->player->y = world->ligne[514][recule].y - PLAYER_HEIGHT/2;
-                        world->player->x =  world->ligne[514][recule].x - PLAYER_HEIGHT/2;
-                    }
+            //for (int j = 0;  j < world->nb_mur; j++) {
+               // for (int recule = RECULE; recule > 0; recule--) {
+                    //if (!sprites_collide_ligne(world->ligne[514][RECULE], world->wall[i])) {
+                        world->player->y = world->ligne[514][RECULE].y - PLAYER_HEIGHT/2;
+                        world->player->x =  world->ligne[514][RECULE].x - PLAYER_HEIGHT/2;
+                        world->enemy[i].ishitting=true;
+                        world->compteur_debut2 = (float)(SDL_GetTicks()/1000.);
+                   // }
                     if(world->nb_pv == 0){
                         world->etat_menu = 0 ;
                     }
-                }
-            }
-            
+                //}
+            //}    
         }
     }
 }
@@ -482,7 +493,17 @@ void mouvementEnemy(world_t *world){
         for(int j = 0 ; j < 513 ; j++){
             for(int z = 0 ; z < world->nb_point_ligne[j]; z++){
                 if(sprites_collide_ligne(world->enemy[i], world->ligne[j][z])){
-                    world->enemy[i].findPlayer = true ;
+                    printf("%d",world->enemy[i].ishitting);
+                    if((float)(SDL_GetTicks()/1000.)- world->compteur_debut2 > 2.0){
+                        printf("truc : %f\n\n",(float)(SDL_GetTicks()/1000.)- world->compteur_debut2);
+                        world->enemy[i].ishitting=false;
+                    }
+                    printf("%d",world->enemy[i].ishitting);
+                    if(world->enemy[i].ishitting==false){
+                        world->enemy[i].findPlayer = true ;
+                    }else{
+                        world->enemy[i].findPlayer = false;
+                    }
                 }
             }
         }        
@@ -507,6 +528,7 @@ void position(world_t *world,int numero_enemy){
 }
 
 void update_data(world_t *world){
+
     for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
         handle_sprites_collision(world->player,world->wall[i],world);
     }
@@ -528,6 +550,7 @@ void update_data(world_t *world){
             world->key[i].x = -50 ;
             world->key[i].y = -50 ;
             world->nb_key_recup++ ;
+            setIsLooking(world,i,0);
         }
     }
 

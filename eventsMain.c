@@ -179,6 +179,11 @@ void handle_events_player(SDL_Event *event, world_t *world){
                         if(world->angle <= 0){
                             world->angle = 360 ;
                         } 
+                    } 
+                    if (keystates[SDL_SCANCODE_W]){
+
+                        world->player->y = world->ligne[256][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                        world->player->x = world->ligne[256][MOVING_STEP].x - PLAYER_WIDTH/2;   
                     }    
                     return ;
                 }
@@ -192,6 +197,11 @@ void handle_events_player(SDL_Event *event, world_t *world){
                             world->is_attacking=1;
                             world->compteur_debut = (float)(SDL_GetTicks()/1000.);
                         }
+                    }
+                    if (keystates[SDL_SCANCODE_W]){
+
+                        world->player->y = world->ligne[256][MOVING_STEP].y - PLAYER_HEIGHT/2;
+                        world->player->x = world->ligne[256][MOVING_STEP].x - PLAYER_WIDTH/2;   
                     }
                     return ;
                 }
