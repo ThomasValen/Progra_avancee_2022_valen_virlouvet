@@ -145,7 +145,12 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
                 couleur2=0;
             }
             for(int f=0;f<world->nb_bandes_sortie;f++){
-                SDL_FillRect(textures->surface, &textures->tab_bandes[y], SDL_MapRGB(textures->surface->format, 0, couleur2, 0));
+                if(world->nb_key_recup==world->nb_key){
+                    SDL_FillRect(textures->surface, &textures->tab_bandes[y], SDL_MapRGBA(textures->surface->format, 0, 255, 0,0));
+                }else{
+                    SDL_FillRect(textures->surface, &textures->tab_bandes[y], SDL_MapRGB(textures->surface->format, 0, couleur2, 0));
+                }
+                
                 y++;
             }
         }
