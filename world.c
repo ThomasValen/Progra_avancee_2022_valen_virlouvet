@@ -83,6 +83,8 @@ void init_valeurs(world_t* world){
 
     world->hideMap = true ;
     world->readScore = true ;
+
+    world->compteur_debut2=10000;
     
     
 }
@@ -123,6 +125,7 @@ void init_environnement(world_t* world){
             else if(world->tab[i][j]== 5){
                 init_sprite(&(world->enemy[indice_enemy]),(2*j*PLAYER_WIDTH+WALL_WIDTH/4),(2*i*PLAYER_HEIGHT+WALL_HEIGHT/4),PLAYER_HEIGHT, PLAYER_WIDTH,0);
                 world->enemy[indice_enemy].findPlayer = false ;
+                world->enemy[indice_enemy].ishitting = false ;
                 indice_enemy++ ;
                 
             }
@@ -442,6 +445,10 @@ void enemyAttack(world_t *world){
             world->nb_pv = world->nb_pv - 1 ;
             world->player->y = world->ligne[514][15].y - PLAYER_HEIGHT/2;
             world->player->x =  world->ligne[514][15].x - PLAYER_HEIGHT/2;
+
+            world->enemy[i].ishitting=true;
+            world->compteur_debut2 = (float)(SDL_GetTicks()/1000.);
+
             if(world->nb_pv == 0){
                 world->etat_menu = 0 ;
             }
@@ -472,7 +479,17 @@ void mouvementEnemy(world_t *world){
         for(int j = 0 ; j < 513 ; j++){
             for(int z = 0 ; z < world->nb_point_ligne[j]; z++){
                 if(sprites_collide_ligne(world->enemy[i], world->ligne[j][z])){
-                    world->enemy[i].findPlayer = true ;
+                    printf("%d",world->enemy[i].ishitting);
+                    if((float)(SDL_GetTicks()/1000.)- world->compteur_debut2 > 2.0){
+                        printf("truc : %f\n\n",(float)(SDL_GetTicks()/1000.)- world->compteur_debut2);
+                        world->enemy[i].ishitting=false;
+                    }
+                    printf("%d",world->enemy[i].ishitting);
+                    if(world->enemy[i].ishitting==false){
+                        world->enemy[i].findPlayer = true ;
+                    }else{
+                        world->enemy[i].findPlayer = false;
+                    }
                 }
             }
         }        
@@ -497,6 +514,7 @@ void position(world_t *world,int numero_enemy){
 }
 
 void update_data(world_t *world){
+
     for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
         handle_sprites_collision(world->player,world->wall[i],world);
     }

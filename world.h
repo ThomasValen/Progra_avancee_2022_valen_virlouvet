@@ -15,6 +15,7 @@ struct sprite_s{
     int placement_y;
     int is_looking_for;
     bool findPlayer ;
+    bool ishitting;
 };
 typedef struct sprite_s sprite_t;
 
@@ -36,7 +37,8 @@ struct world_s{
     int attack ;
     int nb_key_recup ;
     int etat_menu ;
-    float compteur_debut;
+    float compteur_debut;//animation epee
+    float compteur_debut2;//quand le joueur est touché
     float compteur_fin;
     int is_attacking;
     bool hideMap ;
