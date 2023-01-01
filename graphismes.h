@@ -25,6 +25,8 @@ struct textures_s
     SDL_Texture* play_active ;
     SDL_Texture* button_exit ;
     SDL_Texture* button_exit_active ;
+    SDL_Texture* you_died ;
+    SDL_Texture* you_escaped ;
     SDL_Texture* compteur_key ;
     SDL_Surface* surface;
     SDL_Rect * keys;

@@ -33,6 +33,7 @@ void init_memoire(world_t* world){
     world->button_exit = (sprite_t*)malloc(sizeof(sprite_t)) ;
     world->epee = (sprite_t*)malloc(sizeof(sprite_t)) ;
     world->compteur_key = (sprite_t*)malloc(sizeof(sprite_t)) ;
+    world->you_died = (sprite_t*) malloc(sizeof(sprite_t)) ;
     world->score = cons_empty() ;
     
     
@@ -96,6 +97,7 @@ void init_environnement(world_t* world){
     init_sprite(world->button_exit, SCREEN_WIDTH/2 -90, 500, SCREEN_HEIGHT, SCREEN_WIDTH,0);
     init_sprite(world->epee, SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2, 0, 0, 0) ;
     init_sprite(world->compteur_key, SCREEN_WIDTH - 100, 100,50 , 150, 0);
+    init_sprite(world->you_died, 0, 0, 300, 700, 0) ;
     for (int p = 0; p < 3; p++) {
         init_sprite(&(world->pv[p]),(50*p)+ 50 , SCREEN_HEIGHT-200, PV_HEIGHT, PV_WIDTH, 0) ;
     }
@@ -158,6 +160,7 @@ void clean_data(world_t *world){
     free(world->menu) ;
     free(world->epee) ;
     free(world->compteur_key);
+    free(world->you_died) ;
     //free_score(world->score) ;
     //free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
     //free_murs(world->wall);
@@ -440,11 +443,18 @@ void enemyAttack(world_t *world){
     for(int i = 0; i < world->nb_enemy ; i++){
         if(sprites_collide(world->player, world->enemy[i])){
             world->nb_pv = world->nb_pv - 1 ;
-            world->player->y = world->ligne[514][15].y - PLAYER_HEIGHT/2;
-            world->player->x =  world->ligne[514][15].x - PLAYER_HEIGHT/2;
-            if(world->nb_pv == 0){
-                world->etat_menu = 0 ;
+            for (int j = 0;  j < world->nb_mur; j++) {
+                for (int recule = RECULE; recule > 0; recule--) {
+                    if (!sprites_collide_ligne(world->ligne[514][RECULE], world->wall[i])) {
+                        world->player->y = world->ligne[514][recule].y - PLAYER_HEIGHT/2;
+                        world->player->x =  world->ligne[514][recule].x - PLAYER_HEIGHT/2;
+                    }
+                    if(world->nb_pv == 0){
+                        world->etat_menu = 0 ;
+                    }
+                }
             }
+            
         }
     }
 }

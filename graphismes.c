@@ -31,6 +31,8 @@ void clean_textures(textures_t *textures){
     clean_texture(textures->epee4) ;
     clean_texture(textures->compteur_key) ;
     clean_texture(textures->pv) ;
+    clean_texture(textures->you_died) ;
+    clean_texture(textures->you_escaped) ;
     clean_texture(textures->squelette);
     free(textures->enemys);
     clean_font(textures->font) ;
@@ -63,6 +65,8 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
     textures->button_exit_active = load_image("ressources/exit_active.bmp",renderer);
     textures->pv = load_image("ressources/coeur.bmp", renderer) ;
     textures->squelette=load_image("ressources/skeleton.bmp", renderer) ;
+    textures->you_died = load_image("ressources/you_died.bmp", renderer) ;
+    textures->you_escaped = load_image("ressources/you_escaped.bmp", renderer) ;
     textures->enemys = (SDL_Rect*)malloc(world->nb_enemy*sizeof(SDL_Rect));
 
 
@@ -292,6 +296,15 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
 
     if((float)(SDL_GetTicks()/1000.)- world->compteur_debut > 1.0){
         world->is_attacking=0;
+    }
+
+    if(world->etat_menu < 3){
+        if(world->nb_pv == 0){
+            apply_sprite(renderer, textures->you_died, world->you_died) ;
+        }else if(world->nb_key_recup == world->nb_key){
+            apply_sprite(renderer, textures->you_escaped, world->you_died) ;
+        }
+        
     }
     
 
