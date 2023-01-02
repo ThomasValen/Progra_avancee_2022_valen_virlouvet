@@ -87,13 +87,13 @@ void init_textures(SDL_Renderer * renderer, textures_t *textures, world_t* world
 
 }
 
-void apply_background(SDL_Renderer * renderer, SDL_Texture * texture){
+void apply_background(SDL_Renderer * renderer, SDL_Texture * texture){//applique le fond
     if(texture != NULL){
         apply_texture(texture, renderer, 0,0) ;
     }
 }
 //erreur pointeur
-void apply_wall(sprite_t sprite, SDL_Renderer * renderer, SDL_Texture * texture){
+void apply_wall(sprite_t sprite, SDL_Renderer * renderer, SDL_Texture * texture){//applique les murs
     if(texture!=NULL){
         apply_texture(texture, renderer,sprite.x,sprite.y) ;
     }
@@ -105,7 +105,7 @@ void apply_sprite(SDL_Renderer* renderer, SDL_Texture* texture, sprite_t *sprite
     }
 }
 
-void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
+void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){//affiche les murs 3ds, les ennemies et les clees
     int couleur;
     int couleur2;
     textures->surface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT, 32, 0, 0, 0, 0);
@@ -201,7 +201,7 @@ void color_3d(SDL_Renderer * renderer,world_t* world, textures_t* textures){
     
 }
 
-void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* textures){
+void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* textures){//animation de l'epee
     if(world->is_attacking==1){
         if((int)(((float)(SDL_GetTicks()/1000.)-world->compteur_debut)*4) %4 ==0){
             apply_sprite(renderer,textures->epee1, world->epee) ;
@@ -221,7 +221,7 @@ void animation_epee(SDL_Renderer * renderer, world_t* world, textures_t* texture
 
 }
 
-void afficher_miniMap(SDL_Renderer * renderer, world_t* world, textures_t* textures){
+void afficher_miniMap(SDL_Renderer * renderer, world_t* world, textures_t* textures){//affiche minimap en appuyant sur ,
     apply_sprite(renderer, textures->background, world->background) ;
     for(int j = 0 ; j < 513 ; j++){
         for(int i = 0 ; i < world->nb_point_ligne[j]; i++){
@@ -324,7 +324,7 @@ void refresh_graphics(SDL_Renderer * renderer, world_t* world, textures_t* textu
     update_screen(renderer);
 }
 
-void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* textures){
+void refresh_graphics_menu(SDL_Renderer* renderer, world_t* world,textures_t* textures){//textures du menu
     //on vide le renderer
     clear_renderer(renderer);
     //application des textures dans le renderer
