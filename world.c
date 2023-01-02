@@ -22,6 +22,7 @@ void init_data(world_t * world){
 
 }
 
+//initialise la mémoire 
 void init_memoire(world_t* world){
     world->background = (sprite_t*)malloc(sizeof(sprite_t));
     world->player = (sprite_t*)malloc(sizeof(sprite_t));
@@ -38,7 +39,7 @@ void init_memoire(world_t* world){
     
     
 
-    //world->wall = cree_murs(500);
+    //initialise les matrices et les tableaux
     world->tab = changer_monde(world,world->hauteur_tab,world->longueur_tab );
     world->key = creer_tableau(world->nb_key) ;
     world->enemy = creer_tableau(world->nb_enemy) ;
@@ -53,6 +54,7 @@ void init_valeurs(world_t* world){
     world->longueur_tab=setlongueur();
     world->gameover=0;
     world->direction=0;
+    //initialise le nombre de point dans chaque ligne
     for (int i = 0; i < 516; i++)
     {
         world->nb_point_ligne[i] = 0 ;
@@ -60,7 +62,7 @@ void init_valeurs(world_t* world){
 
     world->nb_mur = 0 ;
 
-    world->angle = 180 ;
+    world->angle = 230 ;
 
     world->nb_bandes_sortie=0;
     world->no_ligne_db_sortie=-1;
@@ -100,10 +102,12 @@ void init_environnement(world_t* world){
     init_sprite(world->epee, SCREEN_WIDTH/2 - 100, SCREEN_HEIGHT/2, 0, 0, 0) ;
     init_sprite(world->compteur_key, SCREEN_WIDTH - 100, 100,50 , 150, 0);
     init_sprite(world->you_died, 0, 0, 300, 700, 0) ;
+    //initialise la position des coeur à l'ecran
     for (int p = 0; p < 3; p++) {
         init_sprite(&(world->pv[p]),(50*p)+ 50 , SCREEN_HEIGHT-200, PV_HEIGHT, PV_WIDTH, 0) ;
     }
 
+    //rempli la map de jeu de sprite
     int indice_wall=0;
     int indice_key = 0 ;
     int indice_enemy = 0 ;
@@ -164,9 +168,7 @@ void clean_data(world_t *world){
     free(world->epee) ;
     free(world->compteur_key);
     free(world->you_died) ;
-    //free_score(world->score) ;
-    //free_matrice(world->tab,world->longueur_tab,world->hauteur_tab);
-    //free_murs(world->wall);
+   
 }
 
 
@@ -178,6 +180,7 @@ void init_sprite(sprite_t *sprite,float x,float y,int h,int l,int no_key){
     sprite->no_key=no_key;
 }
 
+//initialise la hauteur du tableau
 int sethauteur(){
     FILE* fichier=NULL;
     char chara;
@@ -197,6 +200,7 @@ int sethauteur(){
     return lignes;
 }
 
+//initialise la longueur du tableau
 int setlongueur(){
     FILE* fichier=NULL;
     char chara;
@@ -220,6 +224,8 @@ int setlongueur(){
     return max;
 }
 
+
+//initialise tout les element du tableau
 int** changer_monde(world_t* world,int ligne,int colonne){
     int ** T = malloc(ligne*sizeof(int*));
     if(T == NULL)
@@ -256,14 +262,13 @@ int** changer_monde(world_t* world,int ligne,int colonne){
                     }else{
                         T[lignes][colonnes]=1;
                         world->nb_mur++ ;
-                    }
-                    
+                    }         
 
                 }else if(chara == 'e'){
                     T[lignes][colonnes] = 5 ;
                     world->nb_enemy++ ;
                 }else{
-                    T[lignes][colonnes]=0;
+                    T[lignes][colonnes]= 0;
                 }
                 if(chara=='\n'){
                     lignes++;
@@ -280,7 +285,7 @@ int** changer_monde(world_t* world,int ligne,int colonne){
     return T;
 
 }
-
+//supprime des elements d'un tableau de sprite
 sprite_t* suppr(sprite_t* tab, sprite_t sprite, int nb_element){
     for(int i = 0 ; i < nb_element; i++ ){
         if(tab[i].x == sprite.x){
@@ -292,13 +297,14 @@ sprite_t* suppr(sprite_t* tab, sprite_t sprite, int nb_element){
     return tab ;
 }
 
-
+//creer un tableau de sprite
 sprite_t* creer_tableau(int nb_elements){
     sprite_t* T = (sprite_t*)malloc(nb_elements*sizeof(sprite_t));
     if(T == NULL) exit(EXIT_FAILURE);
     return T;
 }
 
+//creer une matrice de sprite
 sprite_t** creer_ligne(int ligne, int colonne){
     sprite_t ** T = malloc(ligne*sizeof(sprite_t*));
     if(T == NULL)
@@ -308,6 +314,7 @@ sprite_t** creer_ligne(int ligne, int colonne){
     return T ;
 }
 
+//compte le nombre de mur
 int nb_murs(int **tab,int hauteur_tab,int longueur_tab){
     int count =0;
     for(int i=0;i<(longueur_tab);i++){
@@ -320,6 +327,7 @@ int nb_murs(int **tab,int hauteur_tab,int longueur_tab){
     return count;
 }
 
+//regarde la colision de 2 sprites
 int two_sprites_collide(sprite_t *sp1, sprite_t *sp2){
     int w1 = sp1->l ;
     int w2 = sp2->l ;
@@ -335,6 +343,7 @@ int two_sprites_collide(sprite_t *sp1, sprite_t *sp2){
     //return (abs(x1 - x2) <= (w1 + w2) / 2) && (abs(y1 - y2) <= (h1 + h2) / 2);
 }
 
+//regarde la colision de 2 sprites
 int sprites_collide(sprite_t *sp1, sprite_t sp2)
 {
     int w1 = sp1->l ;
@@ -351,6 +360,7 @@ int sprites_collide(sprite_t *sp1, sprite_t sp2)
     //return (abs(x1 - x2) <= (w1 + w2) / 2) && (abs(y1 - y2) <= (h1 + h2) / 2);
 }
 
+//regarde la colision de 2 sprites
 int sprites_collide_ligne(sprite_t sp1, sprite_t sp2)
 {
     int w1 = sp1.l ;
@@ -367,6 +377,7 @@ int sprites_collide_ligne(sprite_t sp1, sprite_t sp2)
     //return (abs(x1 - x2) <= (w1 + w2) / 2) && (abs(y1 - y2) <= (h1 + h2) / 2);
 }
 
+//repousse le joueur si il touche un objet
 void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
 {
     int collision = sprites_collide(sp1, sp2);
@@ -391,6 +402,7 @@ void handle_sprites_collision(sprite_t *sp1, sprite_t sp2, world_t *world)
         
     }
 }
+
 
 void handle_two_sprites_collision(sprite_t *sp1, sprite_t *sp2, world_t *world)
 {
@@ -449,27 +461,24 @@ void free_murs(sprite_t* T) {
     T = NULL;
 }
 
+
+//repousse le joueur quand un enemie le touche
 void enemyAttack(world_t *world){
     for(int i = 0; i < world->nb_enemy ; i++){
         if(sprites_collide(world->player, world->enemy[i])){
             world->nb_pv = world->nb_pv - 1 ;
-            //for (int j = 0;  j < world->nb_mur; j++) {
-               // for (int recule = RECULE; recule > 0; recule--) {
-                    //if (!sprites_collide_ligne(world->ligne[514][RECULE], world->wall[i])) {
-                        world->player->y = world->ligne[514][RECULE].y - PLAYER_HEIGHT/2;
-                        world->player->x =  world->ligne[514][RECULE].x - PLAYER_HEIGHT/2;
-                        world->enemy[i].ishitting=true;
-                        world->compteur_debut2 = (float)(SDL_GetTicks()/1000.);
-                   // }
-                    if(world->nb_pv == 0){
-                        world->etat_menu = 0 ;
-                    }
-                //}
-            //}    
+            world->player->y = world->ligne[514][RECULE].y - PLAYER_HEIGHT/2;
+            world->player->x =  world->ligne[514][RECULE].x - PLAYER_HEIGHT/2;
+            world->enemy[i].ishitting=true;
+            world->compteur_debut2 = (float)(SDL_GetTicks()/1000.);
+            if(world->nb_pv == 0){
+                world->etat_menu = 0 ;
+            }
         }
     }
 }
 
+//gere la collision de l'enemie avec les murs
 void enemyCollision(world_t *world){
     for (int j = 0; j < world->nb_enemy; j++) {
         for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
@@ -488,17 +497,15 @@ void enemyCollision(world_t *world){
     }    
 }
 
+//detecte si l'enemie est dans le champ de vision du joueur
 void mouvementEnemy(world_t *world){
     for(int i = 0 ; i < world->nb_enemy ; i++){
         for(int j = 0 ; j < 513 ; j++){
             for(int z = 0 ; z < world->nb_point_ligne[j]; z++){
                 if(sprites_collide_ligne(world->enemy[i], world->ligne[j][z])){
-                    //printf("%d",world->enemy[i].ishitting);
                     if((float)(SDL_GetTicks()/1000.)- world->compteur_debut2 > 2.0){
-                        //printf("truc : %f\n\n",(float)(SDL_GetTicks()/1000.)- world->compteur_debut2);
                         world->enemy[i].ishitting=false;
                     }
-                    //printf("%d",world->enemy[i].ishitting);
                     if(world->enemy[i].ishitting==false){
                         world->enemy[i].findPlayer = true ;
                     }else{
@@ -511,6 +518,7 @@ void mouvementEnemy(world_t *world){
     
 }
 
+//fait le deplacement de l'enemie vers le joueur
 void position(world_t *world,int numero_enemy){
     if(world->enemy[numero_enemy].findPlayer){
         if(world->enemy[numero_enemy].y > world->player->y){
@@ -528,14 +536,16 @@ void position(world_t *world,int numero_enemy){
 }
 
 void update_data(world_t *world){
-
+    //colision en les murs et le joueur
     for(int i=0;i<nb_murs(world->tab,world->hauteur_tab,world->longueur_tab);i++){
         handle_sprites_collision(world->player,world->wall[i],world);
     }
+
     float angle = world->angle ;
     float mid_angle = 0 ;
     
     world->nb_bandes_sortie=0;
+    //gere le champ de vision du joueur
     for (int i = 0; i < 513; i++)
     {
         ligne(world, angle, i) ;
@@ -545,6 +555,7 @@ void update_data(world_t *world){
         }
     }
 
+    //permet au joueur de recuperer les clé
     for(int i = 0; i < world->nb_key ; i++){
         if(sprites_collide(world->player, world->key[i])){
             world->key[i].x = -50 ;
@@ -560,6 +571,8 @@ void update_data(world_t *world){
     for(int i = 0 ; i < world->nb_enemy ; i++){
         position(world, i) ;
     }
+
+    //gere l'attaque du joueur sur l'enemie
     if(world->attack == 1 ){
         for(int i = 240 ; i < 280 ; i++){
             for(int j = 8; j < 40 ; j++){
@@ -578,7 +591,7 @@ void update_data(world_t *world){
     }
 
 
-
+    //gere la collision entre le joueur et la sortie
     if(two_sprites_collide(world->player, world->exit)){
         if(world->nb_key_recup == world->nb_key){
             world->etat_menu = 0 ;
@@ -586,6 +599,7 @@ void update_data(world_t *world){
             handle_two_sprites_collision(world->player, world->exit, world) ;
         }
     }
+
     angle = mid_angle + 90;
     ligne(world, angle, 513) ;
     angle = mid_angle + 180 ;
@@ -596,10 +610,12 @@ void update_data(world_t *world){
 
 }
 
+//gere la fin du jeu
 int is_game_over(world_t *world){
     return world->gameover;
 }
 
+//permet de savoir si le joueur regarde un enemie
 int is_looking(world_t* world, sprite_t sprite){
     for(int i=0;i<513;i++){
         for(int j=0;j<world->nb_point_ligne[i];j++){
@@ -612,14 +628,17 @@ int is_looking(world_t* world, sprite_t sprite){
     return 0;
 }
 
+//change la valeur de is_looking des clé
 void setIsLooking(world_t* world,int numero_clef,int valeur){
     world->key[numero_clef].is_looking_for=valeur;
 }
 
+//change la valeur de is_looking des enemie
 void setIsLooking2(world_t* world,int numero_enemy,int valeur){
     world->enemy[numero_enemy].is_looking_for=valeur;
 }
 
+//genere le champ de vision du joueur
 void ligne(world_t* world,float player_a, int numero_ligne){
     float angle_radian = player_a*PI/180;
     float cx = world->player->x ;
@@ -644,10 +663,7 @@ void ligne(world_t* world,float player_a, int numero_ligne){
             is_over = 1; 
             if(world->nb_bandes_sortie == 0){
                 world->no_ligne_db_sortie=numero_ligne;
-                //printf("%d   %d\n",world->no_ligne_db_sortie,numero_ligne*2);
-                
-                
-            }//printf("%d  %d\n",world->nb_bandes_sortie,world->no_ligne_db_sortie);
+            }
             world->nb_bandes_sortie++;
         }
 
@@ -702,6 +718,7 @@ void ligne(world_t* world,float player_a, int numero_ligne){
     
 }
 
+//permet au score de toujours afficher que les  meilleurs scores sauvegarder
 void top5(score_t score, world_t* world){
     int top5 = 0, top4 = 0, top3 = 0, top2 = 0, top1 = 0;
     int transition = 0 ;
@@ -739,6 +756,7 @@ void top5(score_t score, world_t* world){
     
 }
 
+//permet de recuperer tout les scores contenu des la liste score
 void scorefin(world_t* world){
     world->score = ajouter_score(world->compteur_score, world->score) ;
 

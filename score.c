@@ -4,12 +4,13 @@
 #include "score.h"
 #include "world.h"
 
+//creer une liste vide
 score_t cons_empty(){
     return NULL ;
 }
 
-
- score_t cons(int nombre, score_t suivant){
+//ajoute une valeur dans la liste
+score_t cons(int nombre, score_t suivant){
     score_t score = (score_t)malloc(sizeof(score_t));
 
     score->nombre = nombre ;
@@ -18,11 +19,12 @@ score_t cons_empty(){
     return score;
 }
 
+//regarde si la liste est vide
 int is_empty(score_t score){
     return score == NULL;
 }
 
-
+//retourne la valeur dans la liste
 int nombre(score_t score){
     if(!is_empty(score)){
         int nombre = score->nombre ;
@@ -32,6 +34,7 @@ int nombre(score_t score){
     }
 }
 
+//retourne la liste suivante
 score_t suivant(score_t score){
     if (!is_empty(score->suivant))
     {
@@ -41,18 +44,21 @@ score_t suivant(score_t score){
     }
 }
 
+//change la valeur actuelle
 void change_value(int new_score, score_t score){
     if(is_empty(score)){
         score->nombre = new_score ;
     }
 }
 
+//change la liste suivante
 void change_suivant(score_t score, score_t new_score){
     if(is_empty(score)){
         score->suivant = new_score ;
     }
 }
 
+//libere la liste
 void free_score(score_t score){
     if(is_empty(score)){
         free_score(suivant(score)) ;
@@ -60,11 +66,14 @@ void free_score(score_t score){
     free(score) ;
 }
 
+//ajoute le score a la liste
 score_t ajouter_score(int new_score, score_t score){
     score = cons(new_score,score) ;
     return score ;
 }
 
+
+//affiche la liste
 void toString(score_t score){
     if(!is_empty(score)){
         while(!is_empty(score)){

@@ -50,7 +50,7 @@ int main( int argc, char* args[] ){
             }
             handle_events(&event, &world) ;
 
-            update_data(&world); 
+            //update_data(&world); 
 
             refresh_graphics_menu(renderer, &world,&textures) ;
 
