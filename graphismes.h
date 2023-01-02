@@ -11,8 +11,8 @@
 struct textures_s
 {
     SDL_Texture* background;
-    SDL_Texture* sky;
-    SDL_Texture* ground ;
+    SDL_Texture* sky;//ground
+    SDL_Texture* ground ;//sky
     SDL_Texture* bandes;
     SDL_Texture* wall;
     SDL_Texture* key ;
